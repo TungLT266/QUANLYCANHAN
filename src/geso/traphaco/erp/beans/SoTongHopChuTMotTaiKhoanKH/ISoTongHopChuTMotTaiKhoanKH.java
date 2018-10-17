@@ -1,0 +1,108 @@
+package geso.traphaco.erp.beans.SoTongHopChuTMotTaiKhoanKH;
+
+import java.sql.ResultSet;
+
+import javax.servlet.ServletOutputStream;
+
+public interface ISoTongHopChuTMotTaiKhoanKH {
+
+	String getTuNgay();
+
+	void setTuNgay(String tuNgay);
+
+	String getDenNgay();
+
+	void setDenNgay(String denNgay);
+
+	String getTaiKhoan();
+
+	void setTaiKhoan(String taiKhoan);
+
+	String getChiNhanh();
+
+	void setChiNhanh(String chiNhanh);
+
+	boolean xuatExcel(ServletOutputStream out, String fileName);
+
+	void DBClose();
+
+	void initBC();
+
+	ResultSet getChiNhanhRs();
+
+	void setChiNhanhRs(ResultSet chiNhanhRs);
+
+	ResultSet getTaiKhoanRs();
+
+	void setTaiKhoanRs(ResultSet taiKhoanRs);
+
+	void getSoPhatSinh();
+
+	ResultSet getTongSoPhatSinh();
+
+	ResultSet getQuery(int loaiQuery);
+
+	void initRs();
+
+	ResultSet getPhatSinhRs();
+
+	void setPhatSinhRs(ResultSet phatSinhRs);
+
+	Double getDauKyCo();
+
+	void setDauKyCo(Double dauKyCo);
+	
+	
+	Double getDauKyNo();
+
+	void setDauKyNo(Double dauKyNo);
+
+	Double getTongPSNo();
+
+	void setTongPSNo(Double tongPSNo);
+
+	Double getTongPSCo();
+
+	void setTongPSCo(Double tongPSCo);
+
+	Double getCuoiKyNo();
+
+	void setCuoiKyNo(Double cuoiKyNo);
+
+	Double getCuoiKyCo();
+
+	void setCuoiKyCo(Double cuoiKyCo);
+	
+
+	public ResultSet getKhachhangRs();
+
+	public void setKhachhangRs();
+
+	
+	public String getKhachhang();
+
+	public void setKhachhang(String khachhang);
+	
+	
+	public String getChinhanhdoitac();
+
+	public void setChinhanhdoitac(String chinhanhdoitac);
+	
+
+	public String getLoaiDoiTuong() ;
+
+	public void setLoaiDoiTuong(String loaiDoiTuong) ;
+	
+	
+	public String getQuerykh() ;
+	public void setQuerykh(String querykh) ;
+	
+	public ResultSet getNhomKhachHangRs();
+
+	public void setNhomKhachHangRs(ResultSet nhomKhachHangRs);
+
+	public String getNhomKhachHang();
+
+	public void setNhomKhachHang(String nhomKhachHang);
+
+}

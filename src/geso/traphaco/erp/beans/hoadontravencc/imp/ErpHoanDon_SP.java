@@ -1,0 +1,252 @@
+package geso.traphaco.erp.beans.hoadontravencc.imp;
+
+import java.util.List;
+
+import geso.traphaco.erp.beans.hoadontravencc.IErpHoaDon_SP;
+import geso.traphaco.erp.beans.nhapkhoNK.ISpDetail;
+
+public class ErpHoanDon_SP implements IErpHoaDon_SP{
+
+	String Id;
+	String IdSanPham;
+	String TenSanPham;
+	double DonGia;
+	double ChietKhau;
+	double Vat;
+	double SoLuong;
+	String Donhangid;
+	int SoLuongDat;
+	String MaSanPham;
+	String DonViTinh;
+	double thanhtien;
+	String ctkmid;
+	double GiaNet;
+	String dvtId="";
+	
+	double tienvat;
+	double thanhtienavat;
+	String hansudung="";
+	
+	
+	public String getHansudung() {
+		return hansudung;
+	}
+	public void setHansudung(String hansudung) {
+		this.hansudung = hansudung;
+	}
+	public double getTienvat() {
+		return tienvat;
+	}
+	public void setTienvat(double tienvat) {
+		this.tienvat = tienvat;
+	}
+	public double getThanhtienavat() {
+		return thanhtienavat;
+	}
+	public void setThanhtienavat(double thanhtienavat) {
+		this.thanhtienavat = thanhtienavat;
+	}
+
+	List<ISpDetail> spDetail;
+	int quydoi;
+
+	public List<ISpDetail> getSpDetail() {
+		return spDetail;
+	}
+	public void setSpDetail(List<ISpDetail> spDetail) {
+		this.spDetail = spDetail;
+	}
+
+
+	
+	public void setDvtId(String dvtId){
+		this.dvtId= dvtId;
+	}
+	public String getDvtId(){
+		return this.dvtId;
+	}
+	
+	
+	
+	public String getId() {
+		// TODO Auto-generated method stub
+		return this.Id;
+	}
+
+	@Override
+	public void setId(String id) {
+		// TODO Auto-generated method stub
+		this.Id=id;
+	}
+
+	@Override
+	public String getIdSanPham() {
+		// TODO Auto-generated method stub
+		return this.IdSanPham;
+	}
+
+	@Override
+	public void setIdSanPham(String idsanpham) {
+		// TODO Auto-generated method stub
+		this.IdSanPham=idsanpham;
+	}
+
+	@Override
+	public String getTenSanPham() {
+		// TODO Auto-generated method stub
+		return this.TenSanPham;
+	}
+
+	@Override
+	public void setTenSanPham(String tensanpham) {
+		// TODO Auto-generated method stub
+		this.TenSanPham=tensanpham;
+	}
+
+	@Override
+	public void setSoLuong(double soluong) {
+		// TODO Auto-generated method stub
+		this.SoLuong=soluong;
+	}
+
+	@Override
+	public double getSoLuong() {
+		// TODO Auto-generated method stub
+		return this.SoLuong;
+	}
+
+	@Override
+	public double getDonGia() {
+		// TODO Auto-generated method stub
+		return this.DonGia;
+	}
+
+	@Override
+	public void setDonGia(double dongia) {
+		// TODO Auto-generated method stub
+		this.DonGia=dongia;
+	}
+
+	@Override
+	public void setVAT(double vat) {
+		// TODO Auto-generated method stub
+		this.Vat=vat;
+	}
+
+	@Override
+	public double getVAT() {
+		// TODO Auto-generated method stub
+		return this.Vat;
+	}
+
+	@Override
+	public void setChietKhau(double chietkhau) {
+		// TODO Auto-generated method stub
+		this.ChietKhau=chietkhau;
+	}
+
+	@Override
+	public double getChietKhau() {
+		// TODO Auto-generated method stub
+		return this.ChietKhau;
+	}
+
+	@Override
+	public double getThanhTien() {
+		// TODO Auto-generated method stub
+		return (this.SoLuong* this.DonGia);
+	}
+
+	@Override
+	public String getMaSanPham() {
+		// TODO Auto-generated method stub
+		return this.MaSanPham;
+	}
+
+	@Override
+	public void setMaSanPham(String masanpham) {
+		// TODO Auto-generated method stub
+		this.MaSanPham=masanpham;
+	}
+
+	@Override
+	public void setDonViTinh(String donvitinh) {
+		// TODO Auto-generated method stub
+		this.DonViTinh=donvitinh;
+	}
+
+	@Override
+	public String getDonViTinh() {
+		// TODO Auto-generated method stub
+		return this.DonViTinh;
+	}
+
+	@Override
+	public void setSoLuongDat(int soluongdat) {
+		// TODO Auto-generated method stub
+		this.SoLuongDat=soluongdat;
+	}
+
+	@Override
+	public int getSoLuongDat() {
+		// TODO Auto-generated method stub
+		return this.SoLuongDat;
+	}
+
+	@Override
+	public void setThanhTien(double thanhtien) {
+		// TODO Auto-generated method stub
+		this.thanhtien=thanhtien;
+	}
+
+	@Override
+	public void setCTKMID(String _ctkmid) {
+		// TODO Auto-generated method stub
+		this.ctkmid=_ctkmid;
+	}
+
+	@Override
+	public String getCTKMId() {
+		// TODO Auto-generated method stub
+		return this.ctkmid;
+	}
+
+	@Override
+	public int getQuyDoi() {
+		// TODO Auto-generated method stub
+		return this.quydoi;
+	}
+
+	@Override
+	public void setQuyDoi(int _quydoi) {
+		// TODO Auto-generated method stub
+		this.quydoi=_quydoi;
+	}
+
+	@Override
+	public double getGiaNet() {
+		// TODO Auto-generated method stub
+		return this.GiaNet;
+	}
+
+	@Override
+	public void setGiaNet(double gianet) {
+		// TODO Auto-generated method stub
+		this.GiaNet=gianet;
+	}
+
+	@Override
+	public void setDonhangId(String Donhangid) {
+		// TODO Auto-generated method stub
+		this.Donhangid= Donhangid;
+	}
+
+	@Override
+	public String getDonhangId() {
+		// TODO Auto-generated method stub
+		return this.Donhangid;
+	}
+
+
+
+}

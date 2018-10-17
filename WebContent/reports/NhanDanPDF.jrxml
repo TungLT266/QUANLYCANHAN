@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="NhanDanPDF" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d4a21ced-2ac6-4f76-934a-e9c52d7a83ff">
+	<property name="ireport.zoom" value="0.7513148009015777"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" fill="Solid" hAlign="Center" vAlign="Middle" fontName="Times New Roman" fontSize="40" isBold="true" pdfFontName="Times-Roman" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<style name="style1_1" fill="Solid" hAlign="Left" vAlign="Middle" fontName="Times New Roman" fontSize="40" isBold="false" pdfFontName="Times-Roman" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<parameter name="tensanpham" class="java.lang.String"/>
+	<parameter name="solosx" class="java.lang.String"/>
+	<parameter name="HD" class="java.lang.String"/>
+	<parameter name="sokn" class="java.lang.String"/>
+	<parameter name="soluong" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="555" splitType="Stretch">
+			<image>
+				<reportElement x="31" y="11" width="166" height="39" uuid="8709663e-1e5d-4be1-bcd8-7855c3c20186"/>
+				<imageExpression><![CDATA["D:\\project\\TraHY\\TraphacoHYERP\\WebContent\\pages\\images\\logotrahy.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="style1" x="406" y="22" width="385" height="19" forecolor="#FF3333" uuid="7fc748a9-96e8-49f4-bf69-a6aeb95736ed"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[BH/SĐ: 16/01/17]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="406" y="2" width="385" height="20" uuid="e18bb13f-184e-4692-9d83-3c8b95999f2c"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="10" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[PL05/01]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="10" y="68" width="781" height="476" uuid="11afbdc4-9c3c-4e22-b540-05a7cb679835"/>
+				<box>
+					<pen lineStyle="Double"/>
+					<topPen lineWidth="0.25" lineStyle="Double"/>
+					<leftPen lineWidth="0.25" lineStyle="Double"/>
+					<bottomPen lineWidth="0.25" lineStyle="Double"/>
+					<rightPen lineWidth="0.25" lineStyle="Double"/>
+				</box>
+				<staticText>
+					<reportElement style="style1" x="227" y="0" width="342" height="56" uuid="25cc403c-8b40-4ecb-80b3-9feb2be30833"/>
+					<textElement textAlignment="Center">
+						<font size="40"/>
+					</textElement>
+					<text><![CDATA[TRAPHACO HY]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="style1" x="227" y="56" width="342" height="56" uuid="d0619cb2-d42b-4673-a364-a172c7715933"/>
+					<textElement textAlignment="Center">
+						<font size="40"/>
+					</textElement>
+					<text><![CDATA[THÀNH PHẨM]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="56" width="781" height="1" uuid="ebc3c922-35f9-4e3b-91b3-55dbfa4a4f40"/>
+				</line>
+				<staticText>
+					<reportElement style="style1_1" x="21" y="145" width="254" height="51" uuid="c605c5f3-7568-4225-9904-934d83b0ba94"/>
+					<text><![CDATA[Tên sản phẩm: ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="style1_1" x="21" y="196" width="195" height="51" uuid="5e7a2fa1-1365-4971-8db4-120655f400f7"/>
+					<text><![CDATA[Số lô SX:    ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="style1_1" x="21" y="247" width="195" height="51" uuid="0fa4ff3d-2265-43cd-af42-d4795e0f2a7c"/>
+					<text><![CDATA[Số KN:        ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="style1_1" x="21" y="298" width="195" height="51" uuid="4c96edc9-dd45-475c-b0cf-4f1306685fcd"/>
+					<text><![CDATA[Số lượng:     ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="style1" x="215" y="390" width="385" height="56" uuid="1e4914b6-f3c2-4002-bb46-7534c3de82eb"/>
+					<textElement textAlignment="Center">
+						<font size="40"/>
+					</textElement>
+					<text><![CDATA[ĐẠT TIÊU CHUẨN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="style1_1" x="439" y="196" width="85" height="51" uuid="23cef993-89eb-41c7-aaea-0a284f5a5157"/>
+					<text><![CDATA[HD:]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="style1" x="298" y="145" width="483" height="51" uuid="ff2dcf4f-889d-450d-8845-947d2ea98fbc"/>
+					<box leftPadding="6"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$P{tensanpham}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="style1_1" x="216" y="196" width="223" height="51" uuid="7f6ad8f3-309c-4ac5-af45-00210564546d"/>
+					<textFieldExpression><![CDATA[$P{solosx}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="style1_1" x="524" y="196" width="257" height="51" uuid="2e6a50a5-94f2-4ea2-a836-597d10b1793f"/>
+					<textFieldExpression><![CDATA[$P{HD}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="style1_1" x="216" y="247" width="565" height="51" uuid="fe2cc16c-dd51-4d51-bd7b-416b4340fd32"/>
+					<textFieldExpression><![CDATA[$P{sokn}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="style1_1" x="216" y="298" width="565" height="51" uuid="1cc23258-d0e3-4b9a-a0ef-151d02a0cd89"/>
+					<textFieldExpression><![CDATA[$P{soluong}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+</jasperReport>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="HoaDonMienBac_DonHang" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="660af745-2347-4dd4-ad2d-c3403b876260">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<parameter name="HoaDonId" class="java.lang.String">
+		<defaultValueExpression><![CDATA[109823]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select c.MA, c.TEN, d.DONVI,dhsp.GIAMUA AS dongia ,' ' as solo, ' ' as ngayhethan,dhsp.thuevat ,
+	SUM( b.soluong) as soluong, '0' as chietkhau
+from PHIEUXUATKHO a inner join PHIEUXUATKHO_SANPHAM_CHITIET b on a.pk_seq=b.PXK_FK
+	inner join SANPHAM c on b.sanpham_fk = c.PK_SEQ
+	inner join DONHANG dh on dh.pk_seq in (select ddh_fk from HOADON_DDH where hoadon_fk =$P!{HoaDonId}   )
+	inner join DONHANG_SANPHAM dhsp on dhsp.donhang_fk=dh.PK_SEQ  and c.PK_SEQ = dhsp.SANPHAM_FK
+	left join DONVIDOLUONG d on d.PK_SEQ=c.dvdl_fk
+where a.PK_SEQ
+	in( select PXK_FK from PHIEUXUATKHO_DONHANG
+		where DONHANG_FK in (select ddh_fk from HOADON_DDH where hoadon_fk = $P!{HoaDonId} )  )
+group by   c.MA, c.TEN, d.DONVI, b.soluong,dhsp.GIAMUA ,b.solo, isnull(b.NGAYHETHAN,'') ,dhsp.thuevat]]>
+	</queryString>
+	<field name="MA" class="java.lang.String"/>
+	<field name="TEN" class="java.lang.String"/>
+	<field name="DONVI" class="java.lang.String"/>
+	<field name="dongia" class="java.lang.Double"/>
+	<field name="solo" class="java.lang.String"/>
+	<field name="ngayhethan" class="java.lang.String"/>
+	<field name="thuevat" class="java.lang.Double"/>
+	<field name="soluong" class="java.lang.Double"/>
+	<field name="chietkhau" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="55" y="0" width="58" height="20" uuid="dfa370fb-0654-4313-8c4d-756be60f9ce6"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="0" width="83" height="20" uuid="c68a67f8-262f-401f-9556-e3e11f9ec470"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="196" y="0" width="60" height="20" uuid="52154c79-88b1-4414-8b04-4129c42c96ab"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="256" y="0" width="52" height="20" uuid="3839a050-9476-473a-81b9-80aec4fc1acc"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ngayhethan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="0" width="44" height="20" uuid="2b5e6f1f-7411-41e2-b4dc-28f4ba4ff2f2"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DONVI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="352" y="0" width="75" height="20" uuid="24df037c-71da-421f-8434-10a99223b44f"/>
+				<textFieldExpression><![CDATA[$F{soluong}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="427" y="0" width="62" height="20" uuid="59c1ac7e-746d-4662-a876-d64823b18a6e"/>
+				<textFieldExpression><![CDATA[$F{dongia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="489" y="0" width="100" height="20" uuid="e48a4844-a8eb-4174-b361-fd3d2ca70c10"/>
+				<textFieldExpression><![CDATA[$F{dongia}*$F{soluong}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="589" y="0" width="30" height="20" uuid="a1e5cc60-f039-420a-a3fb-7f04c8c577c8"/>
+				<textFieldExpression><![CDATA[$F{thuevat}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="619" y="0" width="109" height="20" uuid="934aa199-791b-46bf-a961-414743b0218f"/>
+				<textFieldExpression><![CDATA[( $F{dongia}*$F{soluong} )*$F{thuevat}/100]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="728" y="0" width="114" height="20" uuid="0f80d722-b8ac-42a5-bb2d-a60a057292ad"/>
+				<textFieldExpression><![CDATA[( $F{dongia}*$F{soluong} )*(1+$F{thuevat}/100)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
