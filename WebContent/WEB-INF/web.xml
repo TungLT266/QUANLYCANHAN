@@ -21,6 +21,73 @@
     <servlet-name>QuanLyCaNhanSvl</servlet-name>
     <url-pattern>/QuanLyCaNhanSvl</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>LoaiTaiKhoanSvl</display-name>
+    <servlet-name>LoaiTaiKhoanSvl</servlet-name>
+    <servlet-class>qlcn.pages.loaitaikhoan.servlets.LoaiTaiKhoanSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoaiTaiKhoanSvl</servlet-name>
+    <url-pattern>/LoaiTaiKhoanSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>LoaiTaiKhoanUpdateSvl</display-name>
+    <servlet-name>LoaiTaiKhoanUpdateSvl</servlet-name>
+    <servlet-class>qlcn.pages.loaitaikhoan.servlets.LoaiTaiKhoanUpdateSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoaiTaiKhoanUpdateSvl</servlet-name>
+    <url-pattern>/LoaiTaiKhoanUpdateSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>TaiKhoanSvl</display-name>
+    <servlet-name>TaiKhoanSvl</servlet-name>
+    <servlet-class>qlcn.pages.taikhoan.servlets.TaiKhoanSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TaiKhoanSvl</servlet-name>
+    <url-pattern>/TaiKhoanSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>TaiKhoanUpdateSvl</display-name>
+    <servlet-name>TaiKhoanUpdateSvl</servlet-name>
+    <servlet-class>qlcn.pages.taikhoan.servlets.TaiKhoanUpdateSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TaiKhoanUpdateSvl</servlet-name>
+    <url-pattern>/TaiKhoanUpdateSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>TaiKhoanThanhToanSvl</display-name>
+    <servlet-name>TaiKhoanThanhToanSvl</servlet-name>
+    <servlet-class>qlcn.pages.taikhoanthanhtoan.servlets.TaiKhoanThanhToanSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TaiKhoanThanhToanSvl</servlet-name>
+    <url-pattern>/TaiKhoanThanhToanSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>TaiKhoanThanhToanUpdateSvl</display-name>
+    <servlet-name>TaiKhoanThanhToanUpdateSvl</servlet-name>
+    <servlet-class>qlcn.pages.taikhoanthanhtoan.servlets.TaiKhoanThanhToanUpdateSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TaiKhoanThanhToanUpdateSvl</servlet-name>
+    <url-pattern>/TaiKhoanThanhToanUpdateSvl</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
