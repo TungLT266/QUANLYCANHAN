@@ -81,7 +81,6 @@
     <servlet-name>TaiKhoanThanhToanUpdateSvl</servlet-name>
     <url-pattern>/TaiKhoanThanhToanUpdateSvl</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>ThuChiSvl</display-name>
@@ -92,7 +91,6 @@
     <servlet-name>ThuChiSvl</servlet-name>
     <url-pattern>/ThuChiSvl</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>ThuChiUpdateSvl</display-name>
@@ -102,6 +100,28 @@
   <servlet-mapping>
     <servlet-name>ThuChiUpdateSvl</servlet-name>
     <url-pattern>/ThuChiUpdateSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>NoiDungThuChiSvl</display-name>
+    <servlet-name>NoiDungThuChiSvl</servlet-name>
+    <servlet-class>qlcn.pages.noidungthuchi.servlets.NoiDungThuChiSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NoiDungThuChiSvl</servlet-name>
+    <url-pattern>/NoiDungThuChiSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>NoiDungThuChiUpdateSvl</display-name>
+    <servlet-name>NoiDungThuChiUpdateSvl</servlet-name>
+    <servlet-class>qlcn.pages.noidungthuchi.servlets.NoiDungThuChiUpdateSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NoiDungThuChiUpdateSvl</servlet-name>
+    <url-pattern>/NoiDungThuChiUpdateSvl</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>
