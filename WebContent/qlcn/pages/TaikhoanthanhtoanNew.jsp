@@ -1,7 +1,8 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="qlts.taikhoanthanhtoan.beans.ITaiKhoanThanhToan"%>
-<%@page import="qlts.center.util.Utility"%>
+<%@page import="qlcn.pages.taikhoanthanhtoan.beans.ITaiKhoanThanhToan"%>
+<%@page import="qlcn.center.util.Utility"%>
+<%@page import="java.util.Calendar"%>
 
 <%
 Utility util = new Utility();
@@ -15,16 +16,15 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 <head>
 <title>Tài khoản thanh toán</title>
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="../CSS/main.css" type="text/css">
-<link rel="stylesheet" href="../CSS/calendar.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="../CSS/mybutton.css">
-<LINK rel="stylesheet" type="text/css" href="../Css/style.css" />
+<link rel="stylesheet" href="../css/main.css" type="text/css">
+<link rel="stylesheet" href="../css/calendar.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
-<script type="text/javascript"	src="../Scripts/jquery.min.1.7.js"></script>
-<script type="text/javascript" language="JavaScript" src="../Scripts/jquery.tools.min.js"></script>
+<script type="text/javascript"	src="../scripts/jquery.min.1.7.js"></script>
+<script type="text/javascript" language="JavaScript" src="../scripts/jquery.tools.min.js"></script>
 
-<link href="../Css/select2.css" rel="stylesheet" />
-<script src="../Scripts/select2.js"></script>
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../scripts/select2.js"></script>
 <script>
 	$(document).ready(function() {
 		$(".select2").select2();
@@ -82,14 +82,14 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 						<tr class="tbdarkrow">
 							<td width="30" align="left">
 								<a href="/QUANLYCANHAN/TaiKhoanThanhToanSvl?userId=<%=userId %>">
-									<img src="../Images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
+									<img src="../images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
 								</a>
 							</td>
 							<td width="2" align="left"></td>
 							<td width="30" align="left">
 								<div id="btnSave">
 									<A href="javascript: save()">
-										<img src="../Images/Save30.png" title="Save" alt="Save" border="1" style="border-style: outset">
+										<img src="../images/Save30.png" title="Save" alt="Save" border="1" style="border-style: outset">
 									</A>
 								</div>
 							</td>
@@ -128,7 +128,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 											
 											<td width="15%" class="plainlabel">Tài khoản <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<select id="taikhoan" name="taikhoan" class="select2">
+												<select id="taikhoan" name="taikhoan" class="select2" style="width: 200px">
 													<%if(TaikhoanRs != null){ %>
 														<%while(TaikhoanRs.next()){ %>
 															<%if(obj.getTaikhoan().equals(TaikhoanRs.getString("id"))){ %>
@@ -210,15 +210,47 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 										<tr id="loaittt3" <%=obj.getLoai().equals("2") ? "" : "style=\"display: none;\"" %>>
 											<td class="plainlabel">Thời gian hiệu lực</td>
 											<td class="plainlabel">
-												<%-- <input type="text" name="tungay" id="tungay" value="<%=obj.getTungay() %>"> --%>
-												<select >
-													
+												<select name="thanghieuluc" class="select2" style="width: 78px">
+													<%for(int i = 1; i <= 12; i++) { %>
+														<%if(obj.getThanghieuluc().equals(i+"")){ %>
+															<option value="<%=i %>" selected="selected"><%=i %></option>
+														<%} else { %>
+															<option value="<%=i %>"><%=i %></option>
+														<%} %>
+													<%} %>
+												</select>
+												<%int yearCurrent = Calendar.getInstance().get(Calendar.YEAR); %>
+												<select name="namhieuluc" class="select2" style="width: 120px">
+													<%for(int i = yearCurrent-50; i <= yearCurrent+50; i++) { %>
+														<%if(obj.getNamhieuluc().equals(i+"")){ %>
+															<option value="<%=i %>" selected="selected"><%=i %></option>
+														<%} else { %>
+															<option value="<%=i %>"><%=i %></option>
+														<%} %>
+													<%} %>
 												</select>
 											</td>
 											
 											<td class="plainlabel">Thời gian hết hạn</td>
 											<td class="plainlabel">
-												<%-- <input type="text" name="denngay" id="denngay" value="<%=obj.getDenngay() %>"> --%>
+												<select name="thanghethan" class="select2" style="width: 78px">
+													<%for(int i = 1; i <= 12; i++) { %>
+														<%if(obj.getThanghethan().equals(i+"")){ %>
+															<option value="<%=i %>" selected="selected"><%=i %></option>
+														<%} else { %>
+															<option value="<%=i %>"><%=i %></option>
+														<%} %>
+													<%} %>
+												</select>
+												<select name="namhethan" class="select2" style="width: 120px">
+													<%for(int i = yearCurrent-50; i <= yearCurrent+50; i++) { %>
+														<%if(obj.getNamhethan().equals(i+"")){ %>
+															<option value="<%=i %>" selected="selected"><%=i %></option>
+														<%} else { %>
+															<option value="<%=i %>"><%=i %></option>
+														<%} %>
+													<%} %>
+												</select>
 											</td>
 										</tr>
 										<tr id="loaittt4" <%=obj.getLoai().equals("2") ? "" : "style=\"display: none;\"" %>>

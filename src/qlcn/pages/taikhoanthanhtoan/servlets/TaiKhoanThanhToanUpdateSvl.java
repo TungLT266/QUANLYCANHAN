@@ -67,9 +67,9 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 				action = "";
 			
 			if(action.equals("update")) {
-				response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanNew.jsp");
+				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 		    } else {
-		    	response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanDisplay.jsp");
+		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanDisplay.jsp");
 		    }
 	    }
 	}
@@ -96,15 +96,14 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 	    	obj.setUserId(userId);
 	    	
 	    	String id = request.getParameter("id");	
-		    if(id == null)
-		    	id = "";
-	    	obj.setID(id);
+		    if(id != null)
+		    	obj.setID(id);
 	    	
-	    	String loai = util.antiSQLInspection(request.getParameter("loai"));
+	    	String loai = request.getParameter("loai");
 			if (loai != null)
 				obj.setLoai(loai);
 			
-			String taikhoan = util.antiSQLInspection(request.getParameter("taikhoan"));
+			String taikhoan = request.getParameter("taikhoan");
 			if (taikhoan != null)
 				obj.setTaikhoan(taikhoan);
 		    
@@ -112,7 +111,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 			if (ten != null)
 				obj.setTen(ten);
 			
-			String loaithe = util.antiSQLInspection(request.getParameter("loaithe"));
+			String loaithe = request.getParameter("loaithe");
 			if (loaithe != null)
 				obj.setLoaithe(loaithe);
 			
@@ -124,47 +123,27 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 			if (sothe != null)
 				obj.setSothe(sothe);
 			
-			String mapin = util.antiSQLInspection(request.getParameter("mapin"));
-			if (mapin != null)
-				obj.setMapin(mapin);
-			
 			String tenchuthe = util.antiSQLInspection(request.getParameter("tenchuthe"));
 			if (tenchuthe != null)
 				obj.setTenchuthe(tenchuthe);
 			
-			/*String sotaikhoan = util.antiSQLInspection(request.getParameter("sotaikhoan"));
-			if (sotaikhoan != null)
-				obj.setSotaikhoan(sotaikhoan);
+			String mapin = util.antiSQLInspection(request.getParameter("mapin"));
+			if (mapin != null)
+				obj.setMapin(mapin);
 			
-			String sodienthoai = util.antiSQLInspection(request.getParameter("sodienthoai"));
-			if (sodienthoai != null)
-				obj.setSodienthoai(sodienthoai);
-			
-			String email = util.antiSQLInspection(request.getParameter("email"));
-			if (email != null)
-				obj.setEmail(email);
-			
-			String tungay = util.antiSQLInspection(request.getParameter("tungay"));
-			if (tungay != null)
-				obj.setTungay(tungay);
-			
-			String denngay = util.antiSQLInspection(request.getParameter("denngay"));
-			if (denngay != null)
-				obj.setDenngay(denngay);*/
-			
-			String thanghieuluc = util.antiSQLInspection(request.getParameter("thanghieuluc"));
+			String thanghieuluc = request.getParameter("thanghieuluc");
 			if (thanghieuluc != null)
 				obj.setThanghieuluc(thanghieuluc);
 			
-			String namhieuluc = util.antiSQLInspection(request.getParameter("namhieuluc"));
+			String namhieuluc = request.getParameter("namhieuluc");
 			if (namhieuluc != null)
 				obj.setNamhieuluc(namhieuluc);
 			
-			String thanghethan = util.antiSQLInspection(request.getParameter("thanghethan"));
+			String thanghethan = request.getParameter("thanghethan");
 			if (thanghethan != null)
 				obj.setThanghethan(thanghethan);
 			
-			String namhethan = util.antiSQLInspection(request.getParameter("namhethan"));
+			String namhethan = request.getParameter("namhethan");
 			if (namhethan != null)
 				obj.setNamhethan(namhethan);
 			
@@ -188,7 +167,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", obj);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanNew.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 					} else {
 						obj.DBClose();
 						ITaiKhoanThanhToanList objList = new TaiKhoanThanhToanList();
@@ -198,7 +177,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", objList);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Taikhoanthanhtoan.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoanthanhtoan.jsp");
 					}
 				} else {
 					if(!obj.create()) {
@@ -206,7 +185,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", obj);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanNew.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 					} else {
 						obj.DBClose();
 						ITaiKhoanThanhToanList objList = new TaiKhoanThanhToanList();
@@ -216,7 +195,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", objList);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Taikhoanthanhtoan.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoanthanhtoan.jsp");
 					}
 				}
 		    } else {
@@ -224,7 +203,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 		    	
 		    	session.setAttribute("obj", obj);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanNew.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 		    }
 	    }
 	}

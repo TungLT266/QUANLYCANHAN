@@ -67,9 +67,9 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 				action = "";
 			
 			if(action.equals("update")) {
-				response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanNew.jsp");
+				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanNew.jsp");
 		    } else {
-		    	response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanDisplay.jsp");
+		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanDisplay.jsp");
 		    }
 	    }
 	}
@@ -130,7 +130,7 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 					if(!obj.update()) {
 						session.setAttribute("obj", obj);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanNew.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanNew.jsp");
 					} else {
 						obj.DBClose();
 						ITaiKhoanList objList = new TaiKhoanList();
@@ -140,13 +140,13 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", objList);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Taikhoan.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoan.jsp");
 					}
 				} else {
 					if(!obj.create()) {
 						session.setAttribute("obj", obj);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanNew.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanNew.jsp");
 					} else {
 						obj.DBClose();
 						ITaiKhoanList objList = new TaiKhoanList();
@@ -156,7 +156,7 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", objList);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Taikhoan.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoan.jsp");
 					}
 				}
 		    }

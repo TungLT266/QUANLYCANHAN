@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="qlts.taikhoan.beans.ITaiKhoan"%>
-<%@page import="qlts.center.util.Utility"%>
+<%@page import="qlcn.pages.taikhoan.beans.ITaiKhoan"%>
+<%@page import="qlcn.center.util.Utility"%>
 
 <%
 Utility util = new Utility();
@@ -15,9 +15,9 @@ ResultSet DonviRs = obj.getDonviRs();
 <head>
 <title>Tài khoản</title>
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="../CSS/main.css" type="text/css">
-<link rel="stylesheet" href="../CSS/calendar.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="../CSS/mybutton.css">
+<link rel="stylesheet" href="../css/main.css" type="text/css">
+<link rel="stylesheet" href="../css/calendar.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
@@ -39,7 +39,7 @@ ResultSet DonviRs = obj.getDonviRs();
 						<tr class="tbdarkrow">
 							<td width="30" align="left">
 								<a href="/QUANLYCANHAN/TaiKhoanSvl?userId=<%=userId %>">
-									<img src="../Images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
+									<img src="../images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
 								</a>
 							</td>
 							<td>&nbsp;</td>

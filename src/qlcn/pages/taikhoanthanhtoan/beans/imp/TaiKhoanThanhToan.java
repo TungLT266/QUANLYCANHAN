@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import db.Dbutils;
@@ -44,19 +45,13 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 		this.taikhoan = "";
 		this.ten = "";
 		this.loaithe = "";
-//		this.nganhang = "";
 		this.sothe = "";
 		this.mapin = "";
 		this.tenchuthe = "";
-//		this.sotaikhoan = "";
-//		this.sodienthoai = "";
-//		this.email = "";
-//		this.tungay = "";
-//		this.denngay = "";
 		this.thanghieuluc = "";
-		this.namhieuluc = "";
+		this.namhieuluc = Calendar.getInstance().get(Calendar.YEAR) + "";
 		this.thanghethan = "";
-		this.namhethan = "";
+		this.namhethan = Calendar.getInstance().get(Calendar.YEAR) + "";
 		this.chuky = "";
 		this.trangthai = "1";
 		this.msg = "";
@@ -65,30 +60,24 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 	}
 	
 	public void init() {
-		String query = "select loai, taikhoan_fk, TEN, LOAITHE, NGANHANG_FK, SOTHE, MAPIN, TENCHUTHE, SOTAIKHOAN, SODIENTHOAI,"
-				+ " EMAIL, TUNGAY, DENNGAY, CHUKY, TRANGTHAI from TAIKHOANTHANHTOAN where ID = " + this.ID;
+		String query = "select loai, taikhoan_fk, TEN, LOAITHE, SOTHE, MAPIN, TENCHUTHE, THOIGIANHIEULUC, THOIGIANHETHAN, CHUKY, TRANGTHAI from TAIKHOANTHANHTOAN where ID = " + this.ID;
 		System.out.println(query);
 		
 		ResultSet rs = this.db.get(query);
 		try {
 			rs.next();
-			this.ten = rs.getString("TEN");
+			
 			this.loai = rs.getString("loai");
 			this.taikhoan = rs.getString("taikhoan_fk");
+			this.ten = rs.getString("TEN");
 			this.loaithe = rs.getString("LOAITHE");
-//			this.nganhang = rs.getString("NGANHANG_FK");
 			this.sothe = rs.getString("SOTHE");
 			this.mapin = rs.getString("MAPIN");
 			this.tenchuthe = rs.getString("TENCHUTHE");
-//			this.sotaikhoan = rs.getString("SOTAIKHOAN");
-//			this.sodienthoai = rs.getString("SODIENTHOAI");
-//			this.email = rs.getString("EMAIL");
-//			this.tungay = rs.getString("TUNGAY");
-//			this.denngay = rs.getString("DENNGAY");
-			this.thanghieuluc = rs.getString("TUNGAY").substring(0, 2);
-			this.namhieuluc = rs.getString("TUNGAY").substring(3);
-			this.thanghethan = rs.getString("DENNGAY").substring(0, 2);
-			this.namhethan = rs.getString("DENNGAY").substring(3);
+			this.thanghieuluc = rs.getString("THOIGIANHIEULUC").split("-")[0];
+			this.namhieuluc = rs.getString("THOIGIANHIEULUC").split("-")[1];
+			this.thanghethan = rs.getString("THOIGIANHETHAN").split("-")[0];
+			this.namhethan = rs.getString("THOIGIANHETHAN").split("-")[1];
 			this.chuky = rs.getString("CHUKY");
 			this.trangthai = rs.getString("TRANGTHAI");
 			rs.close();
@@ -108,12 +97,12 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			
 			String query = "";
 			if(this.loai.equals("1")) {
-				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, TEN, trangthai, nguoitao, ngaytao, nguoisua, ngaysua, loaithe, sothe, mapin, tenchuthe, tungay, denngay, chuky)"
-						+ "\n values("+this.loai+","+this.taikhoan+",N'"+this.ten+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"','0','','','','','','')";
+				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, TEN, trangthai, nguoitao, ngaytao, nguoisua, ngaysua, loaithe, sothe, tenchuthe, mapin, thoigianhieuluc, thoigianhethan, chuky)"
+						+ "\n values("+this.loai+","+this.taikhoan+",N'"+this.ten+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"',0,'','','','','','')";
 			} else {
-				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, LOAITHE, SOTHE, MAPIN, TENCHUTHE, TUNGAY, DENNGAY, CHUKY, trangthai, nguoitao, ngaytao, nguoisua, ngaysua, ten)"
-						+ "\n values("+this.loai+","+this.taikhoan+","+this.loaithe+",'"+this.sothe+"','"+this.mapin+"','"+this.tenchuthe+"','"+this.thanghieuluc+"'+'-'+'"+this.namhieuluc+"',"
-						+ "'"+this.thanghethan+"'+'-'+'"+this.namhethan+"','"+this.chuky+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"','')";
+				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, LOAITHE, SOTHE, TENCHUTHE, MAPIN, THOIGIANHIEULUC, THOIGIANHETHAN, CHUKY, trangthai, nguoitao, ngaytao, nguoisua, ngaysua, ten)"
+						+ "\n values("+this.loai+","+this.taikhoan+","+this.loaithe+",'"+this.sothe+"','"+this.tenchuthe+"','"+this.mapin+"','"+this.thanghieuluc+"-"+this.namhieuluc+"',"
+						+ "'"+this.thanghethan+"-"+this.namhethan+"','"+this.chuky+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"','')";
 			}
 			System.out.println(query);
 			
@@ -142,11 +131,11 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			
 			String query;
 			if(this.loai.equals("1")) {
-				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+",taikhoan_fk="+this.taikhoan+",TEN=N'"+this.ten+"',trangthai="+this.trangthai+",nguoisua="+this.userId+","
-						+ "ngaysua='"+this.getDateTime()+"',LOAITHE='0',SOTHE='',MAPIN='',TENCHUTHE='', TUNGAY='', DENNGAY='', CHUKY='' where ID=" + this.ID;
+				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+", taikhoan_fk="+this.taikhoan+", TEN=N'"+this.ten+"', trangthai="+this.trangthai+", nguoisua="+this.userId+","
+						+ " ngaysua='"+this.getDateTime()+"', LOAITHE=0, SOTHE='', MAPIN='', TENCHUTHE='', THOIGIANHIEULUC='', THOIGIANHETHAN='', CHUKY='' where ID=" + this.ID;
 			} else {
-				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+",taikhoan="+this.taikhoan+",LOAITHE="+this.loaithe+",SOTHE='"+this.sothe+"',MAPIN='"+this.mapin+"',"
-						+ "TENCHUTHE='"+this.tenchuthe+"',TUNGAY='"+this.thanghieuluc+"'+'-'+'"+this.namhieuluc+"',DENNGAY='"+this.thanghethan+"'+'-'+'"+this.namhethan+"',"
+				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+", taikhoan="+this.taikhoan+", LOAITHE="+this.loaithe+", SOTHE='"+this.sothe+"', MAPIN='"+this.mapin+"',"
+						+ " TENCHUTHE='"+this.tenchuthe+"', THOIGIANHIEULUC='"+this.thanghieuluc+"-"+this.namhieuluc+"',THOIGIANHETHAN='"+this.thanghethan+"-"+this.namhethan+"',"
 						+ "CHUKY='"+this.chuky+"',trangthai="+this.trangthai+",nguoisua="+this.userId+",ngaysua='"+this.getDateTime()+"',ten='' where ID = " + this.ID;
 			}
 			System.out.println(query);

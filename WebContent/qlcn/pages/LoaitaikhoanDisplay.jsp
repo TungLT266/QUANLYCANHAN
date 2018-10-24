@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="qlts.loaitaikhoan.beans.ILoaiTaiKhoan"%>
-<%@page import="qlts.center.util.Utility"%>
+<%@page import="qlcn.pages.loaitaikhoan.beans.ILoaiTaiKhoan"%>
+<%@page import="qlcn.center.util.Utility"%>
 
 <%
 Utility util = new Utility();
@@ -14,9 +14,9 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 <head>
 <title>Loại tài khoản</title>
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="../CSS/main.css" type="text/css">
-<link rel="stylesheet" href="../CSS/calendar.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="../CSS/mybutton.css">
+<link rel="stylesheet" href="../css/main.css" type="text/css">
+<link rel="stylesheet" href="../css/calendar.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
 	<form name="FormLtk" method="post" action="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl">
@@ -37,7 +37,7 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 						<tr class="tbdarkrow">
 							<td width="30" align="left">
 								<a href="/QUANLYCANHAN/LoaiTaiKhoanSvl?userId=<%=userId %>">
-									<img src="../Images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
+									<img src="../images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
 								</a>
 							</td>
 							<td>&nbsp;</td>

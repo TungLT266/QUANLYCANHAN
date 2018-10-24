@@ -6,60 +6,67 @@
 	background-image: url(../images/line.gif);
 	background-repeat: repeat-y;
 }
-fieldset{
-   	padding-bottom: 4px;
-    padding-left: 2px;
-    padding-right: 2px;
-    padding-top: 2px;
-}	
-input[type="text"]{
-		width:200px;
-		background-color:white;
-		border:1px;
-		border-style: solid;
-		border-color: #808080;
-			
-	}	
-input[type="file"]{
-	background-color:white;
-	border:1px;
-	border-style:solid;
-    border-color: #808080;
-	}
-select{
-	width:200px;
-	background-color:white;
-	border:1px;
-	border-style:solid;
-    border-color: #808080;
-	
-	}	
-table.tabledetail tr td input[type="text"]{
-		width:100%;
-		
-	}	
-table.tablecontent tr td input[type="text"]{
-			background-color:white;
-			
-	}	
-table.tabledetail{
+
+fieldset {
+	padding-bottom: 4px;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 2px;
+}
+
+input[type="text"] {
+	width: 200px;
+	background-color: white;
+	border: 1px;
+	border-style: solid;
+	border-color: #a6a6a6;
+	border-radius: 5px;
+	padding: 5px 0px;
+}
+
+input[type="file"] {
+	background-color: white;
+	border: 1px;
+	border-style: solid;
+	border-color: #a6a6a6;
+	border-radius: 5px;
+	padding: 5px 0px;
+}
+
+select {
+	width: 200px;
+	background-color: white;
+	border: 1px;
+	border-style: solid;
+	border-color: #a6a6a6;
+	border-radius: 5px;
+	padding: 5px 0px;
+}
+
+table.tabledetail tr td input[type="text"] {
+	width: 100%;
+}
+
+table.tablecontent tr td input[type="text"] {
+	background-color: white;
+}
+
+table.tabledetail {
 	border-bottom-width: 1px;
 	border-bottom-color: #F5F5F5;
-	border:1px;
-	
-	}	
-textarea{
-	width:100%;
+	border: 1px;
+}
+
+textarea {
+	width: 100%;
 	background-color: white;
-	color: red; 
-	font-weight:bold;
-	/*background-color: red;
-	color: white;*/
-	border:1px;
+	color: red;
+	font-weight: bold;
+	border: 1px;
 	border-style: solid;
 	border-color: #808080;
-	
-	}	
+}
+
 body {
 	text-align: center;
 	margin: 0px;
@@ -72,8 +79,8 @@ body {
 .erroralert {
 	color: Red;
 	text-decoration: none;
-	font-weight : bold;
-	font-family : Arial; 
+	font-weight: bold;
+	font-family: Arial;
 	font-size: 10pt;
 }
 /* HEADER BACKGROUND COLOR */
@@ -101,26 +108,27 @@ body {
 a.hilight:link {
 	color: #000000;
 	text-decoration: none;
-	font-weight : bold;
+	font-weight: bold;
 }
-
 
 a.hilight:visited {
 	color: #FF6633;
 	text-decoration: none;
-	font-weight : bold;
+	font-weight: bold;
 }
 /* PROJECT TITLE LINKS FORMATING */
 a.philight:link {
 	color: #006666;
 	text-decoration: none;
-	font-weight : bold;
+	font-weight: bold;
 }
+
 a.philight:visited {
 	color: #55A0FF;
 	text-decoration: none;
-	font-weight : bold;
+	font-weight: bold;
 }
+
 a:visited {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -128,6 +136,7 @@ a:visited {
 	color: #000000;
 	text-decoration: none;
 }
+
 a:active {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -135,7 +144,6 @@ a:active {
 	color: #000000;
 	text-decoration: none;
 }
-
 
 /*end*/
 a:link {
@@ -154,18 +162,19 @@ a:link {
 .plainlabel {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 9pt;
-	font-weight : bold;
+	font-weight: bold;
 	color: #000000;
 	line-height: 15pt;
 	background-color: #C5E8CD;
-	
 }
+
 .plainlabel_red {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 9pt;
-	font-weight : bold;
+	font-weight: bold;
 	color: #FF0000;
 }
+
 .plainlabel_eha {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -175,7 +184,7 @@ a:link {
 .plaintitle {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18pt;
-	font-weight : bold;
+	font-weight: bold;
 	color: #FFF5E7;
 }
 
@@ -217,6 +226,7 @@ a:link {
 	background-color: #80CB9B;
 	line-height: 20pt;
 }
+
 .tbfooter {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -247,6 +257,7 @@ a:link {
 	color: #000000;
 	line-height: 12px;
 }
+
 .tblight {
 	background-color: #EEFFFF;
 	cellpadding: 2;
@@ -258,57 +269,61 @@ a:link {
 	background-color: #FFF5E7;
 	cellpadding: 2;
 }
-.tbhilightrow { 
-	background-color: #F0FCDA; 
-	font-family: Arial, Helvetica, sans-serif; 
-	font-size: 10pt; 
+
+.tbhilightrow {
+	background-color: #F0FCDA;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
 	color: #000000;
 }
-.tbhilightrow2 { 
-	background-color: #CFDABE; 
+
+.tbhilightrow2 {
+	background-color: #CFDABE;
 	font-weight: bold;
 }
 /* TABLE within legend */
 .tbInLegend {
 	background-color: #FFF5E7;
-	border-color: #084A87;	
+	border-color: #084A87;
 	cellpadding: 2;
 }
 
 .legendtitle {
-	color: #000000; 
-	text-decoration: none; 
-	font-weight : bold; 
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
 	font-style: normal;
-	font-family: Arial, Helvetica, sans-serif; 
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 }
-.title { 
-	color: #000000; 
-	text-decoration: none; 
-	font-weight : bold; 
-	font-family: Arial, Helvetica, sans-serif; 
+
+.title {
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 9pt;
 }
+
 .grise {
-	background-color:#999999;
+	background-color: #999999;
 }
+
 .blanc {
-		
-  color : #999999;
-  
-  letter-spacing : 0pt;
-  text-decoration: none ; 
-  font-weight : 600;
+	color: #999999;
+	letter-spacing: 0pt;
+	text-decoration: none;
+	font-weight: 600;
 }
 
 .tbnavigation {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 9pt;
 	font-weight: bold;
-	font-style : normal;
+	font-style: normal;
 	background-color: #80CB9B;
 }
+
 .menu0 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -317,6 +332,7 @@ a:link {
 	font-weight: normal;
 	color: #000000;
 }
+
 .menu01 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -324,6 +340,7 @@ a:link {
 	background-color: #EEFFFF;
 	font-weight: normal;
 }
+
 .menu02 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -333,6 +350,7 @@ a:link {
 	background-color: #FFFFEE;
 	font-variant: normal;
 }
+
 .menu02_selected {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;

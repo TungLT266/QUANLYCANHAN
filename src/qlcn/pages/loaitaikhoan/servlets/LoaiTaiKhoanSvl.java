@@ -65,7 +65,7 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 	    	
 	    	session.setAttribute("obj", obj);
     		session.setAttribute("userId", userId);
-    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Loaitaikhoan.jsp");
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 	    }
 	}
 
@@ -97,7 +97,7 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 				
 				session.setAttribute("obj", obj);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/LoaitaikhoanNew.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 		    } else {
 		    	ILoaiTaiKhoanList obj = new LoaiTaiKhoanList();
 		    	obj.setUserId(userId);
@@ -131,7 +131,7 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 		    	
 		    	session.setAttribute("obj", obj);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Loaitaikhoan.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 		    }
 	    }
 	}

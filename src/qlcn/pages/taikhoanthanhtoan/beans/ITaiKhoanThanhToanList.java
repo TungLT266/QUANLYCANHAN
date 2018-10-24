@@ -28,9 +28,6 @@ public interface ITaiKhoanThanhToanList extends IPhan_Trang {
 	public String getSoItems();
 	public void setSoItems(String soItems);
 
-	public String getLoai();
-	public void setLoai(String loai);
-
 	public String getTaikhoan();
 	public void setTaikhoan(String taikhoan);
 

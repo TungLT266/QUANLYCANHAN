@@ -67,9 +67,9 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 				action = "";
 			
 			if(action.equals("update")) {
-				response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/LoaitaikhoanNew.jsp");
+				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 		    } else {
-		    	response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/LoaitaikhoanDisplay.jsp");
+		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanDisplay.jsp");
 		    }
 	    }
 	}
@@ -96,16 +96,15 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 	    	obj.setUserId(userId);
 	    	
 	    	String id = request.getParameter("id");	
-		    if(id == null)
-		    	id = "";
-	    	obj.setID(id);
-		    
+		    if(id != null)
+		    	obj.setID(id);
+	    	
 			String ten = util.antiSQLInspection(request.getParameter("ten"));
 			if (ten != null)
 				obj.setTen(ten);
 		    
 		    String trangthai = request.getParameter("trangthai");
-			if (trangthai == null || trangthai.length() == 0)
+			if (trangthai == null)
 				trangthai = "0";
 			obj.setTrangthai(trangthai);
 	    	
@@ -118,7 +117,7 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 					if(!obj.update()) {
 						session.setAttribute("obj", obj);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/LoaitaikhoanNew.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 					} else {
 						obj.DBClose();
 						ILoaiTaiKhoanList objList = new LoaiTaiKhoanList();
@@ -128,13 +127,13 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", objList);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Loaitaikhoan.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 					}
 				} else {
 					if(!obj.create()) {
 						session.setAttribute("obj", obj);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/LoaitaikhoanNew.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 					} else {
 						obj.DBClose();
 						ILoaiTaiKhoanList objList = new LoaiTaiKhoanList();
@@ -144,7 +143,7 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 						
 						session.setAttribute("obj", objList);
 			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Loaitaikhoan.jsp");
+			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 					}
 				}
 		    }

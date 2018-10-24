@@ -65,7 +65,7 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 	    	
 	    	session.setAttribute("obj", obj);
     		session.setAttribute("userId", userId);
-    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/Taikhoanthanhtoan.jsp");
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoanthanhtoan.jsp");
 	    }
 	}
 
@@ -99,7 +99,7 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 				
 				session.setAttribute("obj", obj);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanNew.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 		    } else {
 		    	ITaiKhoanThanhToanList obj = new TaiKhoanThanhToanList();
 		    	obj.setUserId(userId);
@@ -111,6 +111,10 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 				String ten = util.antiSQLInspection(request.getParameter("ten"));
 				if(ten != null)
 					obj.setTen(ten);
+				
+				String taikhoan = util.antiSQLInspection(request.getParameter("taikhoan"));
+				if(taikhoan != null)
+					obj.setTaikhoan(taikhoan);
 				
 				String trangthai = request.getParameter("trangthai");
 				if(trangthai != null)
@@ -133,7 +137,7 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 		    	
 		    	session.setAttribute("obj", obj);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/Pages/QLTS/Pages/TaikhoanthanhtoanDisplay.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoanthanhtoan.jsp");
 		    }
 	    }
 	}

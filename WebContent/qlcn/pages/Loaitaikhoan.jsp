@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="qlts.loaitaikhoan.beans.ILoaiTaiKhoanList"%>
-<%@page import="qlts.center.util.Utility"%>
+<%@page import="qlcn.pages.loaitaikhoan.beans.ILoaiTaiKhoanList"%>
+<%@page import="qlcn.center.util.Utility"%>
 
 <%
 Utility util = new Utility();
@@ -16,9 +16,9 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 <head>
 <title>Loại tài khoản</title>
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="../CSS/main.css" type="text/css">
-<link rel="stylesheet" href="../CSS/calendar.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="../CSS/mybutton.css">
+<link rel="stylesheet" href="../css/main.css" type="text/css">
+<link rel="stylesheet" href="../css/calendar.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
@@ -141,10 +141,10 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 												</a>&nbsp;&nbsp;&nbsp;&nbsp; -->
 												&nbsp;&nbsp;
 												<a class="button2" href="javascript:clearform()">
-													<img style="top: -4px;" src="../Images/Clear32.png" alt="">Clear
+													<img style="top: -4px;" src="../images/Clear32.png" alt="">Clear
 												</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<a class="button2" href="javascript:deleteDB()">
-													<img style="top: -4px;" src="../Images/resetdb32.png" alt="">Refresh Database
+													<img style="top: -4px;" src="../images/resetdb32.png" alt="">Refresh Database
 												</a>&nbsp;&nbsp;&nbsp;&nbsp;
 											</td>
 										</tr>
@@ -158,7 +158,7 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 								<fieldset>
 									<legend class="legendtitle">&nbsp;Loại tài khoản &nbsp;&nbsp;
 										<a class="button3" href="javascript:newform()">
-											<img style="top: -4px;" src="../Images/New.png" alt="">New
+											<img style="top: -4px;" src="../images/New.png" alt="">New
 										</a>
 									</legend>
 
@@ -209,17 +209,17 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																		<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=loaitaikhoanRs.getString("ID") %>">
-																			<img title="Cập nhật" src="../Images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
+																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
 																		</a> &nbsp;
 																		<a href="/QUANLYCANHAN/LoaiTaiKhoanSvl?userId=<%=userId%>&delete=<%=loaitaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
-																			<img title="Delete" src="../Images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
+																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																		</a>&nbsp;
 																		<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId%>&display=<%=loaitaikhoanRs.getString("ID") %>">
-																			<img title="Hiển thị" src="../Images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																			<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																		</a>
 																<%} else { %>
 																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&display=<%=loaitaikhoanRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../Images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} %>
 															</td>
@@ -230,19 +230,19 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 													<tr class="tbfooter">
 														<td align="center" valign="middle" colspan="8" class="tbfooter">
 															<% obj.setNextSplittings(); %>
-															<script type="text/javascript" src="../Scripts/phanTrang.js"></script>
+															<script type="text/javascript" src="../scripts/phanTrang.js"></script>
 															<input type="hidden" name="crrApprSplitting" value="<%= obj.getCrrApprSplitting() %>" >
 															<input type="hidden" name="nxtApprSplitting" value="<%= obj.getNxtApprSplitting() %>" >
 															
 															<%if(obj.getNxtApprSplitting() > 1) { %>
-																<img alt="Trang Dau" src="../Images/first.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, 1, 'view')"> &nbsp;
+																<img alt="Trang Dau" src="../images/first.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, 1, 'view')"> &nbsp;
 															<%} else { %>
-																<img alt="Trang Dau" src="../Images/first.gif" > &nbsp;
+																<img alt="Trang Dau" src="../images/first.gif" > &nbsp;
 															<%} %>
 															<% if(obj.getNxtApprSplitting() > 1){ %>
-																<img alt="Trang Truoc" src="../Images/prev.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, eval(document.forms[0].nxtApprSplitting.value) -1, 'view')"> &nbsp;
+																<img alt="Trang Truoc" src="../images/prev.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, eval(document.forms[0].nxtApprSplitting.value) -1, 'view')"> &nbsp;
 															<%}else{ %>
-																<img alt="Trang Truoc" src="../Images/prev_d.gif" > &nbsp;
+																<img alt="Trang Truoc" src="../images/prev_d.gif" > &nbsp;
 															<%} %>
 															
 															<%int[] listPage = obj.getNextSplittings(); %>
@@ -256,14 +256,14 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 															<%} %>
 															
 															<%if(obj.getNxtApprSplitting() < obj.getTheLastSplitting()){ %>
-																&nbsp; <img alt="Trang Tiep" src="../Images/next.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, eval(document.forms[0].nxtApprSplitting.value) +1, 'view')"> &nbsp;
+																&nbsp; <img alt="Trang Tiep" src="../images/next.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, eval(document.forms[0].nxtApprSplitting.value) +1, 'view')"> &nbsp;
 															<%} else { %>
-																&nbsp; <img alt="Trang Tiep" src="../Images/next_d.gif" > &nbsp;
+																&nbsp; <img alt="Trang Tiep" src="../images/next_d.gif" > &nbsp;
 															<%} %>
 															<%if(obj.getNxtApprSplitting() == obj.getTheLastSplitting()) {%>
-																<img alt="Trang Cuoi" src="../Images/last.gif" > &nbsp;
+																<img alt="Trang Cuoi" src="../images/last.gif" > &nbsp;
 															<%} else { %>
-																<img alt="Trang Cuoi" src="../Images/last.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, -1, 'view')"> &nbsp;
+																<img alt="Trang Cuoi" src="../images/last.gif" style="cursor: pointer;" onclick="View(document.forms[0].name, -1, 'view')"> &nbsp;
 															<%} %>
 														</td>
 													</tr>

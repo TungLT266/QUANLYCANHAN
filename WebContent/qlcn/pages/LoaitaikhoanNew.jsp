@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="qlts.loaitaikhoan.beans.ILoaiTaiKhoan"%>
-<%@page import="qlts.center.util.Utility"%>
+<%@page import="qlcn.pages.loaitaikhoan.beans.ILoaiTaiKhoan"%>
+<%@page import="qlcn.center.util.Utility"%>
 
 <%
 Utility util = new Utility();
@@ -14,9 +14,9 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 <head>
 <title>Loại tài khoản</title>
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="stylesheet" href="../CSS/main.css" type="text/css">
-<link rel="stylesheet" href="../CSS/calendar.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="../CSS/mybutton.css">
+<link rel="stylesheet" href="../css/main.css" type="text/css">
+<link rel="stylesheet" href="../css/calendar.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
 <script language="javascript" type="text/javascript">
 	function save() {
@@ -53,14 +53,14 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 						<tr class="tbdarkrow">
 							<td width="30" align="left">
 								<a href="/QUANLYCANHAN/LoaiTaiKhoanSvl?userId=<%=userId %>">
-									<img src="../Images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
+									<img src="../images/Back30.png" alt="Back" title="Back" border="1" longdesc="Quay ve" style="border-style: outset">
 								</a>
 							</td>
 							<td width="2" align="left"></td>
 							<td width="30" align="left">
 								<div id="btnSave">
 									<A href="javascript: save()">
-										<img src="../Images/Save30.png" title="Save" alt="Save" border="1" style="border-style: outset">
+										<img src="../images/Save30.png" title="Save" alt="Save" border="1" style="border-style: outset">
 									</A>
 								</div>
 							</td>

@@ -10,7 +10,6 @@ import qlcn.pages.taikhoanthanhtoan.beans.ITaiKhoanThanhToanList;
 public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhToanList {
 	private String userId;
 	private String ID;
-	private String loai;
 	private String taikhoan;
 	private String ten;
 	private String trangthai;
@@ -23,7 +22,6 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 	
 	public TaiKhoanThanhToanList() {
 		this.ID = "";
-		this.loai = "";
 		this.taikhoan = "";
 		this.ten = "";
 		this.trangthai = "";
@@ -35,8 +33,11 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 	
 	public void init() {
 		Utility util = new Utility();
-		String query = "select tktt.ID, tktt.loai, tktt.taikhoan_fk, tktt.TEN, tktt.TRANGTHAI, ndt.TEN as nguoitao, nds.TEN as nguoisua, tktt.NGAYTAO, tktt.NGAYSUA"
+		String query = "select tktt.ID, '[' + cast(tk.id as varchar) + '] ' + tk.ten as taikhoan,"
+				+ "\n	case when tktt.loai = 1 then tktt.TEN when tktt.loai = 2 then tktt.sothe else '' end as ten,"
+				+ "\n	tktt.TRANGTHAI, ndt.TEN as nguoitao, nds.TEN as nguoisua, tktt.NGAYTAO, tktt.NGAYSUA"
 				+ "\n from TAIKHOANTHANHTOAN tktt"
+				+ "\n left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk"
 				+ "\n left join NGUOIDUNG ndt on ndt.ID = tktt.NGUOITAO"
 				+ "\n left join NGUOIDUNG nds on nds.ID = tktt.NGUOISUA"
 				+ "\n where tktt.ID > 0";
@@ -46,7 +47,11 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 		}
 		
 		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(tktt.TEN) like '%" + util.replaceAEIOU(this.ten.trim()) + "%'";
+			query += " and (dbo.ftBoDau(tktt.TEN) like '%" + util.replaceAEIOU(this.ten.trim()) + "%' or tktt.sothe like '%" + util.replaceAEIOU(this.ten.trim()) + "%')";
+		}
+		
+		if(this.taikhoan.trim().length() > 0) {
+			query += " and (tk.id like '%" + util.replaceAEIOU(this.taikhoan.trim()) + "%' or (dbo.ftBoDau(tk.TEN)) like '%" + util.replaceAEIOU(this.taikhoan.trim()) + "%')";
 		}
 		
 		if(this.trangthai.length() > 0) {
@@ -54,7 +59,6 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 		}
 		
 		System.out.println(query);
-		
 		this.TaikhoanthanhtoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
@@ -120,14 +124,6 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 
 	public void setSoItems(String soItems) {
 		this.soItems = soItems;
-	}
-
-	public String getLoai() {
-		return loai;
-	}
-
-	public void setLoai(String loai) {
-		this.loai = loai;
 	}
 
 	public String getTaikhoan() {
