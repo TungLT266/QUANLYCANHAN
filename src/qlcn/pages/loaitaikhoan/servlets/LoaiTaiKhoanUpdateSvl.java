@@ -53,9 +53,8 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 	    	obj.setUserId(userId);
 	    	
 	    	String id = util.getId(querystring);
-		    if(id == null)
-		    	id = "";
-	    	obj.setID(id);
+		    if(id != null)
+		    	obj.setID(id);
 	    	
 	    	obj.init();
 	    	

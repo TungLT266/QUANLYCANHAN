@@ -19,6 +19,17 @@ ResultSet DonviRs = obj.getDonviRs();
 <link rel="stylesheet" href="../css/calendar.css" type="text/css">
 <link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
+<script type="text/javascript"	src="../scripts/jquery.min.1.7.js"></script>
+<script type="text/javascript" language="JavaScript" src="../scripts/jquery.tools.min.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../scripts/select2.js"></script>
+<script>
+	$(document).ready(function() {
+		$(".select2").select2();
+	});
+</script>
+
 <script language="javascript" type="text/javascript">
 	function save() {
 		if (document.getElementById("ten").value.trim().length <= 0) {
@@ -92,7 +103,7 @@ ResultSet DonviRs = obj.getDonviRs();
 							<td align="left" colspan="4" class="legendtitle">
 								<fieldset>
 									<legend class="legendtitle">Thông báo </legend>
-									<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1"><%=obj.getMsg()%></textarea>
+									<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1" style="width: 99%"><%=obj.getMsg()%></textarea>
 								</fieldset>
 							</td>
 						</tr>
@@ -134,8 +145,13 @@ ResultSet DonviRs = obj.getDonviRs();
 											
 											<td width="15%" class="plainlabel">Số tiền <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);">
-												<select name="donvi" style="width: 70px;">
+												<%if(obj.getID().length() > 0){ %>
+													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" readonly="readonly" onkeypress="return keypress(event);">
+												<%} else { %>
+													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);">
+												<%} %>
+												
+												<select name="donvi" class="select2" style="width: 70px;">
 													<%if(DonviRs != null){ %>
 														<%while(DonviRs.next()){ %>
 															<%if(obj.getDonvi().equals(DonviRs.getString("id"))){ %>

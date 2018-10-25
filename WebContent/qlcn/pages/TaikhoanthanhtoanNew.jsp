@@ -102,7 +102,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 							<td align="left" colspan="4" class="legendtitle">
 								<fieldset>
 									<legend class="legendtitle">Thông báo </legend>
-									<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1"><%=obj.getMsg()%></textarea>
+									<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1" style="width: 99%"><%=obj.getMsg()%></textarea>
 								</fieldset>
 							</td>
 						</tr>
@@ -115,7 +115,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 										<tr>
 											<td width="15%" class="plainlabel">Loại <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<select id="loai" name="loai" onchange="showHideByLoai();">
+												<select id="loai" name="loai" class="select2" style="width: 200px;" onchange="showHideByLoai();">
 													<%if(obj.getLoai().equals("1")) { %>
 														<option value="1" selected="selected">Tiền mặt</option>
 														<option value="2">Thẻ thanh toán</option>
@@ -150,7 +150,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 										<tr id="loaittt1" <%=obj.getLoai().equals("2") ? "" : "style=\"display: none;\"" %>>
 											<td class="plainlabel">Loại thẻ</td>
 											<td class="plainlabel">
-												<select id="loaithe" name="loaithe">
+												<select id="loaithe" name="loaithe" class="select2" style="width: 200px;">
 													<%if(obj.getLoaithe().equals("1")) { %>
 														<option value="0"></option>
 														<option value="1" selected="selected">ATM</option>
@@ -174,22 +174,6 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 													<%} %>
 												</select>
 											</td>
-											
-											<%-- <td class="plainlabel">Ngân hàng</td>
-											<td class="plainlabel">
-												<select id="nganhang" name="nganhang">
-													<option value="0"></option>
-													<%if(NganhangRs != null){ %>
-														<%while(NganhangRs.next()){ %>
-															<%if(obj.getNganhang().equals(NganhangRs.getString("id"))){ %>
-																<option value="<%=NganhangRs.getString("id") %>" selected><%=NganhangRs.getString("ten") %></option>
-															<%} else { %>
-																<option value="<%=NganhangRs.getString("id") %>" ><%=NganhangRs.getString("ten") %></option>
-															<%} %>
-														<%} %>
-													<%} %>
-												</select>
-											</td> --%>
 											
 											<td class="plainlabel">Số thẻ</td>
 											<td class="plainlabel">

@@ -18,6 +18,9 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 <link rel="stylesheet" href="../css/calendar.css" type="text/css">
 <link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
+<script type="text/javascript"	src="../scripts/jquery.min.1.7.js"></script>
+<script type="text/javascript" language="JavaScript" src="../scripts/jquery.tools.min.js"></script>
+
 <script language="javascript" type="text/javascript">
 	function save() {
 		if (document.getElementById("ten").value.trim() == "") {
@@ -73,7 +76,7 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 							<td align="left" colspan="4" class="legendtitle">
 								<fieldset>
 									<legend class="legendtitle">Thông báo </legend>
-									<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1"><%=obj.getMsg()%></textarea>
+									<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1" style="width: 99%"><%=obj.getMsg()%></textarea>
 								</fieldset>
 							</td>
 						</tr>

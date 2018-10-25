@@ -24,6 +24,17 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 <link rel="stylesheet" href="../css/calendar.css" type="text/css">
 <link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 
+<script type="text/javascript"	src="../scripts/jquery.min.1.7.js"></script>
+<script type="text/javascript" language="JavaScript" src="../scripts/jquery.tools.min.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../scripts/select2.js"></script>
+<script>
+	$(document).ready(function() {
+		$(".select2").select2();
+	});
+</script>
+
 <script language="javascript" type="text/javascript">
 	function clearform() { 
 	    document.forms['FormTk'].id.value = "";
@@ -70,10 +81,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 		}
 		return true;
 	}
-
-	if (<%=obj.getMsg().length()%> > 0) {
-	 	alert("<%=obj.getMsg()%>");
-	}
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
@@ -91,6 +98,17 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 					</table>
 					
 					<table width="100%" cellpadding="0" cellspacing="1">
+						<%if(obj.getMsg().trim().length() > 0){ %>
+							<tr>
+								<td align="left" class="legendtitle">
+									<fieldset>
+										<legend class="legendtitle">Thông báo </legend>
+										<textarea name="dataerror" id="dataerror" readonly="readonly" rows="1" style="width: 99%"><%=obj.getMsg()%></textarea>
+									</fieldset>
+								</td>
+							</tr>
+						<%} %>
+						
 						<tr>
 							<td>
 								<fieldset>
@@ -120,7 +138,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 										
 											<td class="plainlabel">Trạng thái</td>
 											<td class="plainlabel">
-												<select name="trangthai" onchange="search();">
+												<select name="trangthai" class="select2" style="width: 200px;" onchange="search();">
 													<option value=""></option>
 													<%if(obj.getTrangthai().equals("0")){ %>
 														<option value="0" selected="selected">Ngưng hoạt động</option>

@@ -46,11 +46,10 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 		}
 		
 		if(this.trangthai.length() > 0) {
-			query += " and ltk.TRANGTHAI = '" + this.trangthai + "'";
+			query += " and ltk.TRANGTHAI = " + this.trangthai;
 		}
 		
 		System.out.println(query);
-		
 		this.loaitaikhoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
