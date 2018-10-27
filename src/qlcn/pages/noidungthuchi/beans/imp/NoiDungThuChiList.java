@@ -19,6 +19,7 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 	private ResultSet NoidungthuchiRs;
 	
 	private Dbutils db;
+	private Utility util;
 	
 	public NoiDungThuChiList() {
 		this.ID = "";
@@ -29,15 +30,12 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 		this.msg = "";
 		
 		this.db = new Dbutils();
+		this.util = new Utility();
 	}
 	
 	public void init() {
-		Utility util = new Utility();
-		String query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndt.TEN as nguoitao, nds.TEN as nguoisua, ndtc.NGAYTAO, ndtc.NGAYSUA"
-				+ "\n from NOIDUNGTHUCHI ndtc"
-				+ "\n left join NGUOIDUNG ndt on ndt.ID = ndtc.NGUOITAO"
-				+ "\n left join NGUOIDUNG nds on nds.ID = ndtc.NGUOISUA"
-				+ "\n where ndtc.ID > 0";
+		String query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA"
+				+ "\n from NOIDUNGTHUCHI ndtc where ndtc.USERID = " + this.userId;
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and ndtc.ID like '%" + this.ID.trim() + "%'";
@@ -48,7 +46,7 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 		}
 		
 		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(ndtc.TEN) like '%" + util.replaceAEIOU(this.ten.trim()) + "%'";
+			query += " and dbo.ftBoDau(ndtc.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
 		}
 		
 		if(this.trangthai.length() > 0) {
@@ -66,11 +64,22 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
     	}
 	}
 	
-	public void deleteDB() {
-		String query = "delete NOIDUNGTHUCHI where trangthai = 2";
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa Database NOIDUNGTHUCHI: " + query;
-    	}
+	public void deleteDB(String pinUser) {
+		try {
+			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
+			ResultSet rs = this.db.get(query);
+			if(rs.next()){
+				query = "delete NOIDUNGTHUCHI where trangthai = 2";
+				if(!this.db.update(query)){
+		    		this.msg = "Không thể xóa Database NOIDUNGTHUCHI: " + query;
+		    	}
+			} else {
+				this.msg = "Mã PIN không đúng.";
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void DBClose() {

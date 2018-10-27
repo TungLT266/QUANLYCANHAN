@@ -5,6 +5,7 @@
 
 <%
 Utility util = new Utility();
+String userTen = (String) session.getAttribute("userTen");
 String userId = (String) session.getAttribute("userId");
 
 ILoaiTaiKhoanList obj = (ILoaiTaiKhoanList) session.getAttribute("obj");
@@ -41,27 +42,23 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 	}
 	
 	function search() {
-		document.forms['FormLtk'].action.value= 'search';
+		document.forms['FormLtk'].action.value = 'search';
 		document.forms['FormLtk'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormLtk'].action.value= 'new';
+		document.forms['FormLtk'].action.value = 'new';
 		document.forms['FormLtk'].submit();
 	}
 	
 	function deleteDB() {
 		var pin = prompt("Please enter your PIN", "");
-		if(pin != null) {
-			if(pin != "1995"){
-				alert("Mã PIN bạn nhập không đúng.");
-				return false;
-			}
-		} else {
+		if(pin == null) {
 			return false;
 		}
 		
-		document.forms['FormLtk'].action.value= 'deletedb';
+		document.forms['FormLtk'].pinUser.value = pin;
+		document.forms['FormLtk'].action.value = 'deletedb';
 		document.forms['FormLtk'].submit();
 	}
 
@@ -83,13 +80,14 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 	<form name="FormLtk" method="post" action="/QUANLYCANHAN/LoaiTaiKhoanSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
 		<input type="hidden" name="action" value="">
+		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
 			<tr>
 				<td colspan="4" align='left' valign='top' bgcolor="#FFFFFF">
-					<table width="100%" border="0" cellpadding="0" cellspacing="2">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr height="22">
 							<td align="left" colspan="2" class="tbnavigation">&nbsp;Dữ liệu nền > Loại tài khoản</td>
-							<%-- <td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %></td> --%>
+							<td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %>&nbsp;&nbsp;</td>
 						</tr>
 					</table>
 					
@@ -186,12 +184,10 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 												<table width="100%" border="0" cellspacing="1" cellpadding="4">
 													<tr class="tbheader">
 														<th width="10%">ID</th>
-														<th width="20%">Tên</th>
-														<th width="12%">Trạng thái</th>
+														<th width="50%">Tên</th>
+														<th width="10%">Trạng thái</th>
 														<th width="10%">Ngày tạo</th>
-														<th width="14%">Người tạo</th>
 														<th width="10%">Ngày sửa</th>
-														<th width="14%">Người sửa</th>
 														<th width="10%">Tác vụ</th>
 													</tr>
 													<%
@@ -221,9 +217,7 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 															<%} %>
 
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYTAO") %></td>
-															<td><%=loaitaikhoanRs.getString("NGUOITAO") %></td>
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYSUA") %></td>
-															<td><%=loaitaikhoanRs.getString("NGUOISUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																		<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=loaitaikhoanRs.getString("ID") %>">
@@ -246,7 +240,7 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 														<%} %>
 			                                    	<%} %>
 													<tr class="tbfooter">
-														<td align="center" valign="middle" colspan="8" class="tbfooter">
+														<td align="center" valign="middle" colspan="6" class="tbfooter">
 															<% obj.setNextSplittings(); %>
 															<script type="text/javascript" src="../scripts/phanTrang.js"></script>
 															<input type="hidden" name="crrApprSplitting" value="<%= obj.getCrrApprSplitting() %>" >

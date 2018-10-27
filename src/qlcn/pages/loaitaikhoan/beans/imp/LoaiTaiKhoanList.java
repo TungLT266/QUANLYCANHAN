@@ -18,6 +18,7 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 	private ResultSet loaitaikhoanRs;
 	
 	private Dbutils db;
+	private Utility util;
 	
 	public LoaiTaiKhoanList() {
 		this.ID = "";
@@ -27,22 +28,18 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 		this.msg = "";
 		
 		this.db = new Dbutils();
+		this.util = new Utility();
 	}
 	
 	public void init() {
-		Utility util = new Utility();
-		String query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ndt.TEN as nguoitao, nds.TEN as nguoisua, ltk.NGAYTAO, ltk.NGAYSUA"
-				+ "\n from LOAITAIKHOAN ltk"
-				+ "\n left join NGUOIDUNG ndt on ndt.ID = ltk.NGUOITAO"
-				+ "\n left join NGUOIDUNG nds on nds.ID = ltk.NGUOISUA"
-				+ "\n where ltk.ID > 0";
+		String query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ltk.NGAYTAO, ltk.NGAYSUA from LOAITAIKHOAN ltk where ltk.USERID = " + this.userId;
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and ltk.ID like '%" + this.ID.trim() + "%'";
 		}
 		
 		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(ltk.TEN) like '%" + util.replaceAEIOU(this.ten.trim()) + "%'";
+			query += " and dbo.ftBoDau(ltk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
 		}
 		
 		if(this.trangthai.length() > 0) {
@@ -60,11 +57,22 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
     	}
 	}
 	
-	public void deleteDB() {
-		String query = "delete LOAITAIKHOAN where trangthai = 2";
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa Database LOAITAIKHOAN: " + query;
-    	}
+	public void deleteDB(String pinUser) {
+		try {
+			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
+			ResultSet rs = this.db.get(query);
+			if(rs.next()){
+				query = "delete LOAITAIKHOAN where trangthai = 2";
+				if(!this.db.update(query)){
+		    		this.msg = "Không thể xóa Database LOAITAIKHOAN: " + query;
+		    	}
+			} else {
+				this.msg = "Mã PIN không đúng.";
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void DBClose() {

@@ -19,6 +19,7 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 	private ResultSet TaikhoanthanhtoanRs;
 	
 	private Dbutils db;
+	private Utility util;
 	
 	public TaiKhoanThanhToanList() {
 		this.ID = "";
@@ -29,29 +30,25 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 		this.msg = "";
 		
 		this.db = new Dbutils();
+		this.util = new Utility();
 	}
 	
 	public void init() {
-		Utility util = new Utility();
 		String query = "select tktt.ID, '[' + cast(tk.id as varchar) + '] ' + tk.ten as taikhoan,"
 				+ "\n	case when tktt.loai = 1 then tktt.TEN when tktt.loai = 2 then tktt.sothe else '' end as ten,"
-				+ "\n	tktt.TRANGTHAI, ndt.TEN as nguoitao, nds.TEN as nguoisua, tktt.NGAYTAO, tktt.NGAYSUA"
-				+ "\n from TAIKHOANTHANHTOAN tktt"
-				+ "\n left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk"
-				+ "\n left join NGUOIDUNG ndt on ndt.ID = tktt.NGUOITAO"
-				+ "\n left join NGUOIDUNG nds on nds.ID = tktt.NGUOISUA"
-				+ "\n where tktt.ID > 0";
+				+ "\n	tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
+				+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.USERID = " + this.userId;
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and tktt.ID like '%" + this.ID.trim() + "%'";
 		}
 		
 		if(this.ten.trim().length() > 0) {
-			query += " and (dbo.ftBoDau(tktt.TEN) like '%" + util.replaceAEIOU(this.ten.trim()) + "%' or tktt.sothe like '%" + util.replaceAEIOU(this.ten.trim()) + "%')";
+			query += " and (dbo.ftBoDau(tktt.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%' or tktt.sothe like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%')";
 		}
 		
 		if(this.taikhoan.trim().length() > 0) {
-			query += " and (tk.id like '%" + util.replaceAEIOU(this.taikhoan.trim()) + "%' or (dbo.ftBoDau(tk.TEN)) like '%" + util.replaceAEIOU(this.taikhoan.trim()) + "%')";
+			query += " and (tk.id like '%" + this.util.replaceAEIOU(this.taikhoan.trim()) + "%' or (dbo.ftBoDau(tk.TEN)) like '%" + this.util.replaceAEIOU(this.taikhoan.trim()) + "%')";
 		}
 		
 		if(this.trangthai.length() > 0) {
@@ -69,11 +66,22 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
     	}
 	}
 	
-	public void deleteDB() {
-		String query = "delete TAIKHOANTHANHTOAN where trangthai = 2";
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa Database TAIKHOANTHANHTOAN: " + query;
-    	}
+	public void deleteDB(String pinUser) {
+		try {
+			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
+			ResultSet rs = this.db.get(query);
+			if(rs.next()){
+				query = "delete TAIKHOANTHANHTOAN where trangthai = 2";
+				if(!this.db.update(query)){
+		    		this.msg = "Không thể xóa Database TAIKHOANTHANHTOAN: " + query;
+		    	}
+			} else {
+				this.msg = "Mã PIN không đúng.";
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void DBClose() {

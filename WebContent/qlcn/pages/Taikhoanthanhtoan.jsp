@@ -5,6 +5,7 @@
 
 <%
 Utility util = new Utility();
+String userTen = (String) session.getAttribute("userTen");
 String userId = (String) session.getAttribute("userId");
 
 ITaiKhoanThanhToanList obj = (ITaiKhoanThanhToanList) session.getAttribute("obj");
@@ -42,27 +43,23 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 	}
 	
 	function search() {
-		document.forms['FormTktt'].action.value= 'search';
+		document.forms['FormTktt'].action.value = 'search';
 		document.forms['FormTktt'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormTktt'].action.value= 'new';
+		document.forms['FormTktt'].action.value = 'new';
 		document.forms['FormTktt'].submit();
 	}
 	
 	function deleteDB() {
 		var pin = prompt("Please enter your PIN", "");
-		if(pin != null) {
-			if(pin != "1995"){
-				alert("Mã PIN bạn nhập không đúng.");
-				return false;
-			}
-		} else {
+		if(pin == null) {
 			return false;
 		}
 		
-		document.forms['FormTktt'].action.value= 'deletedb';
+		document.forms['FormTktt'].pinUser.value = pin;
+		document.forms['FormTktt'].action.value = 'deletedb';
 		document.forms['FormTktt'].submit();
 	}
 
@@ -84,13 +81,14 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 	<form name="FormTktt" method="post" action="/QUANLYCANHAN/TaiKhoanThanhToanSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
 		<input type="hidden" name="action" value="">
+		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
 			<tr>
 				<td colspan="4" align='left' valign='top' bgcolor="#FFFFFF">
-					<table width="100%" border="0" cellpadding="0" cellspacing="2">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr height="22">
 							<td align="left" colspan="2" class="tbnavigation">&nbsp;Dữ liệu nền > Tài khoản thanh toán</td>
-							<%-- <td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %></td> --%>
+							<td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %>&nbsp;&nbsp;</td>
 						</tr>
 					</table>
 					
@@ -194,13 +192,11 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 												<table width="100%" border="0" cellspacing="1" cellpadding="4">
 													<tr class="tbheader">
 														<th width="10%">ID</th>
-														<th width="15%">Tên/Số thẻ</th>
-														<th width="15%">Tài khoản</th>
+														<th width="30%">Tên/Số thẻ</th>
+														<th width="20%">Tài khoản</th>
 														<th width="10%">Trạng thái</th>
 														<th width="10%">Ngày tạo</th>
-														<th width="10%">Người tạo</th>
 														<th width="10%">Ngày sửa</th>
-														<th width="10%">Người sửa</th>
 														<th width="10%">Tác vụ</th>
 													</tr>
 													<%
@@ -231,9 +227,7 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 															<%} %>
 
 															<td align="center"><%=TaikhoanthanhtoanRs.getString("NGAYTAO") %></td>
-															<td><%=TaikhoanthanhtoanRs.getString("NGUOITAO") %></td>
 															<td align="center"><%=TaikhoanthanhtoanRs.getString("NGAYSUA") %></td>
-															<td><%=TaikhoanthanhtoanRs.getString("NGUOISUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																		<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId %>&update=<%=TaikhoanthanhtoanRs.getString("ID") %>">
@@ -256,7 +250,7 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 														<%} %>
 			                                    	<%} %>
 													<tr class="tbfooter">
-														<td align="center" valign="middle" colspan="9" class="tbfooter">
+														<td align="center" valign="middle" colspan="7" class="tbfooter">
 															<% obj.setNextSplittings(); %>
 															<script type="text/javascript" src="../scripts/phanTrang.js"></script>
 															<input type="hidden" name="crrApprSplitting" value="<%= obj.getCrrApprSplitting() %>" >

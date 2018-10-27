@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import db.Dbutils;
+import qlcn.center.util.Utility;
 import qlcn.pages.loaitaikhoan.beans.ILoaiTaiKhoan;
 
 public class LoaiTaiKhoan implements ILoaiTaiKhoan {
@@ -17,6 +18,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 	private String msg;
 	
 	private Dbutils db;
+	private Utility util;
 	
 	public LoaiTaiKhoan() {
 		this.ID = "";
@@ -25,6 +27,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 		this.msg = "";
 		
 		this.db = new Dbutils();
+		this.util = new Utility();
 	}
 	
 	public void init() {
@@ -44,8 +47,8 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "insert into LOAITAIKHOAN(TEN, trangthai, nguoitao, ngaytao, nguoisua, ngaysua)"
-					+ "\n values(N'"+this.ten+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"')";
+			String query = "insert into LOAITAIKHOAN(TEN, trangthai, ngaytao, ngaysua, USERID)"
+					+ "\n values(N'"+this.ten+"',"+this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -71,8 +74,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "update LOAITAIKHOAN set TEN=N'"+this.ten+"', trangthai="+this.trangthai+","
-					+ "\n nguoisua="+this.userId+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+			String query = "update LOAITAIKHOAN set TEN=N'"+this.ten+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
 			if(!db.update(query)) {

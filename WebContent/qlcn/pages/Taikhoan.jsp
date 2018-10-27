@@ -7,6 +7,7 @@
 
 <%
 Utility util = new Utility();
+String userTen = (String) session.getAttribute("userTen");
 String userId = (String) session.getAttribute("userId");
 
 ITaiKhoanList obj = (ITaiKhoanList) session.getAttribute("obj");
@@ -45,27 +46,23 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 	}
 	
 	function search() {
-		document.forms['FormTk'].action.value= 'search';
+		document.forms['FormTk'].action.value = 'search';
 		document.forms['FormTk'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormTk'].action.value= 'new';
+		document.forms['FormTk'].action.value = 'new';
 		document.forms['FormTk'].submit();
 	}
 	
 	function deleteDB() {
 		var pin = prompt("Please enter your PIN", "");
-		if(pin != null) {
-			if(pin != "1995"){
-				alert("Mã PIN bạn nhập không đúng.");
-				return false;
-			}
-		} else {
+		if(pin == null) {
 			return false;
 		}
 		
-		document.forms['FormTk'].action.value= 'deletedb';
+		document.forms['FormTk'].pinUser.value = pin;
+		document.forms['FormTk'].action.value = 'deletedb';
 		document.forms['FormTk'].submit();
 	}
 
@@ -87,13 +84,14 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 	<form name="FormTk" method="post" action="/QUANLYCANHAN/TaiKhoanSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
 		<input type="hidden" name="action" value="">
+		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
 			<tr>
 				<td colspan="4" align='left' valign='top' bgcolor="#FFFFFF">
-					<table width="100%" border="0" cellpadding="0" cellspacing="2">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr height="22">
 							<td align="left" colspan="2" class="tbnavigation">&nbsp;Dữ liệu nền > Tài khoản</td>
-							<%-- <td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %></td> --%>
+							<td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %>&nbsp;&nbsp;</td>
 						</tr>
 					</table>
 					
@@ -200,13 +198,11 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 												<table width="100%" border="0" cellspacing="1" cellpadding="4">
 													<tr class="tbheader">
 														<th width="10%">ID</th>
-														<th width="18%">Tên tài khoản</th>
-														<th width="12%">Số tiền</th>
+														<th width="30%">Tên tài khoản</th>
+														<th width="20%">Số tiền</th>
 														<th width="10%">Trạng thái</th>
 														<th width="10%">Ngày tạo</th>
-														<th width="10%">Người tạo</th>
 														<th width="10%">Ngày sửa</th>
-														<th width="10%">Người sửa</th>
 														<th width="10%">Tác vụ</th>
 													</tr>
 													<%
@@ -246,9 +242,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 															<%} %>
 
 															<td align="center"><%=TaikhoanRs.getString("NGAYTAO") %></td>
-															<td><%=TaikhoanRs.getString("NGUOITAO") %></td>
 															<td align="center"><%=TaikhoanRs.getString("NGAYSUA") %></td>
-															<td><%=TaikhoanRs.getString("NGUOISUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=TaikhoanRs.getString("ID") %>">
@@ -271,7 +265,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.######");
 														<%} %>
 			                                    	<%} %>
 													<tr class="tbfooter">
-														<td align="center" valign="middle" colspan="9" class="tbfooter">
+														<td align="center" valign="middle" colspan="7" class="tbfooter">
 															<% obj.setNextSplittings(); %>
 															<script type="text/javascript" src="../scripts/phanTrang.js"></script>
 															<input type="hidden" name="crrApprSplitting" value="<%= obj.getCrrApprSplitting() %>" >

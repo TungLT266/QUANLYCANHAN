@@ -20,6 +20,7 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	private ResultSet TaikhoanRs;
 	
 	private Dbutils db;
+	private Utility util;
 	
 	public TaiKhoanList() {
 		this.ID = "";
@@ -30,23 +31,19 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 		this.msg = "";
 		
 		this.db = new Dbutils();
+		this.util = new Utility();
 	}
 	
 	public void init() {
-		Utility util = new Utility();
-		String query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, ndt.TEN as nguoitao, nds.TEN as nguoisua, tk.NGAYTAO, tk.NGAYSUA"
-				+ "\n from TAIKHOAN tk"
-				+ "\n left join DONVI dv on dv.ID = tk.DONVI_FK"
-				+ "\n left join NGUOIDUNG ndt on ndt.ID = tk.NGUOITAO"
-				+ "\n left join NGUOIDUNG nds on nds.ID = tk.NGUOISUA"
-				+ "\n where tk.ID > 0";
+		String query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
+				+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.USERID = " + this.userId;
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and tk.ID like '%" + this.ID.trim() + "%'";
 		}
 		
 		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(tk.TEN) like '%" + util.replaceAEIOU(this.ten.trim()) + "%'";
+			query += " and dbo.ftBoDau(tk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
 		}
 		
 //		if(this.loai.length() > 0) {
@@ -69,11 +66,22 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
     	}
 	}
 	
-	public void deleteDB() {
-		String query = "delete TAIKHOAN where trangthai = 2";
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa Database TAIKHOAN: " + query;
-    	}
+	public void deleteDB(String pinUser) {
+		try {
+			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
+			ResultSet rs = this.db.get(query);
+			if(rs.next()){
+				query = "delete TAIKHOAN where trangthai = 2";
+				if(!this.db.update(query)){
+		    		this.msg = "Không thể xóa Database TAIKHOAN: " + query;
+		    	}
+			} else {
+				this.msg = "Mã PIN không đúng.";
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void DBClose() {

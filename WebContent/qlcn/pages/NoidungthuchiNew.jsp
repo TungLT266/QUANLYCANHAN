@@ -5,7 +5,9 @@
 
 <%
 Utility util = new Utility();
+String userTen = (String) session.getAttribute("userTen");
 String userId = (String) session.getAttribute("userId");
+
 INoiDungThuChi obj = (INoiDungThuChi) session.getAttribute("obj");
 %>
 
@@ -49,13 +51,14 @@ INoiDungThuChi obj = (INoiDungThuChi) session.getAttribute("obj");
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
 			<tr>
 				<td colspan="4" align='left' valign='top' bgcolor="#FFFFFF">
-					<table width="100%" border="0" cellpadding="0" cellspacing="2">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr height="22">
 							<%if (obj.getID().length() > 0) {%>
 								<td align="left" colspan="2" class="tbnavigation">&nbsp;Dữ liệu nền > Nội dung thu chi > Cập nhật</td>
 							<%} else { %>
 								<td align="left" colspan="2" class="tbnavigation">&nbsp;Dữ liệu nền > Nội dung thu chi > Tạo mới</td>
 							<%} %>
+							<td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%=userTen %>&nbsp;&nbsp;</td>
 						</tr>
 					</table>
 					

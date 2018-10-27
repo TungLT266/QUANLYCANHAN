@@ -7,7 +7,7 @@ import qlcn.center.util.IPhan_Trang;
 public interface ILoaiTaiKhoanList extends IPhan_Trang {
 	public void init();
 	public void delete(String id);
-	public void deleteDB();
+	public void deleteDB(String pinUser);
 	public void DBClose();
 	
 	public String getUserId();

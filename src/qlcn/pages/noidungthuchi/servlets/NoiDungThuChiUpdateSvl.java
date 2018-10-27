@@ -42,10 +42,12 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 	    Utility util = new Utility();
 	    
 	    String querystring = request.getQueryString();
+	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = util.getUserId(querystring);
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
+	    	session.setAttribute("userTen", userTen);
 	    	session.removeAttribute("userId");
 	    	response.sendRedirect("/QUANLYCANHAN/");
 	    } else {
@@ -59,6 +61,7 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 	    	obj.init();
 	    	
 	    	session.setAttribute("obj", obj);
+	    	session.setAttribute("userTen", userTen);
     		session.setAttribute("userId", userId);
 		    
 			String action = util.getAction(querystring);
@@ -84,10 +87,12 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
+	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
+	    	session.removeAttribute("userTen");
 	    	session.removeAttribute("userId");
 	    	response.sendRedirect("/QUANLYCANHAN/");
 	    } else {
@@ -123,6 +128,7 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 				if(id.length() > 0){
 					if(!obj.update()) {
 						session.setAttribute("obj", obj);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/NoidungthuchiNew.jsp");
 					} else {
@@ -133,12 +139,14 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 						objList.init();
 						
 						session.setAttribute("obj", objList);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Noidungthuchi.jsp");
 					}
 				} else {
 					if(!obj.create()) {
 						session.setAttribute("obj", obj);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/NoidungthuchiNew.jsp");
 					} else {
@@ -149,6 +157,7 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 						objList.init();
 						
 						session.setAttribute("obj", objList);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Noidungthuchi.jsp");
 					}

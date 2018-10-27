@@ -17,15 +17,9 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 	private String taikhoan;
 	private String ten;
 	private String loaithe;
-//	private String nganhang;
 	private String sothe;
 	private String mapin;
 	private String tenchuthe;
-//	private String sotaikhoan;
-//	private String sodienthoai;
-//	private String email;
-//	private String tungay;
-//	private String denngay;
 	private String thanghieuluc;
 	private String namhieuluc;
 	private String thanghethan;
@@ -35,9 +29,9 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 	private String msg;
 	
 	private ResultSet TaikhoanRs;
-//	private ResultSet NganhangRs;
 	
 	private Dbutils db;
+//	private Utility util;
 	
 	public TaiKhoanThanhToan() {
 		this.ID = "";
@@ -57,6 +51,7 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 		this.msg = "";
 		
 		this.db = new Dbutils();
+//		this.util = new Utility();
 	}
 	
 	public void init() {
@@ -97,12 +92,12 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			
 			String query = "";
 			if(this.loai.equals("1")) {
-				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, TEN, trangthai, nguoitao, ngaytao, nguoisua, ngaysua, loaithe, sothe, tenchuthe, mapin, thoigianhieuluc, thoigianhethan, chuky)"
-						+ "\n values("+this.loai+","+this.taikhoan+",N'"+this.ten+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"',0,'','','','','','')";
+				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, TEN, trangthai, ngaytao, ngaysua, USERID, loaithe, sothe, tenchuthe, mapin, thoigianhieuluc, thoigianhethan, chuky)"
+						+ "\n values("+this.loai+","+this.taikhoan+",N'"+this.ten+"',"+this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+",0,'','','','','','')";
 			} else {
-				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, LOAITHE, SOTHE, TENCHUTHE, MAPIN, THOIGIANHIEULUC, THOIGIANHETHAN, CHUKY, trangthai, nguoitao, ngaytao, nguoisua, ngaysua, ten)"
+				query = "insert into TAIKHOANTHANHTOAN(loai, taikhoan_fk, LOAITHE, SOTHE, TENCHUTHE, MAPIN, THOIGIANHIEULUC, THOIGIANHETHAN, CHUKY, trangthai, USERID, ngaytao, ngaysua, ten)"
 						+ "\n values("+this.loai+","+this.taikhoan+","+this.loaithe+",'"+this.sothe+"','"+this.tenchuthe+"','"+this.mapin+"','"+this.thanghieuluc+"-"+this.namhieuluc+"',"
-						+ "'"+this.thanghethan+"-"+this.namhethan+"','"+this.chuky+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"','')";
+						+ "'"+this.thanghethan+"-"+this.namhethan+"','"+this.chuky+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"','"+this.getDateTime()+"','')";
 			}
 			System.out.println(query);
 			
@@ -131,12 +126,12 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			
 			String query;
 			if(this.loai.equals("1")) {
-				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+", taikhoan_fk="+this.taikhoan+", TEN=N'"+this.ten+"', trangthai="+this.trangthai+", nguoisua="+this.userId+","
+				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+", taikhoan_fk="+this.taikhoan+", TEN=N'"+this.ten+"', trangthai="+this.trangthai+","
 						+ " ngaysua='"+this.getDateTime()+"', LOAITHE=0, SOTHE='', MAPIN='', TENCHUTHE='', THOIGIANHIEULUC='', THOIGIANHETHAN='', CHUKY='' where ID=" + this.ID;
 			} else {
 				query = "update TAIKHOANTHANHTOAN set loai="+this.loai+", taikhoan="+this.taikhoan+", LOAITHE="+this.loaithe+", SOTHE='"+this.sothe+"', MAPIN='"+this.mapin+"',"
 						+ " TENCHUTHE='"+this.tenchuthe+"', THOIGIANHIEULUC='"+this.thanghieuluc+"-"+this.namhieuluc+"',THOIGIANHETHAN='"+this.thanghethan+"-"+this.namhethan+"',"
-						+ "CHUKY='"+this.chuky+"',trangthai="+this.trangthai+",nguoisua="+this.userId+",ngaysua='"+this.getDateTime()+"',ten='' where ID = " + this.ID;
+						+ "CHUKY='"+this.chuky+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"',ten='' where ID = " + this.ID;
 			}
 			System.out.println(query);
 			

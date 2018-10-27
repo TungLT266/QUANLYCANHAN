@@ -19,6 +19,7 @@ public class NoiDungThuChi implements INoiDungThuChi {
 	private String msg;
 	
 	private Dbutils db;
+//	private Utility util;
 	
 	public NoiDungThuChi() {
 		this.ID = "";
@@ -29,6 +30,7 @@ public class NoiDungThuChi implements INoiDungThuChi {
 		this.msg = "";
 		
 		this.db = new Dbutils();
+//		this.util = new Utility();
 	}
 	
 	public void init() {
@@ -50,8 +52,8 @@ public class NoiDungThuChi implements INoiDungThuChi {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "insert into NOIDUNGTHUCHI(loai, TEN, DIENGIAI, trangthai, nguoitao, ngaytao, nguoisua, ngaysua)"
-					+ "\n values("+this.loai+",N'"+this.ten+"',N'"+this.diengiai+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"')";
+			String query = "insert into NOIDUNGTHUCHI(loai, TEN, DIENGIAI, trangthai, USERID, ngaytao, ngaysua)"
+					+ "\n values("+this.loai+",N'"+this.ten+"',N'"+this.diengiai+"',"+this.trangthai+","+this.userId+",'"+this.getDateTime()+"','"+this.getDateTime()+"')";
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -78,7 +80,7 @@ public class NoiDungThuChi implements INoiDungThuChi {
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "update NOIDUNGTHUCHI set loai="+this.loai+", TEN=N'"+this.ten+"', diengiai=N'"+this.diengiai+"',"
-					+ "\n trangthai="+this.trangthai+", nguoisua="+this.userId+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+					+ "\n trangthai="+this.trangthai+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
 			if(!db.update(query)) {

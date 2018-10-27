@@ -24,6 +24,7 @@ public class TaiKhoan implements ITaiKhoan {
 	private ResultSet DonviRs;
 	
 	private Dbutils db;
+//	private Utility util;
 	
 	public TaiKhoan() {
 		this.ID = "";
@@ -35,6 +36,7 @@ public class TaiKhoan implements ITaiKhoan {
 		this.msg = "";
 		
 		this.db = new Dbutils();
+//		this.util = new Utility();
 	}
 	
 	public void init() {
@@ -67,8 +69,8 @@ public class TaiKhoan implements ITaiKhoan {
 			db.getConnection().setAutoCommit(false);
 			
 			String sotien = this.sotien.replaceAll("[, ]", "");
-			String query = "insert into TAIKHOAN(TEN, SOTIEN, DONVI_FK, trangthai, nguoitao, ngaytao, nguoisua, ngaysua)"
-					+ "\n values(N'"+this.ten+"',"+sotien+","+this.donvi+","+this.trangthai+","+this.userId+",'"+this.getDateTime()+"',"+this.userId+",'"+this.getDateTime()+"')";
+			String query = "insert into TAIKHOAN(TEN, SOTIEN, DONVI_FK, trangthai, ngaytao, ngaysua, USERID)"
+					+ "\n values(N'"+this.ten+"',"+sotien+","+this.donvi+","+this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -96,7 +98,7 @@ public class TaiKhoan implements ITaiKhoan {
 			
 			String sotien = this.sotien.replaceAll("[, ]", "");
 			String query = "update TAIKHOAN set TEN=N'"+this.ten+"', sotien="+sotien+", donvi_fk="+this.donvi+", trangthai="+this.trangthai+","
-					+ "\n nguoisua="+this.userId+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+					+ "\n ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
 			if(!db.update(query)) {

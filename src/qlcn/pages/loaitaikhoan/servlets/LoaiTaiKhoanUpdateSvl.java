@@ -42,10 +42,12 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 	    Utility util = new Utility();
 	    
 	    String querystring = request.getQueryString();
+	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = util.getUserId(querystring);
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
+	    	session.removeAttribute("userTen");
 	    	session.removeAttribute("userId");
 	    	response.sendRedirect("/QUANLYCANHAN/");
 	    } else {
@@ -59,6 +61,7 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 	    	obj.init();
 	    	
 	    	session.setAttribute("obj", obj);
+	    	session.setAttribute("userTen", userTen);
     		session.setAttribute("userId", userId);
 		    
 			String action = util.getAction(querystring);
@@ -84,10 +87,12 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
+	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
+	    	session.removeAttribute("userTen");
 	    	session.removeAttribute("userId");
 	    	response.sendRedirect("/QUANLYCANHAN/");
 	    } else {
@@ -115,6 +120,7 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 				if(id.length() > 0){
 					if(!obj.update()) {
 						session.setAttribute("obj", obj);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 					} else {
@@ -125,12 +131,14 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 						objList.init();
 						
 						session.setAttribute("obj", objList);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 					}
 				} else {
 					if(!obj.create()) {
 						session.setAttribute("obj", obj);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 					} else {
@@ -141,6 +149,7 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 						objList.init();
 						
 						session.setAttribute("obj", objList);
+						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 					}

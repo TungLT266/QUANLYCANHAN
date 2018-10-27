@@ -42,10 +42,12 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 	    Utility util = new Utility();
 	    
 	    String querystring = request.getQueryString();
+	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = util.getUserId(querystring);
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
+	    	session.removeAttribute("userTen");
 	    	session.removeAttribute("userId");
 	    	response.sendRedirect("/QUANLYCANHAN/");
 	    } else {
@@ -64,6 +66,7 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 	    	obj.init();
 	    	
 	    	session.setAttribute("obj", obj);
+	    	session.setAttribute("userTen", userTen);
     		session.setAttribute("userId", userId);
     		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 	    }
@@ -80,6 +83,7 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
+	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
@@ -96,11 +100,14 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 				obj.setUserId(userId);
 				
 				session.setAttribute("obj", obj);
+				session.setAttribute("userTen", userTen);
 	    		session.setAttribute("userId", userId);
 	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 		    } else {
 		    	ILoaiTaiKhoanList obj = new LoaiTaiKhoanList();
 		    	obj.setUserId(userId);
+		    	
+		    	String pinUser = request.getParameter("pinUser");
 		    	
 		    	String id = request.getParameter("id");
 				if(id != null)
@@ -124,12 +131,13 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 					obj.setNxtApprSplitting(Integer.parseInt(request.getParameter("nxtApprSplitting")));
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
-					obj.deleteDB();
+					obj.deleteDB(pinUser);
 				}
 				
 		    	obj.init();
 		    	
 		    	session.setAttribute("obj", obj);
+		    	session.setAttribute("userTen", userTen);
 	    		session.setAttribute("userId", userId);
 	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
 		    }
