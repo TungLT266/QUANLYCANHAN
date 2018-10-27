@@ -32,7 +32,12 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 	}
 	
 	public void init() {
-		String query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ltk.NGAYTAO, ltk.NGAYSUA from LOAITAIKHOAN ltk where ltk.USERID = " + this.userId;
+		String query = "";
+		if(this.userId.equals("100000")){
+			query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ltk.NGAYTAO, ltk.NGAYSUA from LOAITAIKHOAN ltk where ltk.ID > 0";
+		} else {
+			query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ltk.NGAYTAO, ltk.NGAYSUA from LOAITAIKHOAN ltk where ltk.USERID = " + this.userId;
+		}
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and ltk.ID like '%" + this.ID.trim() + "%'";

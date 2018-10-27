@@ -35,8 +35,14 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	}
 	
 	public void init() {
-		String query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
-				+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.USERID = " + this.userId;
+		String query = "";
+		if(this.userId.equals("100000")){
+			query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
+					+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.ID > 0";
+		} else {
+			query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
+					+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.USERID = " + this.userId;
+		}
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and tk.ID like '%" + this.ID.trim() + "%'";

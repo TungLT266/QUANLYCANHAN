@@ -34,8 +34,12 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 	}
 	
 	public void init() {
-		String query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA"
-				+ "\n from NOIDUNGTHUCHI ndtc where ndtc.USERID = " + this.userId;
+		String query = "";
+		if(this.userId.equals("100000")){
+			query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.ID > 0";
+		} else {
+			query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.USERID = " + this.userId;
+		}
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and ndtc.ID like '%" + this.ID.trim() + "%'";

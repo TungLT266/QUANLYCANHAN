@@ -34,10 +34,18 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 	}
 	
 	public void init() {
-		String query = "select tktt.ID, '[' + cast(tk.id as varchar) + '] ' + tk.ten as taikhoan,"
-				+ "\n	case when tktt.loai = 1 then tktt.TEN when tktt.loai = 2 then tktt.sothe else '' end as ten,"
-				+ "\n	tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
-				+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.USERID = " + this.userId;
+		String query = "";
+		if(this.userId.equals("100000")){
+			query = "select tktt.ID, '[' + cast(tk.id as varchar) + '] ' + tk.ten as taikhoan,"
+					+ "\n	case when tktt.loai = 1 then tktt.TEN when tktt.loai = 2 then tktt.sothe else '' end as ten,"
+					+ "\n	tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
+					+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.ID > 0";
+		} else {
+			query = "select tktt.ID, '[' + cast(tk.id as varchar) + '] ' + tk.ten as taikhoan,"
+					+ "\n	case when tktt.loai = 1 then tktt.TEN when tktt.loai = 2 then tktt.sothe else '' end as ten,"
+					+ "\n	tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
+					+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.USERID = " + this.userId;
+		}
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and tktt.ID like '%" + this.ID.trim() + "%'";
