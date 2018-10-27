@@ -79,11 +79,12 @@ public class LoginSvl extends HttpServlet {
 		String nextJSP = "";
 		
 		if(obj.login()) {
+			session.setAttribute("userTen", obj.getUserTen());
 			session.setAttribute("userId", obj.getUserId());
 			nextJSP = "/QUANLYCANHAN/";
 		} else {
 			session.setAttribute("obj", obj);
-			nextJSP = "/QUANLYCANHAN/Pages/Login.jsp";
+			nextJSP = "/QUANLYCANHAN/pages/Login.jsp";
 		}
 		
 		response.sendRedirect(nextJSP);

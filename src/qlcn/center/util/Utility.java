@@ -1,7 +1,12 @@
 package qlcn.center.util;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import javax.xml.bind.DatatypeConverter;
 
 public class Utility implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -161,5 +166,52 @@ public class Utility implements Serializable {
 		kq = kq.replaceAll("--", "-");
 
 		return kq;
+	}
+	
+	public String encrypt(String plaintext) {
+		MessageDigest msgDigest = null;
+		String hashValue = null;
+		try {
+			msgDigest = MessageDigest.getInstance("SHA-1");
+			msgDigest.update(plaintext.getBytes("UTF-8"));
+			byte rawByte[] = msgDigest.digest();
+
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < rawByte.length; i++) {
+				hexString.append(Integer.toHexString(0xFF & rawByte[i]));
+			}
+
+			hashValue = hexString.toString();
+
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("No Such Algorithm Exists");
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("The Encoding Is Not Supported");
+		}
+		return hashValue;
+	}
+	
+	public String EncodeString64(String str) {
+		byte[] message;
+		String encoded = "";
+		try {
+			message = str.getBytes("UTF-8");
+			encoded = DatatypeConverter.printBase64Binary(message);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return encoded;
+	}
+
+	public String DecodeString64(String str) {
+		byte[] message;
+		String decoded = "";
+		try {
+			message = DatatypeConverter.parseBase64Binary(str);
+			decoded = new String(message, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return decoded;
 	}
 }

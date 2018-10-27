@@ -15,4 +15,7 @@ public interface ILogin {
 	
 	public String getUserId();
 	public void setUserId(String userId);
+	
+	public String getUserTen();
+	public void setUserTen(String userTen);
 }
