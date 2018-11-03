@@ -77,7 +77,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 			String query = "update LOAITAIKHOAN set TEN=N'"+this.ten+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
-			if(!db.update(query)) {
+			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật LOAITAIKHOAN: " + query;
 				db.getConnection().rollback();
 				return false;

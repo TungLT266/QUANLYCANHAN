@@ -13,7 +13,7 @@ String userId = (String) session.getAttribute("userId");
 ITaiKhoanList obj = (ITaiKhoanList) session.getAttribute("obj");
 ResultSet TaikhoanRs = obj.getTaikhoanRs();
 
-NumberFormat formatter = new DecimalFormat("#,###,###.######");
+NumberFormat formatter = new DecimalFormat("#,###,###.##");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

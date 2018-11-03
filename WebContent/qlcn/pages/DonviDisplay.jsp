@@ -64,7 +64,7 @@ IDonVi obj = (IDonVi) session.getAttribute("obj");
 										<tr>
 											<td width="15%" class="plainlabel">Diễn giải</td>
 											<td class="plainlabel">
-												<textarea name="diengiai" rows="5" style="width: 70%" readonly="readonly"><%=obj.getDiengiai()%></textarea>
+												<textarea name="diengiai" rows="5" style="width: 70%; color: black;" readonly="readonly"><%=obj.getDiengiai()%></textarea>
 											</td>
 										</tr>
 										

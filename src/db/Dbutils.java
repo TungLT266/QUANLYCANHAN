@@ -79,7 +79,7 @@ public class Dbutils implements Serializable {
 		}
 	}
 
-	/*public int updateReturnInt(String query) {
+	public int updateReturnInt(String query) {
 		try {
 			statement = connection.createStatement();
 			statement.setQueryTimeout(60);
@@ -91,7 +91,7 @@ public class Dbutils implements Serializable {
 			sqle.printStackTrace();
 			return -1;
 		}
-	}*/
+	}
 
 	public boolean execProceduce(String procName, String[] param) {
 		try {

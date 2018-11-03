@@ -1,6 +1,7 @@
 package qlcn.pages.loaitaikhoan.beans.imp;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import db.Dbutils;
 import qlcn.center.util.Phan_Trang;
@@ -56,10 +57,24 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 	}
 	
 	public void delete(String id) {
-		String query = "update LOAITAIKHOAN set trangthai = 2 where ID = " + id;
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa LOAITAIKHOAN: " + query;
-    	}
+		try {
+			db.getConnection().setAutoCommit(false);
+		
+			String query = "update LOAITAIKHOAN set trangthai = 2 where ID = " + id;
+			if(!this.db.update(query)){
+	    		this.msg = "Không thể xóa LOAITAIKHOAN: " + query;
+	    		db.getConnection().rollback();
+	    	}
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteDB(String pinUser) {

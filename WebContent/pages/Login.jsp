@@ -21,8 +21,8 @@ ILogin obj = (ILogin)session.getAttribute("obj");
 	<form name="login" method="post" action="/QUANLYCANHAN/LoginSvl">
 		<input type="hidden" name="action" value="">
 		
-		Username <input type="text" name="username" id="username" value="admin" required="" placeholder="Vui lòng nhập tên đăng nhập.">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		Password <input type="password" name="password" id="password" value="tunggeso" required="" placeholder="Vui lòng nhập mật khẩu.">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Username <input type="text" name="username" id="username" value="tunglt" required="" placeholder="Vui lòng nhập tên đăng nhập.">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Password <input type="password" name="password" id="password" value="tunglt" required="" placeholder="Vui lòng nhập mật khẩu.">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Login"><input type="text" readonly="readonly" value="<%=obj.getMsg() %>">
 	</form>
 </body>
