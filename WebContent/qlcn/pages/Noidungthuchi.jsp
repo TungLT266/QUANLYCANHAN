@@ -248,12 +248,12 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																		<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId %>&update=<%=NoidungthuchiRs.getString("ID") %>">
 																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
-																		</a> &nbsp;
-																		<a href="/QUANLYCANHAN/NoiDungThuChiSvl?userId=<%=userId%>&delete=<%=NoidungthuchiRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
-																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
-																		</a>&nbsp;
+																		</a>
 																		<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId%>&display=<%=NoidungthuchiRs.getString("ID") %>">
 																			<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																		</a>
+																		<a href="/QUANLYCANHAN/NoiDungThuChiSvl?userId=<%=userId%>&delete=<%=NoidungthuchiRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																		</a>
 																<%} else { %>
 																	<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId %>&display=<%=NoidungthuchiRs.getString("ID") %>">
