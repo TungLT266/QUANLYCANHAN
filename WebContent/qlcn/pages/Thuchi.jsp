@@ -278,14 +278,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=ThuchiRs.getString("id") %></td>
 															<td align="center"><%=ThuchiRs.getString("ngay") %></td>
 															<td align="center"><%=formatter.format(Double.parseDouble(ThuchiRs.getString("sotien"))) + " " + ThuchiRs.getString("donvi") %></td>
-															
-															<%String loai = ThuchiRs.getString("loai"); %>
-															<%if(loai.equals("1")) { %>
-																<td align="center">Thu</td>
-															<%} else { %>
-																<td align="center">Chi</td>
-															<%} %>
-															
+															<td align="center"><%=ThuchiRs.getString("loai") %></td>
 															<td><%=ThuchiRs.getString("tenndtc") %></td>
 															<td><%=ThuchiRs.getString("diengiai") %></td>
 															
@@ -298,7 +291,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=ThuchiRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=ThuchiRs.getString("NGAYSUA") %></td>
 															<td align="center">
-																<% if(tt.equals("1") || tt.equals("0")){ %>
+																<% if(tt.equals("1")){ %>
 																		<a href="/QUANLYCANHAN/ThuChiUpdateSvl?userId=<%=userId %>&update=<%=ThuchiRs.getString("ID") %>">
 																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
 																		</a> &nbsp;

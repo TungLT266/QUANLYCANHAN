@@ -130,11 +130,6 @@ public class ThuChiUpdateSvl extends HttpServlet {
 			String diengiai = util.antiSQLInspection(request.getParameter("diengiai"));
 			if (diengiai != null)
 				obj.setDiengiai(diengiai);
-		    
-//		    String trangthai = request.getParameter("trangthai");
-//			if (trangthai == null)
-//				trangthai = "0";
-//			obj.setTrangthai(trangthai);
 	    	
 			String action = request.getParameter("action");
 			if(action == null)

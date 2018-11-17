@@ -52,7 +52,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 			queryUser = " and tc.USERID = " + this.userId;
 		}
 		
-		String query = "select tc.ID, tc.ngay, tc.sotien, dv.ten as donvi, tc.loai, isnull(ndtc.ten,'') as tenndtc, tc.diengiai, tc.TRANGTHAI, tc.NGAYTAO, tc.NGAYSUA"
+		String query = "select tc.ID, tc.ngay, tc.sotien, dv.ten as donvi, case when tc.loai=1 then 'Thu' else 'Chi' end as loai, isnull(ndtc.ten,'') as tenndtc, tc.diengiai, tc.TRANGTHAI, tc.NGAYTAO, tc.NGAYSUA"
 					+ "\n from THUCHI tc"
 					+ "\n left join NOIDUNGTHUCHI ndtc on ndtc.ID = tc.noidungthuchi_fk"
 					+ "\n left join TAIKHOAN tk on tk.ID = tc.taikhoan_fk"
@@ -123,9 +123,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query;
-			
-			query = "select loai, sotien, taikhoan_fk from THUCHI where ID = " + id;
+			String query = "select loai, sotien, taikhoan_fk from THUCHI where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
 			String loai = rs.getString("loai");
@@ -133,7 +131,19 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 			String taikhoanId = rs.getString("taikhoan_fk");
 			rs.close();
 			
+			// Cộng trừ lại tiển trong tài khoản
 			if(loai.equals("1")){
+				// Kiểm tra có đủ tiền trong tài khoản để trừ
+				query = "select sotien from TAIKHOAN where ID = " + taikhoanId;
+				rs = this.db.get(query);
+				rs.next();
+				double stien = rs.getDouble("sotien");
+				rs.close();
+				if(stien < Double.parseDouble(sotien)){
+					this.msg = "Số tiền trong tài khoản không đủ.";
+					return;
+				}
+				
 				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoanId;
 				if(db.updateReturnInt(query) != 1) {
 					this.msg = "Không cập nhật TAIKHOAN: " + query;

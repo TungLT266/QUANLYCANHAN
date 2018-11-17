@@ -32,7 +32,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 	
 	public void init() {
 		String query = "select TEN, TRANGTHAI from LOAITAIKHOAN where ID = " + this.ID;
-		System.out.println(query);
+		System.out.println("init: "+query);
 		
 		ResultSet rs = this.db.get(query);
 		try {
@@ -49,7 +49,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 			
 			String query = "insert into LOAITAIKHOAN(TEN, trangthai, ngaytao, ngaysua, USERID)"
 					+ "\n values(N'"+this.ten+"',"+this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
-			System.out.println(query);
+			System.out.println("create: "+query);
 			
 			if(!db.update(query)) {
 				this.msg = "Không thể tạo mới LOAITAIKHOAN: " + query;
@@ -75,7 +75,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "update LOAITAIKHOAN set TEN=N'"+this.ten+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
-			System.out.println(query);
+			System.out.println("update: "+query);
 			
 			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật LOAITAIKHOAN: " + query;

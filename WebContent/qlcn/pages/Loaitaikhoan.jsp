@@ -87,7 +87,7 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 					<table width="100%" border="0" cellpadding="0" cellspacing="0">
 						<tr height="22">
 							<td align="left" colspan="2" class="tbnavigation">&nbsp;Dữ liệu nền > Loại tài khoản</td>
-							<td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%= userTen %>&nbsp;&nbsp;</td>
+							<td colspan="2" align="right" class="tbnavigation">Chào mừng bạn <%=userTen %>&nbsp;&nbsp;</td>
 						</tr>
 					</table>
 					
@@ -220,22 +220,21 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
-																		<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=loaitaikhoanRs.getString("ID") %>">
-																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
-																		</a> &nbsp;
-																		<a href="/QUANLYCANHAN/LoaiTaiKhoanSvl?userId=<%=userId%>&delete=<%=loaitaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
-																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
-																		</a>&nbsp;
-																		<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId%>&display=<%=loaitaikhoanRs.getString("ID") %>">
-																			<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																		</a>
+																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=loaitaikhoanRs.getString("ID") %>">
+																		<img title="Edit" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId%>&display=<%=loaitaikhoanRs.getString("ID") %>">
+																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/LoaiTaiKhoanSvl?userId=<%=userId%>&delete=<%=loaitaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
+																	</a>
 																<%} else { %>
 																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&display=<%=loaitaikhoanRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} %>
-															</td>
-															</tr>
+															</td></tr>
 															<%m++; %>
 														<%} %>
 			                                    	<%} %>

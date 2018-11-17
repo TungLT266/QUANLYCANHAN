@@ -70,64 +70,63 @@ public class ThuChi implements IThuChi {
 	
 	public void createRs() {
 		String query = "";
-		if(this.userId.equals("100000")){
-			if(this.loai.length() > 0){
-				// Lấy nội dung thu chi
-				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai = " + this.loai;
-				this.NoidungthuchiRs = this.db.get(query);
-			}
+		String queryUser = "";
+		if(!this.userId.equals("100000")){
+			queryUser = " and USERID = " + this.userId;
+		}
+		
+		if(this.loai.length() > 0){
+			// Lấy nội dung thu chi
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai = " + this.loai + queryUser;
+			this.NoidungthuchiRs = this.db.get(query);
+		}
+		
+		// Lấy danh sách tài khoản có trạng thái hoạt động
+		query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+		this.TaikhoanRs = this.db.get(query);
+		
+		if(this.taikhoanId.length() > 5){
+			// Lấy đơn vị của tài khoản
+			try {
+				query = "select dv.ten from TAIKHOAN tk left join DONVI dv on dv.ID = tk.donvi_fk where tk.ID = " + this.taikhoanId;
+				ResultSet rs = this.db.get(query);
+				rs.next();
+				this.donvi = rs.getString("ten");
+				rs.close();
+			} catch (SQLException e) {}
 			
-			// Lấy danh sách tài khoản có trạng thái hoạt động
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1";
-			this.TaikhoanRs = this.db.get(query);
-			
-			if(this.taikhoanId.length() > 5){
-				// Lấy đơn vị của tài khoản
-				try {
-					query = "select dv.ten from TAIKHOAN tk left join DONVI dv on dv.ID = tk.donvi_fk where tk.ID = " + this.taikhoanId;
-					ResultSet rs = this.db.get(query);
-					rs.next();
-					this.donvi = rs.getString("ten");
-					rs.close();
-				} catch (SQLException e) {}
-				
-				// Lấy tài khoản thanh toán thuộc tài khoản này
-				query = "select ID, (case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end) + "
-						+ "'['+cast(ID as varchar)+'] '+(case when LOAI = 1 then TEN else SOTHE end) as ten"
-						+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and taikhoan_fk = " + this.taikhoanId;
-				this.TaikhoanthanhtoanRs = this.db.get(query);
+			// Lấy tài khoản thanh toán thuộc tài khoản này
+			query = "select ID, (case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+'['+cast(ID as varchar)+'] '+SOTHE as ten"
+					+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and taikhoan_fk = " + this.taikhoanId + queryUser;
+			this.TaikhoanthanhtoanRs = this.db.get(query);
+		}
+	}
+	
+	private boolean check() {
+		try {
+			if(this.loai.equals("2")) {
+				String query = "select sotien from TAIKHOAN where ID = " + this.taikhoanId;
+				ResultSet rs = this.db.get(query);
+				rs.next();
+				double stien = rs.getDouble("sotien");
+				rs.close();
+				if(stien < Double.parseDouble(this.sotien.replaceAll(",", ""))){
+					this.msg = "Số tiền trong tài khoản không đủ.";
+					return false;
+				}
 			}
-		} else {
-			if(this.loai.length() > 0){
-				// Lấy nội dung thu chi
-				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and USERID = " + this.userId + " and loai = " + this.loai;
-				this.NoidungthuchiRs = this.db.get(query);
-			}
-			
-			// Lấy danh sách tài khoản có trạng thái hoạt động
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1 and USERID = " + this.userId;
-			this.TaikhoanRs = this.db.get(query);
-			
-			if(this.taikhoanId.length() > 5){
-				// Lấy đơn vị của tài khoản
-				try {
-					query = "select dv.ten from TAIKHOAN tk left join DONVI dv on dv.ID = tk.donvi_fk where tk.ID = " + this.taikhoanId;
-					ResultSet rs = this.db.get(query);
-					rs.next();
-					this.donvi = rs.getString("ten");
-					rs.close();
-				} catch (SQLException e) {}
-				
-				// Lấy tài khoản thanh toán thuộc tài khoản này
-				query = "select ID, (case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+'['+cast(ID as varchar)+'] '+SOTHE as ten"
-						+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and USERID = " + this.userId + " and taikhoan_fk = " + this.taikhoanId;
-				this.TaikhoanthanhtoanRs = this.db.get(query);
-			}
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 	
 	public boolean create() {
 		try {
+			if(!check()){
+				return false;
+			}
+			
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "insert into THUCHI(ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, trangthai, ngaytao, ngaysua, USERID)"
@@ -143,18 +142,13 @@ public class ThuChi implements IThuChi {
 			
 			if(this.loai.equals("1")){
 				query = "update TAIKHOAN set sotien = (sotien + "+this.sotien.replaceAll(",", "")+") where ID = " + this.taikhoanId;
-				if(db.updateReturnInt(query) != 1) {
-					this.msg = "Không cập nhật TAIKHOAN: " + query;
-					db.getConnection().rollback();
-					return false;
-				}
 			} else {
 				query = "update TAIKHOAN set sotien = (sotien - "+this.sotien.replaceAll(",", "")+") where ID = " + this.taikhoanId;
-				if(db.updateReturnInt(query) != 1) {
-					this.msg = "Không cập nhật TAIKHOAN: " + query;
-					db.getConnection().rollback();
-					return false;
-				}
+			}
+			if(db.updateReturnInt(query) != 1) {
+				this.msg = "Không cập nhật TAIKHOAN: " + query;
+				db.getConnection().rollback();
+				return false;
 			}
 			
 			db.getConnection().commit();

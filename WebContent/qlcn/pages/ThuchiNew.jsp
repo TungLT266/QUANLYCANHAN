@@ -250,7 +250,7 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 										<tr>
 											<td class="plainlabel">Nội dung</td>
 											<td class="plainlabel" colspan="3">
-												<textarea name="diengiai" rows="5" style="width: 80%; color: black;"><%=obj.getDiengiai()%></textarea>
+												<textarea name="diengiai" rows="5" style="width: 80%; color: black;"><%=obj.getDiengiai() %></textarea>
 											</td>
 										</tr>
 									</table>

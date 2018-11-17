@@ -52,7 +52,7 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 			query += " and ltk.TRANGTHAI = " + this.trangthai;
 		}
 		
-		System.out.println(query);
+		System.out.println("init: "+query);
 		this.loaitaikhoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
