@@ -121,7 +121,6 @@
     <servlet-name>NoiDungThuChiUpdateSvl</servlet-name>
     <url-pattern>/NoiDungThuChiUpdateSvl</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>DonViSvl</display-name>
@@ -132,7 +131,6 @@
     <servlet-name>DonViSvl</servlet-name>
     <url-pattern>/DonViSvl</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>DonViUpdateSvl</display-name>
@@ -143,7 +141,6 @@
     <servlet-name>DonViUpdateSvl</servlet-name>
     <url-pattern>/DonViUpdateSvl</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>VayNoSvl</display-name>
@@ -154,7 +151,6 @@
     <servlet-name>VayNoSvl</servlet-name>
     <url-pattern>/VayNoSvl</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>VayNoUpdateSvl</display-name>
@@ -164,6 +160,17 @@
   <servlet-mapping>
     <servlet-name>VayNoUpdateSvl</servlet-name>
     <url-pattern>/VayNoUpdateSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>AjaxTop</display-name>
+    <servlet-name>AjaxTop</servlet-name>
+    <servlet-class>qlcn.center.top.servlets.AjaxTop</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AjaxTop</servlet-name>
+    <url-pattern>/AjaxTop</url-pattern>
   </servlet-mapping>
   
   <welcome-file-list>

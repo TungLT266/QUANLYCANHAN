@@ -48,7 +48,7 @@ public class ThuChi implements IThuChi {
 	}
 	
 	public void init() {
-		NumberFormat formatter = new DecimalFormat("#,###,###.##");
+		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
 		String query = "select ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai from THUCHI where ID = " + this.ID;
 		System.out.println(query);
 		

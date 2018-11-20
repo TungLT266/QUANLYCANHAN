@@ -58,7 +58,7 @@ public class VayNo implements IVayNo {
 	}
 	
 	public void init() {
-		NumberFormat formatter = new DecimalFormat("#,###,###.##");
+		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
 		String query = "select ngay,sotien,loai,taikhoan_fk_cho,isnull(taikhoan_fk_nhan,0) as taikhoan_fk_nhan,"
 				+ "nguoivayno,noidung,ghichu,isnull(ngaytra,'') as ngaytra,isnull(cast(phi as varchar),'') as phi"
 				+ " from VAYNO where ID = " + this.ID;
