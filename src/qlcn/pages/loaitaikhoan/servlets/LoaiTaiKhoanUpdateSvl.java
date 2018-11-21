@@ -68,7 +68,10 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 			if(action == null)
 				action = "";
 			
-			if(action.equals("update")) {
+			if(action.equals("update") || action.equals("copy")) {
+				if(action.equals("copy")){
+					obj.setID("");
+				}
 				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 		    } else {
 		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanDisplay.jsp");

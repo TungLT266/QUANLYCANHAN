@@ -71,7 +71,10 @@ public class VayNoUpdateSvl extends HttpServlet {
 		    
 			if(action.equals("nhantra")){
 				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoDisplay.jsp");
-			} else if(action.equals("update")) {
+			} else if(action.equals("update") || action.equals("copy")) {
+				if(action.equals("copy")){
+					obj.setID("");
+				}
 				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoNew.jsp");
 		    } else {
 		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoDisplay.jsp");

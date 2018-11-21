@@ -250,9 +250,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 														<th width="7%">ID</th>
 														<th width="8%">Ngày</th>
 														<th width="12%">Số tiền</th>
-														<th width="5%">Loại</th>
-														<th width="14%">Người Vay/Nợ</th>
-														<th width="20%">Nội dung</th>
+														<th width="7%">Loại</th>
+														<th width="13%">Người Vay/Nợ</th>
+														<th width="19%">Nội dung</th>
 														<th width="8%">Trạng thái</th>
 														<th width="8%">Ngày tạo</th>
 														<th width="8%">Ngày sửa</th>
@@ -295,8 +295,11 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&nhantra=<%=VaynoRs.getString("ID") %>">
 																		<img title="Trả tiền" src="../images/Chot.png" alt="Tra tien" width="20" height="20" longdesc="Tra tien" border=0>
 																	</a>
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&copy=<%=VaynoRs.getString("ID") %>">
+																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																	</a>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&update=<%=VaynoRs.getString("ID") %>">
-																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Cap nhat" border=0>
+																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
 																	</a>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&display=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
@@ -308,10 +311,16 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId %>&unnhantra=<%=VaynoRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn hủy?')) return false;">
 																		<img title="Hủy trả" src="../images/unChot.png" alt="Huy tra tien" width="20" height="20" longdesc="Huy tra" border=0>
 																	</a>
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&copy=<%=VaynoRs.getString("ID") %>">
+																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																	</a>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&display=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} else { %>
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&copy=<%=VaynoRs.getString("ID") %>">
+																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																	</a>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&display=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>

@@ -219,9 +219,12 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
+																<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&copy=<%=loaitaikhoanRs.getString("ID") %>">
+																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																</a>
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=loaitaikhoanRs.getString("ID") %>">
-																		<img title="Edit" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
+																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
 																	</a>
 																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId%>&display=<%=loaitaikhoanRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>

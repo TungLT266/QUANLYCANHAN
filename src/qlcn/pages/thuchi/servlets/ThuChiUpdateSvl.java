@@ -68,7 +68,10 @@ public class ThuChiUpdateSvl extends HttpServlet {
 			if(action == null)
 				action = "";
 			
-			if(action.equals("update")) {
+			if(action.equals("update") || action.equals("copy")) {
+				if(action.equals("copy")){
+					obj.setID("");
+				}
 				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiNew.jsp");
 		    } else {
 		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiDisplay.jsp");
