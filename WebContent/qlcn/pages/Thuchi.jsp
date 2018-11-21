@@ -85,6 +85,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		document.forms['FormTc'].submit();
 	}
 
+	//cho phép nhập số từ 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -93,6 +94,20 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 			keypressed = e.which;
 		
 		if (keypressed < 13 || (keypressed > 13 && keypressed < 48) || keypressed > 57) {
+			return false;
+		}
+		return true;
+	}
+	
+	//cho phép nhập số từ 0->9 và dấu , .
+	function keypress2(e) {
+		var keypressed = null;
+		if (window.event)
+			keypressed = window.event.keyCode;
+		else
+			keypressed = e.which;
+		
+		if (keypressed < 13 || (keypressed > 13 && keypressed < 44) || keypressed == 45 || keypressed == 47 || keypressed > 57) {
 			return false;
 		}
 		return true;
@@ -151,8 +166,8 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 											
 											<td class="plainlabel">Số tiền</td>
 											<td class="plainlabel">
-												<input type="text" name="sotientu" value="<%=obj.getSotientu() %>" onchange="search();" style="width: 90px; text-align: right;">&nbsp;&nbsp;-&nbsp;
-												<input type="text" name="sotienden" value="<%=obj.getSotienden() %>" onchange="search();" style="width: 90px; text-align: right;">
+												<input type="text" name="sotientu" value="<%=obj.getSotientu() %>" onchange="search();" onkeypress="return keypress2(event);" style="width: 90px; text-align: right;">&nbsp;&nbsp;-&nbsp;
+												<input type="text" name="sotienden" value="<%=obj.getSotienden() %>" onchange="search();" onkeypress="return keypress2(event);" style="width: 90px; text-align: right;">
 											</td>
 										</tr>
 										

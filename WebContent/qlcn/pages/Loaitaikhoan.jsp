@@ -62,6 +62,7 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 		document.forms['FormLtk'].submit();
 	}
 
+	//cho phép nhập số từ 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
