@@ -244,6 +244,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=TaikhoanRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=TaikhoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
+																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&copy=<%=TaikhoanRs.getString("ID") %>">
+																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																</a>
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=TaikhoanRs.getString("ID") %>">
 																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>

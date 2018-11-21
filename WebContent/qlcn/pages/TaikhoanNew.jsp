@@ -43,6 +43,11 @@ ResultSet DonviRs = obj.getDonviRs();
 			document.getElementById("dataerror").value = "Bạn chưa nhập số tiền trong tài khoản.";
 			return false;
 		}
+		
+		if (document.getElementById("donvi").value == "") {
+			document.getElementById("dataerror").value = "Bạn chưa chọn đơn vị.";
+			return false;
+		}
 
 		document.forms["FormTk"].action.value = "save";
 		document.forms["FormTk"].submit();
@@ -135,21 +140,35 @@ ResultSet DonviRs = obj.getDonviRs();
 											<td class="plainlabel">
 												<%if(obj.getID().length() > 0){ %>
 													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" readonly="readonly" onkeypress="return keypress(event);">
-												<%} else { %>
-													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);">
-												<%} %>
 												
-												<select name="donvi" class="select2" style="width: 70px;">
-													<%if(DonviRs != null){ %>
-														<%while(DonviRs.next()){ %>
-															<%if(obj.getDonvi().equals(DonviRs.getString("id"))){ %>
-																<option value="<%=DonviRs.getString("id") %>" selected><%=DonviRs.getString("ten") %></option>
-															<%} else { %>
-																<option value="<%=DonviRs.getString("id") %>" ><%=DonviRs.getString("ten") %></option>
+													<select id="donvi" name="donvi" style="width: 70px;">
+														<option value="" disabled="disabled"></option>
+														<%if(DonviRs != null){ %>
+															<%while(DonviRs.next()){ %>
+																<%if(obj.getDonvi().equals(DonviRs.getString("id"))){ %>
+																	<option value="<%=DonviRs.getString("id") %>" selected><%=DonviRs.getString("ten") %></option>
+																<%} else { %>
+																	<option value="<%=DonviRs.getString("id") %>" disabled="disabled"><%=DonviRs.getString("ten") %></option>
+																<%} %>
 															<%} %>
 														<%} %>
-													<%} %>
-												</select>
+													</select>
+												<%} else { %>
+													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);">
+													
+													<select id="donvi" name="donvi" class="select2" style="width: 70px;">
+														<option value=""></option>
+														<%if(DonviRs != null){ %>
+															<%while(DonviRs.next()){ %>
+																<%if(obj.getDonvi().equals(DonviRs.getString("id"))){ %>
+																	<option value="<%=DonviRs.getString("id") %>" selected><%=DonviRs.getString("ten") %></option>
+																<%} else { %>
+																	<option value="<%=DonviRs.getString("id") %>" ><%=DonviRs.getString("ten") %></option>
+																<%} %>
+															<%} %>
+														<%} %>
+													</select>
+												<%} %>
 											</td>
 										</tr>
 										

@@ -270,15 +270,15 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 															<td align="center"><%=TaikhoanthanhtoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
-																		<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId %>&update=<%=TaikhoanthanhtoanRs.getString("ID") %>">
-																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
-																		</a>
-																		<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId%>&display=<%=TaikhoanthanhtoanRs.getString("ID") %>">
-																			<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																		</a>
-																		<a href="/QUANLYCANHAN/TaiKhoanThanhToanSvl?userId=<%=userId%>&delete=<%=TaikhoanthanhtoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
-																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
-																		</a>
+																	<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId %>&update=<%=TaikhoanthanhtoanRs.getString("ID") %>">
+																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId%>&display=<%=TaikhoanthanhtoanRs.getString("ID") %>">
+																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/TaiKhoanThanhToanSvl?userId=<%=userId%>&delete=<%=TaikhoanthanhtoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
+																	</a>
 																<%} else { %>
 																	<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId %>&display=<%=TaikhoanthanhtoanRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>

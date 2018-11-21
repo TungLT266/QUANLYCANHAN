@@ -115,33 +115,35 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 									<legend class="legendtitle">Tài khoản thanh toán</legend>
 									<table border="0" width="100%" cellpadding="6" cellspacing="0">
 										<tr>
-											<%-- <td width="15%" class="plainlabel">Loại <FONT class="erroralert">*</FONT></td>
-											<td class="plainlabel">
-												<select id="loai" name="loai" class="select2" style="width: 200px;" onchange="showHideByLoai();">
-													<%if(obj.getLoai().equals("1")) { %>
-														<option value="1" selected="selected">Tiền mặt</option>
-														<option value="2">Thẻ thanh toán</option>
-													<%} else { %>
-														<option value="1">Tiền mặt</option>
-														<option value="2" selected="selected">Thẻ thanh toán</option>
-													<%} %>
-												</select>
-											</td> --%>
-											
 											<td width="15%" class="plainlabel">Tài khoản <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<select id="taikhoan" name="taikhoan" class="select2" style="width: 200px">
-													<option value=""></option>
-													<%if(TaikhoanRs != null){ %>
-														<%while(TaikhoanRs.next()){ %>
-															<%if(obj.getTaikhoan().equals(TaikhoanRs.getString("id"))){ %>
-																<option value="<%=TaikhoanRs.getString("id") %>" selected><%=TaikhoanRs.getString("ten") %></option>
-															<%} else { %>
-																<option value="<%=TaikhoanRs.getString("id") %>" ><%=TaikhoanRs.getString("ten") %></option>
+												<%if(obj.getID().length() > 0){ %>
+													<select id="taikhoan" name="taikhoan" style="width: 200px">
+														<option value="" disabled="disabled"></option>
+														<%if(TaikhoanRs != null){ %>
+															<%while(TaikhoanRs.next()){ %>
+																<%if(obj.getTaikhoan().equals(TaikhoanRs.getString("id"))){ %>
+																	<option value="<%=TaikhoanRs.getString("id") %>" selected><%=TaikhoanRs.getString("ten") %></option>
+																<%} else { %>
+																	<option value="<%=TaikhoanRs.getString("id") %>" disabled="disabled"><%=TaikhoanRs.getString("ten") %></option>
+																<%} %>
 															<%} %>
 														<%} %>
-													<%} %>
-												</select>
+													</select>
+												<%} else { %>
+													<select id="taikhoan" name="taikhoan" class="select2" style="width: 200px">
+														<option value=""></option>
+														<%if(TaikhoanRs != null){ %>
+															<%while(TaikhoanRs.next()){ %>
+																<%if(obj.getTaikhoan().equals(TaikhoanRs.getString("id"))){ %>
+																	<option value="<%=TaikhoanRs.getString("id") %>" selected><%=TaikhoanRs.getString("ten") %></option>
+																<%} else { %>
+																	<option value="<%=TaikhoanRs.getString("id") %>" ><%=TaikhoanRs.getString("ten") %></option>
+																<%} %>
+															<%} %>
+														<%} %>
+													</select>
+												<%} %>
 											</td>
 											
 											<td width="15%" class="plainlabel">Loại thẻ</td>

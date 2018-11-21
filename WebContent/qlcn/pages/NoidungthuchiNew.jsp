@@ -99,15 +99,27 @@ INoiDungThuChi obj = (INoiDungThuChi) session.getAttribute("obj");
 										<tr>
 											<td width="15%" class="plainlabel">Loại <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<select name="loai" class="select2" style="width: 200px;" onchange="search();">
-													<%if(obj.getLoai().equals("1")){ %>
-														<option value="1" selected="selected">Thu</option>
-														<option value="2">Chi</option>
-													<%} else { %>
-														<option value="1">Thu</option>
-														<option value="2" selected="selected">Chi</option>
-													<%} %>
-												</select>
+												<%if(obj.getID().length() > 0){ %>
+													<select name="loai" style="width: 200px;">
+														<%if(obj.getLoai().equals("1")){ %>
+															<option value="1" selected="selected">Thu</option>
+															<option value="2" disabled="disabled">Chi</option>
+														<%} else { %>
+															<option value="1" disabled="disabled">Thu</option>
+															<option value="2" selected="selected">Chi</option>
+														<%} %>
+													</select>
+												<%} else { %>
+													<select name="loai" class="select2" style="width: 200px;">
+														<%if(obj.getLoai().equals("1")){ %>
+															<option value="1" selected="selected">Thu</option>
+															<option value="2">Chi</option>
+														<%} else { %>
+															<option value="1">Thu</option>
+															<option value="2" selected="selected">Chi</option>
+														<%} %>
+													</select>
+												<%} %>
 											</td>
 											
 											<td width="15%" class="plainlabel">Tên <FONT class="erroralert">*</FONT></td>

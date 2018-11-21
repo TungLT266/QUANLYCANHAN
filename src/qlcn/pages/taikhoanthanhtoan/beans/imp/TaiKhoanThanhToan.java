@@ -122,7 +122,7 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "update TAIKHOANTHANHTOAN set taikhoan_fk="+this.taikhoan+", LOAITHE="+this.loaithe+", SOTHE='"+this.sothe+"', MAPIN='"+this.mapin+"',"
+			String query = "update TAIKHOANTHANHTOAN set LOAITHE="+this.loaithe+", SOTHE='"+this.sothe+"', MAPIN='"+this.mapin+"',"
 						+ " TENCHUTHE='"+this.tenchuthe+"', THOIGIANHIEULUC='"+this.thanghieuluc+"-"+this.namhieuluc+"',THOIGIANHETHAN='"+this.thanghethan+"-"+this.namhethan+"',"
 						+ "CHUKY='"+this.chuky+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);

@@ -110,7 +110,7 @@ public class TaiKhoan implements ITaiKhoan {
 			if(!this.isTknganhang.equals("1")){
 				this.nganhang = "";
 			}
-			String query = "update TAIKHOAN set TEN=N'"+this.ten+"',donvi_fk="+this.donvi+",nganhang=N'"+this.nganhang+"',"
+			String query = "update TAIKHOAN set TEN=N'"+this.ten+"',nganhang=N'"+this.nganhang+"',"
 					+ "istknganhang="+this.isTknganhang+",trangthai="+this.trangthai+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			

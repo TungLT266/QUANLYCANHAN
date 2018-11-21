@@ -61,13 +61,14 @@ ResultSet DonviRs = obj.getDonviRs();
 											<td width="15%" class="plainlabel">Số tiền</td>
 											<td class="plainlabel">
 												<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" readonly="readonly">
-												<select name="donvi" style="width: 70px;" disabled="disabled">
+												<select name="donvi" style="width: 70px;">
+													<option value="" disabled="disabled"></option>
 													<%if(DonviRs != null){ %>
 														<%while(DonviRs.next()){ %>
 															<%if(obj.getDonvi().equals(DonviRs.getString("id"))){ %>
 																<option value="<%=DonviRs.getString("id") %>" selected><%=DonviRs.getString("ten") %></option>
 															<%} else { %>
-																<option value="<%=DonviRs.getString("id") %>" ><%=DonviRs.getString("ten") %></option>
+																<option value="<%=DonviRs.getString("id") %>" disabled="disabled"><%=DonviRs.getString("ten") %></option>
 															<%} %>
 														<%} %>
 													<%} %>

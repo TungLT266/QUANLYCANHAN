@@ -69,7 +69,10 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 			if(action == null)
 				action = "";
 			
-			if(action.equals("update")) {
+			if(action.equals("update") || action.equals("copy")) {
+				if(action.equals("copy")){
+					obj.setID("");
+				}
 				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanNew.jsp");
 		    } else {
 		    	response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanDisplay.jsp");

@@ -79,7 +79,7 @@ public class NoiDungThuChi implements INoiDungThuChi {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "update NOIDUNGTHUCHI set loai="+this.loai+", TEN=N'"+this.ten+"', diengiai=N'"+this.diengiai+"',"
+			String query = "update NOIDUNGTHUCHI set TEN=N'"+this.ten+"', diengiai=N'"+this.diengiai+"',"
 					+ "\n trangthai="+this.trangthai+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
