@@ -307,36 +307,36 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=VaynoRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("0")){ %>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&nhantra=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=nhantra&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Trả tiền" src="../images/Chot.png" alt="Tra tien" width="20" height="20" longdesc="Tra tien" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&copy=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&update=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=update&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&display=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&action=display&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId%>&delete=<%=VaynoRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId%>&action=delete&id=<%=VaynoRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
 																<%} else if(tt.equals("1")) { %>
-																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId %>&unnhantra=<%=VaynoRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn hủy?')) return false;">
+																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId %>&action=unnhantra&id=<%=VaynoRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn hủy?')) return false;">
 																		<img title="Hủy trả" src="../images/unChot.png" alt="Huy tra tien" width="20" height="20" longdesc="Huy tra" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&copy=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&display=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&action=display&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} else { %>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&copy=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&display=<%=VaynoRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=display&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} %>

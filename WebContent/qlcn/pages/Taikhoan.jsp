@@ -244,21 +244,21 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=TaikhoanRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=TaikhoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
-																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&copy=<%=TaikhoanRs.getString("ID") %>">
+																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=copy&id=<%=TaikhoanRs.getString("ID") %>">
 																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
 																</a>
 																<% if(tt.equals("1") || tt.equals("0")){ %>
-																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&update=<%=TaikhoanRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=update&id=<%=TaikhoanRs.getString("ID") %>">
 																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId%>&display=<%=TaikhoanRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId%>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/TaiKhoanSvl?userId=<%=userId%>&delete=<%=TaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																	<a href="/QUANLYCANHAN/TaiKhoanSvl?userId=<%=userId%>&action=delete&id=<%=TaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
 																<%} else { %>
-																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&display=<%=TaikhoanRs.getString("ID") %>">
+																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} %>

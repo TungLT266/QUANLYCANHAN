@@ -41,9 +41,9 @@ public class ThuChiUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-	    String querystring = request.getQueryString();
+//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
-	    String userId = util.getUserId(querystring);
+	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
@@ -54,7 +54,7 @@ public class ThuChiUpdateSvl extends HttpServlet {
 	    	IThuChi obj = new ThuChi();
 	    	obj.setUserId(userId);
 	    	
-	    	String id = util.getId(querystring);
+	    	String id = request.getParameter("id");
 		    if(id != null)
 		    	obj.setID(id);
 	    	
@@ -64,7 +64,7 @@ public class ThuChiUpdateSvl extends HttpServlet {
 	    	session.setAttribute("userTen", userTen);
     		session.setAttribute("userId", userId);
 		    
-			String action = util.getAction(querystring);
+			String action = request.getParameter("action");
 			if(action == null)
 				action = "";
 			

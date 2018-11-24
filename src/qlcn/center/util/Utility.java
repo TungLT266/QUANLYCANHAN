@@ -25,7 +25,7 @@ public class Utility implements Serializable {
 //	public static final int SMS = 7;
 //	public static final int FAX = 8;
 	
-	public String getUserId(String querystring) {
+	/*public String getUserId(String querystring) {
 		String userId;
 		String tmp;
 		if (querystring != null) {
@@ -42,9 +42,9 @@ public class Utility implements Serializable {
 			userId = "";
 		}
 		return userId;
-	}
+	}*/
 	
-	public String getAction(String querystring) {
+	/*public String getAction(String querystring) {
 		String action;
 		String tmp;
 		if (querystring != null) {
@@ -58,9 +58,9 @@ public class Utility implements Serializable {
 			action = "";
 		}
 		return action;
-	}
+	}*/
 	
-	public String getId(String querystring) {
+	/*public String getId(String querystring) {
 		String id;
 		String tmp;
 		if (querystring != null) {
@@ -74,7 +74,7 @@ public class Utility implements Serializable {
 			id = "";
 		}
 		return id;
-	}
+	}*/
 	
 	public boolean check(String userId, String userIdSS) {
 		if(userId != null && userIdSS != null) {
