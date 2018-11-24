@@ -7,6 +7,7 @@ public interface ITaiKhoanThanhToan {
 	public void createRS();
 	public boolean create();
 	public boolean update();
+	public String checkPinUser(String pinUser);
 	public void DBClose();
 	
 	public String getUserId();
@@ -53,4 +54,13 @@ public interface ITaiKhoanThanhToan {
 
 	public String getNamhethan();
 	public void setNamhethan(String namhethan);
+	
+	public String getIsChangeMapin();
+	public void setIsChangeMapin(String isChangeMapin);
+
+	public String getIsChangeChuky();
+	public void setIsChangeChuky(String isChangeChuky);
+	
+	public String getAction();
+	public void setAction(String action);
 }

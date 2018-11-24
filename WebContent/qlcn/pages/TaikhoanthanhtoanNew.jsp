@@ -44,6 +44,12 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 		document.forms["FormTktt"].submit();
 	}
 	
+	function isChange(s) {
+		document.getElementById(s).style.display = "";
+		document.getElementById(s+"change").style.display = "none";
+		document.getElementById("ischange"+s).value = "1";
+	}
+	
 	/* function showHideByLoai() {
 		if(document.getElementById("loai").value == '1'){
 			document.getElementById("loaitienmat1").style.display = "";
@@ -173,12 +179,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 												</select>
 											</td>
 										</tr>
-										<%-- <tr id="loaitienmat1" <%=obj.getLoai().equals("1") ? "" : "style=\"display: none;\"" %>>
-											<td class="plainlabel">Tên <FONT class="erroralert">*</FONT></td>
-											<td class="plainlabel" colspan="3">
-												<input type="text" name="ten" id="ten" style="width: 300px;" value="<%=obj.getTen() %>">
-											</td>
-										</tr> --%>
+										
 										<tr>
 											<td class="plainlabel">Số thẻ</td>
 											<td class="plainlabel">
@@ -187,7 +188,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 											
 											<td class="plainlabel">Tên chủ thẻ</td>
 											<td class="plainlabel">
-												<input type="text" name="tenchuthe" id="tenchuthe" value="<%=obj.getTenchuthe() %>" placeholder="Viết in hoa không dấu.">
+												<input type="text" name="tenchuthe" id="tenchuthe" value="<%=obj.getTenchuthe() %>">
 											</td>
 										</tr>
 										
@@ -241,12 +242,16 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 										<tr>
 											<td class="plainlabel">Mã PIN</td>
 											<td class="plainlabel">
-												<input type="text" id="mapin" name="mapin" value="<%=obj.getMapin() %>">
+												<input type="hidden" id="ischangemapin" name="ischangemapin" value="<%=obj.getIsChangeMapin() %>">
+												<input type="text" id="mapin" name="mapin" value="<%=obj.getMapin() %>" <%=obj.getID().length() > 0 && !obj.getIsChangeMapin().equals("1") ? "style=\"display: none;\"" : "" %>>
+												<input type="button" id="mapinchange" value="Thay đổi" <%=obj.getID().length() > 0 && !obj.getIsChangeMapin().equals("1") ? "" : "style=\"display: none;\"" %> onclick="isChange('mapin');" style="width: 200px; border-radius: 5px; padding: 5px 0px;">
 											</td>
 										
 											<td class="plainlabel">Chữ ký</td>
 											<td class="plainlabel">
-												<input type="text" name="chuky" value="<%=obj.getChuky() %>">
+												<input type="hidden" id="ischangechuky" name="ischangechuky" value="<%=obj.getIsChangeChuky() %>">
+												<input type="text" id="chuky" name="chuky" value="<%=obj.getChuky() %>" <%=obj.getID().length() > 0 && !obj.getIsChangeChuky().equals("1") ? "style=\"display: none;\"" : "" %>>
+												<input type="button" id="chukychange" value="Thay đổi" <%=obj.getID().length() > 0 && !obj.getIsChangeChuky().equals("1") ? "" : "style=\"display: none;\"" %> onclick="isChange('chuky');" style="width: 200px; border-radius: 5px; padding: 5px 0px;">
 											</td>
 										</tr>
 										

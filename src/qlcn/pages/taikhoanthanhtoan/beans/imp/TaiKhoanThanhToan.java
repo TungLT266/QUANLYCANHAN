@@ -7,50 +7,53 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import db.Dbutils;
+import qlcn.center.util.Utility;
 import qlcn.pages.taikhoanthanhtoan.beans.ITaiKhoanThanhToan;
 
 public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 	private String userId;
+	private String action;
 	private String ID;
-//	private String loai;
 	private String taikhoan;
-//	private String ten;
 	private String loaithe;
 	private String sothe;
 	private String mapin;
+	private String isChangeMapin;
 	private String tenchuthe;
 	private String thanghieuluc;
 	private String namhieuluc;
 	private String thanghethan;
 	private String namhethan;
 	private String chuky;
+	private String isChangeChuky;
 	private String trangthai;
 	private String msg;
 	
 	private ResultSet TaikhoanRs;
 	
 	private Dbutils db;
-//	private Utility util;
+	private Utility util;
 	
 	public TaiKhoanThanhToan() {
 		this.ID = "";
-//		this.loai = "1";
+		this.action = "";
 		this.taikhoan = "";
-//		this.ten = "";
 		this.loaithe = "";
 		this.sothe = "";
 		this.mapin = "";
+		this.isChangeMapin = "";
 		this.tenchuthe = "";
 		this.thanghieuluc = Integer.parseInt(this.getDateTime().split("-")[1]) + "";
 		this.namhieuluc = this.getDateTime().split("-")[0];
 		this.thanghethan = Integer.parseInt(this.getDateTime().split("-")[1]) + "";
 		this.namhethan = this.getDateTime().split("-")[0];
 		this.chuky = "";
+		this.isChangeChuky = "";
 		this.trangthai = "1";
 		this.msg = "";
 		
 		this.db = new Dbutils();
-//		this.util = new Utility();
+		this.util = new Utility();
 	}
 	
 	public void init() {
@@ -61,19 +64,21 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 		try {
 			rs.next();
 			
-//			this.loai = rs.getString("loai");
 			this.taikhoan = rs.getString("taikhoan_fk");
-//			this.ten = rs.getString("TEN");
 			this.loaithe = rs.getString("LOAITHE");
 			this.sothe = rs.getString("SOTHE");
-			this.mapin = rs.getString("MAPIN");
 			this.tenchuthe = rs.getString("TENCHUTHE");
 			this.thanghieuluc = rs.getString("THOIGIANHIEULUC").split("-")[0];
 			this.namhieuluc = rs.getString("THOIGIANHIEULUC").split("-")[1];
 			this.thanghethan = rs.getString("THOIGIANHETHAN").split("-")[0];
 			this.namhethan = rs.getString("THOIGIANHETHAN").split("-")[1];
-			this.chuky = rs.getString("CHUKY");
 			this.trangthai = rs.getString("TRANGTHAI");
+			
+			if(this.action.equals("display")){
+				this.mapin = rs.getString("MAPIN");
+				this.chuky = rs.getString("CHUKY");
+			}
+			
 			rs.close();
 		} catch (Exception e) {}
 		
@@ -122,9 +127,19 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "update TAIKHOANTHANHTOAN set LOAITHE="+this.loaithe+", SOTHE='"+this.sothe+"', MAPIN='"+this.mapin+"',"
-						+ " TENCHUTHE='"+this.tenchuthe+"', THOIGIANHIEULUC='"+this.thanghieuluc+"-"+this.namhieuluc+"',THOIGIANHETHAN='"+this.thanghethan+"-"+this.namhethan+"',"
-						+ "CHUKY='"+this.chuky+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+			String query = "update TAIKHOANTHANHTOAN set"
+						;
+			if(this.isChangeMapin.equals("1")){
+				query += " MAPIN='"+this.mapin+"',";
+			}
+			
+			if(this.isChangeChuky.equals("1")){
+				query += " CHUKY='"+this.chuky+"',";
+			}
+			
+			query += " LOAITHE="+this.loaithe+", SOTHE='"+this.sothe+"', TENCHUTHE='"+this.tenchuthe+"', THOIGIANHIEULUC='"+this.thanghieuluc+"-"+this.namhieuluc+"',"
+					+ "THOIGIANHETHAN='"+this.thanghethan+"-"+this.namhethan+"',trangthai="+this.trangthai+",ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+			
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -150,6 +165,23 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date);	
+	}
+	
+	public String checkPinUser(String pinUser) {
+		try {
+			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
+			ResultSet rs = this.db.get(query);
+			if(rs.next()){
+				rs.close();
+				return "";
+			} else {
+				rs.close();
+				return "Mã PIN không đúng.";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
 	}
 	
 	public void DBClose() {
@@ -275,5 +307,29 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 
 	public void setNamhethan(String namhethan) {
 		this.namhethan = namhethan;
+	}
+
+	public String getIsChangeMapin() {
+		return isChangeMapin;
+	}
+
+	public void setIsChangeMapin(String isChangeMapin) {
+		this.isChangeMapin = isChangeMapin;
+	}
+
+	public String getIsChangeChuky() {
+		return isChangeChuky;
+	}
+
+	public void setIsChangeChuky(String isChangeChuky) {
+		this.isChangeChuky = isChangeChuky;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 }

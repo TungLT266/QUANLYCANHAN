@@ -41,9 +41,9 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-	    String querystring = request.getQueryString();
+//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
-	    String userId = util.getUserId(querystring);
+	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
 	    
 	    if(!util.check(userId, userIdSS)){
@@ -54,12 +54,12 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 	    	ITaiKhoanThanhToanList obj = new TaiKhoanThanhToanList();
 	    	obj.setUserId(userId);
 	    	
-			String action = util.getAction(querystring);
+			String action = request.getParameter("action");
 			if(action == null)
 				action = "";
 			
 			if(action.trim().equals("delete")) {
-				String id = util.getId(querystring);
+				String id = request.getParameter("id");
 		    	obj.delete(id);
 		    }
 			
