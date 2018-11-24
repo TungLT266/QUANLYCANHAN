@@ -101,20 +101,32 @@ INoiDungThuChi obj = (INoiDungThuChi) session.getAttribute("obj");
 											<td class="plainlabel">
 												<%if(obj.getID().length() > 0){ %>
 													<select name="loai" style="width: 200px;">
-														<%if(obj.getLoai().equals("1")){ %>
+														<%if(obj.getLoai().equals("0")){ %>
+															<option value="0" selected="selected">Thu - Chi</option>
+															<option value="1" disabled="disabled">Thu</option>
+															<option value="2" disabled="disabled">Chi</option>
+														<%} else if(obj.getLoai().equals("1")){ %>
+															<option value="0">Thu - Chi</option>
 															<option value="1" selected="selected">Thu</option>
 															<option value="2" disabled="disabled">Chi</option>
 														<%} else { %>
+															<option value="0">Thu - Chi</option>
 															<option value="1" disabled="disabled">Thu</option>
 															<option value="2" selected="selected">Chi</option>
 														<%} %>
 													</select>
 												<%} else { %>
 													<select name="loai" class="select2" style="width: 200px;">
-														<%if(obj.getLoai().equals("1")){ %>
+														<%if(obj.getLoai().equals("0")){ %>
+															<option value="0" selected="selected">Thu - Chi</option>
+															<option value="1">Thu</option>
+															<option value="2">Chi</option>
+														<%} else if(obj.getLoai().equals("1")){ %>
+															<option value="0">Thu - Chi</option>
 															<option value="1" selected="selected">Thu</option>
 															<option value="2">Chi</option>
 														<%} else { %>
+															<option value="0">Thu - Chi</option>
 															<option value="1">Thu</option>
 															<option value="2" selected="selected">Chi</option>
 														<%} %>

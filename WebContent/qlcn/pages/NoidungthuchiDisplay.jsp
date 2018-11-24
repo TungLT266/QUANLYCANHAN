@@ -56,10 +56,16 @@ INoiDungThuChi obj = (INoiDungThuChi) session.getAttribute("obj");
 											<td width="15%" class="plainlabel">Loại</td>
 											<td class="plainlabel">
 												<select name="loai" onchange="search();">
-													<%if(obj.getLoai().equals("1")){ %>
+													<%if(obj.getLoai().equals("0")){ %>
+														<option value="0" selected="selected">Thu - Chi</option>
+														<option value="1" disabled="disabled">Thu</option>
+														<option value="2" disabled="disabled">Chi</option>
+													<%} else if(obj.getLoai().equals("1")){ %>
+														<option value="0" disabled="disabled">Thu - Chi</option>
 														<option value="1" selected="selected">Thu</option>
 														<option value="2" disabled="disabled">Chi</option>
 													<%} else { %>
+														<option value="0" disabled="disabled">Thu - Chi</option>
 														<option value="1" disabled="disabled">Thu</option>
 														<option value="2" selected="selected">Chi</option>
 													<%} %>

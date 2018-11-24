@@ -34,12 +34,12 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 	}
 	
 	public void init() {
-		String query = "";
-		if(this.userId.equals("100000")){
-			query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.ID > 0";
-		} else {
-			query = "select ndtc.ID, ndtc.loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.USERID = " + this.userId;
+		String queryUser = "";
+		if(!this.userId.equals("100000")){
+			queryUser = " and ndtc.USERID = " + this.userId;
 		}
+		
+		String query = "select ndtc.ID, case when ndtc.loai=0 then 'Thu - Chi' when ndtc.loai=1 then 'Thu' else 'Chi' end as loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.ID > 0" + queryUser;
 		
 		if(this.ID.trim().length() > 0) {
 			query += " and ndtc.ID like '%" + this.ID.trim() + "%'";

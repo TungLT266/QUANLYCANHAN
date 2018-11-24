@@ -109,14 +109,11 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		
 		String query = "";
 		if(this.loai.length() > 0){
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai = " + this.loai + queryUser;
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
 		} else {
 			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1" + queryUser;
 		}
 		this.NoidungthuchiRs = this.db.get(query);
-		
-//		query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
-//		this.TaikhoanRs = this.db.get(query);
 	}
 	
 	public void delete(String id) {

@@ -77,7 +77,7 @@ public class ThuChi implements IThuChi {
 		
 		if(this.loai.length() > 0){
 			// Lấy nội dung thu chi
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai = " + this.loai + queryUser;
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
 			this.NoidungthuchiRs = this.db.get(query);
 		}
 		

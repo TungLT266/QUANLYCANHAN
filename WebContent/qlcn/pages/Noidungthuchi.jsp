@@ -124,16 +124,24 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 											<td width="10%" class="plainlabel">Loại</td>
 											<td class="plainlabel">
 												<select name="loai" class="select2" style="width: 200px;" onchange="search();">
-													<%if(obj.getLoai().equals("1")){ %>
+													<%if(obj.getLoai().equals("0")){ %>
 														<option value=""></option>
+														<option value="0" selected="selected">Thu - Chi</option>
+														<option value="1">Thu</option>
+														<option value="2">Chi</option>
+													<%} else if(obj.getLoai().equals("1")){ %>
+														<option value=""></option>
+														<option value="0">Thu - Chi</option>
 														<option value="1" selected="selected">Thu</option>
 														<option value="2">Chi</option>
 													<%} else if(obj.getLoai().equals("2")){ %>
 														<option value=""></option>
+														<option value="0">Thu - Chi</option>
 														<option value="1">Thu</option>
 														<option value="2" selected="selected">Chi</option>
 													<%} else { %>
 														<option value="" selected="selected"></option>
+														<option value="0">Thu - Chi</option>
 														<option value="1">Thu</option>
 														<option value="2">Chi</option>
 													<%} %>
@@ -227,12 +235,7 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 															
 															<td align="center"><%=NoidungthuchiRs.getString("id") %></td>
 															<td><%=NoidungthuchiRs.getString("TEN") %></td>
-															
-															<%if(NoidungthuchiRs.getString("loai").equals("1")){ %>
-																<td align="center">Thu</td>
-															<%} else { %>
-																<td align="center">Chi</td>
-															<%} %>
+															<td align="center"><%=NoidungthuchiRs.getString("loai") %></td>
 															
 															<%if(tt.equals("0")) { %>
 																<td align="center" style="color: red;">Ngưng hoạt động</td>
