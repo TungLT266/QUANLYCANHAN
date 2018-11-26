@@ -1,6 +1,7 @@
 package qlcn.pages.taikhoan.beans.imp;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import db.Dbutils;
 import qlcn.center.util.Phan_Trang;
@@ -11,8 +12,6 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	private String userId;
 	private String ID;
 	private String ten;
-//	private String sotien;
-//	private String loai;
 	private String trangthai;
 	private String soItems;
 	private String msg;
@@ -25,7 +24,6 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	public TaiKhoanList() {
 		this.ID = "";
 		this.ten = "";
-//		this.loai = "";
 		this.trangthai = "";
 		this.soItems = "100";
 		this.msg = "";
@@ -52,10 +50,6 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 			query += " and dbo.ftBoDau(tk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
 		}
 		
-//		if(this.loai.length() > 0) {
-//			query += " and tk.loai = '" + this.loai + "'";
-//		}
-		
 		if(this.trangthai.length() > 0) {
 			query += " and tk.TRANGTHAI = '" + this.trangthai + "'";
 		}
@@ -66,26 +60,53 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	}
 	
 	public void delete(String id) {
-		String query = "update TAIKHOAN set trangthai = 2 where ID = " + id;
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa TAIKHOAN: " + query;
-    	}
+		try {
+			db.getConnection().setAutoCommit(false);
+		
+			String query = "update TAIKHOAN set trangthai = 2 where ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể xóa TAIKHOAN: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteDB(String pinUser) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
 			ResultSet rs = this.db.get(query);
 			if(rs.next()){
+				rs.close();
+				
 				query = "delete TAIKHOAN where trangthai = 2";
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database TAIKHOAN: " + query;
+		    		db.getConnection().rollback();
+		    		return;
 		    	}
 			} else {
 				this.msg = "Mã PIN không đúng.";
 			}
-			rs.close();
-		} catch (Exception e) {
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
 			e.printStackTrace();
 		}
 	}

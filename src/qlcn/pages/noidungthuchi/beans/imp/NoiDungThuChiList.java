@@ -1,6 +1,7 @@
 package qlcn.pages.noidungthuchi.beans.imp;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import db.Dbutils;
 import qlcn.center.util.Phan_Trang;
@@ -62,26 +63,53 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 	}
 	
 	public void delete(String id) {
-		String query = "update NOIDUNGTHUCHI set trangthai = 2 where ID = " + id;
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa NOIDUNGTHUCHI: " + query;
-    	}
+		try {
+			db.getConnection().setAutoCommit(false);
+		
+			String query = "update NOIDUNGTHUCHI set trangthai = 2 where ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể xóa NOIDUNGTHUCHI: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteDB(String pinUser) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
 			ResultSet rs = this.db.get(query);
 			if(rs.next()){
+				rs.close();
+				
 				query = "delete NOIDUNGTHUCHI where trangthai = 2";
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database NOIDUNGTHUCHI: " + query;
+		    		db.getConnection().rollback();
+		    		return;
 		    	}
 			} else {
 				this.msg = "Mã PIN không đúng.";
 			}
-			rs.close();
-		} catch (Exception e) {
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
 			e.printStackTrace();
 		}
 	}

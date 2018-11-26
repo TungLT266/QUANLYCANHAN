@@ -169,18 +169,30 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	
 	public void deleteDB(String pinUser) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
 			ResultSet rs = this.db.get(query);
 			if(rs.next()){
+				rs.close();
+				
 				query = "delete THUCHI where trangthai = 2";
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database THUCHI: " + query;
+		    		db.getConnection().rollback();
+		    		return;
 		    	}
 			} else {
 				this.msg = "Mã PIN không đúng.";
 			}
-			rs.close();
-		} catch (Exception e) {
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
 			e.printStackTrace();
 		}
 	}
@@ -191,8 +203,6 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				this.ThuchiRs.close();
 			if (this.NoidungthuchiRs != null)
 				this.NoidungthuchiRs.close();
-//			if (this.TaikhoanRs != null)
-//				this.TaikhoanRs.close();
 			if (this.db != null)
 				this.db.shutDown();
 		} catch (Exception e) {}

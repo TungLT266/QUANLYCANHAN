@@ -1,6 +1,7 @@
 package qlcn.pages.taikhoanthanhtoan.beans.imp;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -101,26 +102,53 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 	}
 	
 	public void delete(String id) {
-		String query = "update TAIKHOANTHANHTOAN set trangthai = 2 where ID = " + id;
-		if(!this.db.update(query)){
-    		this.msg = "Không thể xóa TAIKHOANTHANHTOAN: " + query;
-    	}
+		try {
+			db.getConnection().setAutoCommit(false);
+		
+			String query = "update TAIKHOANTHANHTOAN set trangthai = 2 where ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể xóa TAIKHOANTHANHTOAN: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteDB(String pinUser) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
 			ResultSet rs = this.db.get(query);
 			if(rs.next()){
+				rs.close();
+				
 				query = "delete TAIKHOANTHANHTOAN where trangthai = 2";
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database TAIKHOANTHANHTOAN: " + query;
+		    		db.getConnection().rollback();
+		    		return;
 		    	}
 			} else {
 				this.msg = "Mã PIN không đúng.";
 			}
-			rs.close();
-		} catch (Exception e) {
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
 			e.printStackTrace();
 		}
 	}
