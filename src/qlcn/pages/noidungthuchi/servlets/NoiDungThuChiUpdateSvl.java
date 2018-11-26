@@ -41,7 +41,6 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -126,12 +125,7 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 			
 			if(action.trim().equals("save")) {
 				if(id.length() > 0){
-					if(!obj.update()) {
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/NoidungthuchiNew.jsp");
-					} else {
+					if(obj.update()) {
 						obj.DBClose();
 						INoiDungThuChiList objList = new NoiDungThuChiList();
 						objList.setUserId(userId);
@@ -142,14 +136,11 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Noidungthuchi.jsp");
+
+						return;
 					}
 				} else {
-					if(!obj.create()) {
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/NoidungthuchiNew.jsp");
-					} else {
+					if(obj.create()) {
 						obj.DBClose();
 						INoiDungThuChiList objList = new NoiDungThuChiList();
 						objList.setUserId(userId);
@@ -160,9 +151,16 @@ public class NoiDungThuChiUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Noidungthuchi.jsp");
+
+						return;
 					}
 				}
 		    }
+			
+			session.setAttribute("obj", obj);
+			session.setAttribute("userTen", userTen);
+    		session.setAttribute("userId", userId);
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/NoidungthuchiNew.jsp");
 	    }
 	}
 

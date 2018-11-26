@@ -41,7 +41,6 @@ public class TaiKhoanSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -118,10 +117,6 @@ public class TaiKhoanSvl extends HttpServlet {
 				String ten = util.antiSQLInspection(request.getParameter("ten"));
 				if(ten != null)
 					obj.setTen(ten);
-				
-//				String loai = util.antiSQLInspection(request.getParameter("loai"));
-//				if(loai != null)
-//					obj.setLoai(loai);
 				
 				String trangthai = request.getParameter("trangthai");
 				if(trangthai != null)

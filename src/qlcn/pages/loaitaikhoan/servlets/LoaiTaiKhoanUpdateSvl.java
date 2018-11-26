@@ -41,7 +41,6 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -121,12 +120,7 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 			
 			if(action.trim().equals("save")) {
 				if(id.length() > 0){
-					if(!obj.update()) {
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
-					} else {
+					if(obj.update()) {
 						obj.DBClose();
 						ILoaiTaiKhoanList objList = new LoaiTaiKhoanList();
 						objList.setUserId(userId);
@@ -137,14 +131,11 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
+			    		
+			    		return;
 					}
 				} else {
-					if(!obj.create()) {
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
-					} else {
+					if(obj.create()) {
 						obj.DBClose();
 						ILoaiTaiKhoanList objList = new LoaiTaiKhoanList();
 						objList.setUserId(userId);
@@ -155,9 +146,16 @@ public class LoaiTaiKhoanUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Loaitaikhoan.jsp");
+			    		
+			    		return;
 					}
 				}
 		    }
+			
+			session.setAttribute("obj", obj);
+			session.setAttribute("userTen", userTen);
+    		session.setAttribute("userId", userId);
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/LoaitaikhoanNew.jsp");
 	    }
 	}
 

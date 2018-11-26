@@ -41,7 +41,6 @@ public class NoiDungThuChiSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");

@@ -41,7 +41,6 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -184,14 +183,7 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 			
 			if(action.trim().equals("save")) {
 				if(id.length() > 0){
-					if(!obj.update()) {
-						obj.createRS();
-						
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
-					} else {
+					if(obj.update()) {
 						obj.DBClose();
 						ITaiKhoanThanhToanList objList = new TaiKhoanThanhToanList();
 						objList.setUserId(userId);
@@ -202,16 +194,11 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoanthanhtoan.jsp");
+
+						return;
 					}
 				} else {
-					if(!obj.create()) {
-						obj.createRS();
-						
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
-					} else {
+					if(obj.create()) {
 						obj.DBClose();
 						ITaiKhoanThanhToanList objList = new TaiKhoanThanhToanList();
 						objList.setUserId(userId);
@@ -222,15 +209,18 @@ public class TaiKhoanThanhToanUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoanthanhtoan.jsp");
+
+						return;
 					}
 				}
-		    } else {
-		    	obj.createRS();
-		    	
-		    	session.setAttribute("obj", obj);
-	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 		    }
+			
+			obj.createRS();
+			
+			session.setAttribute("obj", obj);
+			session.setAttribute("userTen", userTen);
+    		session.setAttribute("userId", userId);
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanthanhtoanNew.jsp");
 	    }
 	}
 

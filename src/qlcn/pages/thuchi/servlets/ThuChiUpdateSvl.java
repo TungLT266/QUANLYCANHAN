@@ -41,7 +41,6 @@ public class ThuChiUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -140,14 +139,7 @@ public class ThuChiUpdateSvl extends HttpServlet {
 			
 			if(action.trim().equals("save")) {
 				if(id.length() > 0){
-					if(!obj.update()) {
-						obj.createRs();
-						
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiNew.jsp");
-					} else {
+					if(obj.update()) {
 						obj.DBClose();
 						IThuChiList objList = new ThuChiList();
 						objList.setUserId(userId);
@@ -158,16 +150,11 @@ public class ThuChiUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Thuchi.jsp");
+			    		
+			    		return;
 					}
 				} else {
-					if(!obj.create()) {
-						obj.createRs();
-						
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiNew.jsp");
-					} else {
+					if(obj.create()) {
 						obj.DBClose();
 						IThuChiList objList = new ThuChiList();
 						objList.setUserId(userId);
@@ -178,16 +165,18 @@ public class ThuChiUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Thuchi.jsp");
+			    		
+			    		return;
 					}
 				}
-		    } else {
-		    	obj.createRs();
-		    	
-		    	session.setAttribute("obj", obj);
-				session.setAttribute("userTen", userTen);
-	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiNew.jsp");
 		    }
+			
+			obj.createRs();
+			
+			session.setAttribute("obj", obj);
+			session.setAttribute("userTen", userTen);
+    		session.setAttribute("userId", userId);
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiNew.jsp");
 	    }
 	}
 

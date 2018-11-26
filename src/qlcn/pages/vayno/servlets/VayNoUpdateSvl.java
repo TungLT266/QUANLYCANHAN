@@ -41,7 +41,6 @@ public class VayNoUpdateSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -156,14 +155,7 @@ public class VayNoUpdateSvl extends HttpServlet {
 			
 			if(action.trim().equals("save")) {
 				if(id.length() > 0){
-					if(!obj.update()) {
-						obj.createRS();
-						
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoNew.jsp");
-					} else {
+					if(obj.update()) {
 						obj.DBClose();
 						IVayNoList objList = new VayNoList();
 						objList.setUserId(userId);
@@ -174,16 +166,11 @@ public class VayNoUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Vayno.jsp");
+			    		
+			    		return;
 					}
 				} else {
-					if(!obj.create()) {
-						obj.createRS();
-						
-						session.setAttribute("obj", obj);
-						session.setAttribute("userTen", userTen);
-			    		session.setAttribute("userId", userId);
-			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoNew.jsp");
-					} else {
+					if(obj.create()) {
 						obj.DBClose();
 						IVayNoList objList = new VayNoList();
 						objList.setUserId(userId);
@@ -194,6 +181,8 @@ public class VayNoUpdateSvl extends HttpServlet {
 						session.setAttribute("userTen", userTen);
 			    		session.setAttribute("userId", userId);
 			    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Vayno.jsp");
+			    		
+			    		return;
 					}
 				}
 		    } else if(action.trim().equals("nhantra")){
@@ -204,6 +193,8 @@ public class VayNoUpdateSvl extends HttpServlet {
 					session.setAttribute("userTen", userTen);
 		    		session.setAttribute("userId", userId);
 		    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoDisplay.jsp");
+		    		
+		    		return;
 		    	} else {
 					obj.DBClose();
 					IVayNoList objList = new VayNoList();
@@ -215,15 +206,17 @@ public class VayNoUpdateSvl extends HttpServlet {
 					session.setAttribute("userTen", userTen);
 		    		session.setAttribute("userId", userId);
 		    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Vayno.jsp");
+		    		
+		    		return;
 				}
-		    } else {
-		    	obj.createRS();
-				
-				session.setAttribute("obj", obj);
-				session.setAttribute("userTen", userTen);
-	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoNew.jsp");
 		    }
+			
+			obj.createRS();
+			
+			session.setAttribute("obj", obj);
+			session.setAttribute("userTen", userTen);
+    		session.setAttribute("userId", userId);
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoNew.jsp");
 	    }
 	}
 
