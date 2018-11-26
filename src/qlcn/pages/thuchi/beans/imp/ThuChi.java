@@ -169,7 +169,7 @@ public class ThuChi implements IThuChi {
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "update THUCHI set noidungthuchi_fk="+this.noidungthuchiId+",taikhoanthanhtoan_fk="+this.taikhoanthanhtoanId+","
-					+ "diengiai=N'"+this.diengiai+"',ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+					+ "diengiai=N'"+this.diengiai+"',ngaysua='"+this.getDateTime()+"' where trangthai=1 and ID = " + this.ID;
 			System.out.println(query);
 			
 			if(db.updateReturnInt(query) != 1) {

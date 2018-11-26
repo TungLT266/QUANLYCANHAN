@@ -191,8 +191,8 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 				}
 			}
 		
-			query = "update VAYNO set trangthai = 2 where ID = " + id;
-			if(!this.db.update(query)){
+			query = "update VAYNO set trangthai = 2 where trangthai = 0 and ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể xóa VAYNO: " + query;
 	    		db.getConnection().rollback();
 	    	}

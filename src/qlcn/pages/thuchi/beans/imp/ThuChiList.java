@@ -17,14 +17,12 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	private String sotienden;
 	private String loai;
 	private String noidungthuchiId;
-//	private String taikhoaId;
 	private String noidung;
 	private String soItems;
 	private String msg;
 	
 	private ResultSet ThuchiRs;
 	private ResultSet NoidungthuchiRs;
-//	private ResultSet TaikhoanRs;
 	
 	private Dbutils db;
 	private Utility util;
@@ -37,7 +35,6 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		this.sotienden = "";
 		this.loai = "";
 		this.noidungthuchiId = "";
-//		this.taikhoaId = "";
 		this.noidung = "";
 		this.soItems = "100";
 		this.msg = "";
@@ -90,10 +87,6 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		if(this.noidung.trim().length() > 0) {
 			query += " and dbo.ftBoDau(tc.diengiai) like '%" + this.util.replaceAEIOU(this.noidung.trim()) + "%'";
 		}
-		
-//		if(this.taikhoaId.length() > 0) {
-//			query += " and tc.taikhoan_fk = " + this.taikhoaId;
-//		}
 		
 		System.out.println(query);
 		this.ThuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
@@ -156,8 +149,8 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				}
 			}
 			
-			query = "update THUCHI set trangthai = 2 where ID = " + id;
-			if(!this.db.update(query)){
+			query = "update THUCHI set trangthai = 2 where trangthai=1 and ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể xóa THUCHI: " + query;
 	    		db.getConnection().rollback();
 	    		return;
