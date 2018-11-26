@@ -1,4 +1,4 @@
-package qlcn.pages.thuchi.servlets;
+package qlcn.pages.chuyentien.servlets;
 
 import java.io.IOException;
 
@@ -10,22 +10,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import qlcn.center.util.Utility;
-import qlcn.pages.thuchi.beans.IThuChi;
-import qlcn.pages.thuchi.beans.IThuChiList;
-import qlcn.pages.thuchi.beans.imp.ThuChi;
-import qlcn.pages.thuchi.beans.imp.ThuChiList;
+import qlcn.pages.chuyentien.beans.IChuyenTien;
+import qlcn.pages.chuyentien.beans.IChuyenTienList;
+import qlcn.pages.chuyentien.beans.imp.ChuyenTien;
+import qlcn.pages.chuyentien.beans.imp.ChuyenTienList;
 
 /**
- * Servlet implementation class ThuChiSvl
+ * Servlet implementation class ChuyenTienSvl
  */
-@WebServlet("/ThuChiSvl")
-public class ThuChiSvl extends HttpServlet {
+@WebServlet("/ChuyenTienSvl")
+public class ChuyenTienSvl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThuChiSvl() {
+    public ChuyenTienSvl() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,7 +41,6 @@ public class ThuChiSvl extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    Utility util = new Utility();
 	    
-//	    String querystring = request.getQueryString();
 	    String userTen = (String)session.getAttribute("userTen");
 	    String userId = request.getParameter("userId");
 	    String userIdSS = (String)session.getAttribute("userId");
@@ -51,15 +50,20 @@ public class ThuChiSvl extends HttpServlet {
 	    	session.removeAttribute("userId");
 	    	response.sendRedirect("/QUANLYCANHAN/");
 	    } else {
-	    	IThuChiList obj = new ThuChiList();
+	    	IChuyenTienList obj = new ChuyenTienList();
 	    	obj.setUserId(userId);
 	    	
 			String action = request.getParameter("action");
 			if(action == null)
 				action = "";
 			
-			if(action.trim().equals("delete")) {
-				String id = request.getParameter("id");
+			String id = request.getParameter("id");
+			
+			if(action.trim().equals("chot")) {
+				obj.chot(id);
+			} else if(action.trim().equals("unchot")) {
+				obj.unchot(id);
+			} else if(action.trim().equals("delete")) {
 		    	obj.delete(id);
 		    }
 			
@@ -68,7 +72,7 @@ public class ThuChiSvl extends HttpServlet {
 	    	session.setAttribute("obj", obj);
 	    	session.setAttribute("userTen", userTen);
     		session.setAttribute("userId", userId);
-    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Thuchi.jsp");
+    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Chuyentien.jsp");
 	    }
 	}
 
@@ -96,7 +100,7 @@ public class ThuChiSvl extends HttpServlet {
 				action = "";
 			
 			if(action.equals("new")) {
-				IThuChi obj = new ThuChi();
+				IChuyenTien obj = new ChuyenTien();
 				obj.setUserId(userId);
 				
 				obj.createRs();
@@ -104,9 +108,9 @@ public class ThuChiSvl extends HttpServlet {
 				session.setAttribute("obj", obj);
 				session.setAttribute("userTen", userTen);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ThuchiNew.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ChuyentienNew.jsp");
 		    } else {
-		    	IThuChiList obj = new ThuChiList();
+		    	IChuyenTienList obj = new ChuyenTienList();
 		    	obj.setUserId(userId);
 		    	
 		    	String pinUser = request.getParameter("pinUser");
@@ -131,17 +135,21 @@ public class ThuChiSvl extends HttpServlet {
 				if(sotienden != null)
 					obj.setSotienden(sotienden);
 				
-				String loai = request.getParameter("loai");
-				if(loai != null)
-					obj.setLoai(loai);
+				String taikhoanchuyenId = request.getParameter("taikhoanchuyenId");
+				if(taikhoanchuyenId != null)
+					obj.setTaikhoanchuyenId(taikhoanchuyenId);
 				
-				String noidungthuchiId = request.getParameter("noidungthuchiId");
-				if(noidungthuchiId != null)
-					obj.setNoidungthuchiId(noidungthuchiId);
+				String taikhoannhanId = request.getParameter("taikhoannhanId");
+				if(taikhoannhanId != null)
+					obj.setTaikhoannhanId(taikhoannhanId);
 				
 				String noidung = util.antiSQLInspection(request.getParameter("noidung"));
 				if(noidung != null)
 					obj.setNoidung(noidung);
+				
+				String trangthai = request.getParameter("trangthai");
+				if(trangthai != null)
+					obj.setTrangthai(trangthai);
 				
 				String soitems = request.getParameter("soitems");
 				if(soitems == null)
@@ -161,7 +169,7 @@ public class ThuChiSvl extends HttpServlet {
 		    	session.setAttribute("obj", obj);
 		    	session.setAttribute("userTen", userTen);
 	    		session.setAttribute("userId", userId);
-	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Thuchi.jsp");
+	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Chuyentien.jsp");
 		    }
 	    }
 	}

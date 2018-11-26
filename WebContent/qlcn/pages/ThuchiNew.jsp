@@ -227,7 +227,6 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 														<%} %>
 													</select>
 												<%} %>
-												
 											</td>
 											
 											<td class="plainlabel">Tài khoản thanh toán</td>

@@ -173,6 +173,28 @@
     <url-pattern>/AjaxTop</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <description></description>
+    <display-name>ChuyenTienSvl</display-name>
+    <servlet-name>ChuyenTienSvl</servlet-name>
+    <servlet-class>qlcn.pages.chuyentien.servlets.ChuyenTienSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChuyenTienSvl</servlet-name>
+    <url-pattern>/ChuyenTienSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>ChuyenTienUpdateSvl</display-name>
+    <servlet-name>ChuyenTienUpdateSvl</servlet-name>
+    <servlet-class>qlcn.pages.chuyentien.servlets.ChuyenTienUpdateSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChuyenTienUpdateSvl</servlet-name>
+    <url-pattern>/ChuyenTienUpdateSvl</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
