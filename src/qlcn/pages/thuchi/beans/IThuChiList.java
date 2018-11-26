@@ -6,6 +6,9 @@ import qlcn.center.util.IPhan_Trang;
 
 public interface IThuChiList extends IPhan_Trang {
 	public void init();
+	public void createRs();
+	public void chot(String id);
+	public void unchot(String id);
 	public void delete(String id);
 	public void deleteDB(String pinUser);
 	public void DBClose();
@@ -28,17 +31,11 @@ public interface IThuChiList extends IPhan_Trang {
 	public String getNoidungthuchiId();
 	public void setNoidungthuchiId(String noidungthuchiId);
 
-//	public String getTaikhoaId();
-//	public void setTaikhoaId(String taikhoaId);
-
 	public ResultSet getThuchiRs();
 	public void setThuchiRs(ResultSet thuchiRs);
 
 	public ResultSet getNoidungthuchiRs();
 	public void setNoidungthuchiRs(ResultSet noidungthuchiRs);
-
-//	public ResultSet getTaikhoanRs();
-//	public void setTaikhoanRs(ResultSet taikhoanRs);
 	
 	public String getSotientu();
 	public void setSotientu(String sotientu);
@@ -54,4 +51,7 @@ public interface IThuChiList extends IPhan_Trang {
 	
 	public String getNoidung();
 	public void setNoidung(String noidung);
+	
+	public String getTrangthai();
+	public void setTrangthai(String trangthai);
 }

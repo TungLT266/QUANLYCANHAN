@@ -102,51 +102,17 @@ public class ThuChi implements IThuChi {
 		}
 	}
 	
-	private boolean check() {
-		try {
-			if(this.loai.equals("2")) {
-				String query = "select sotien from TAIKHOAN where ID = " + this.taikhoanId;
-				ResultSet rs = this.db.get(query);
-				rs.next();
-				double stien = rs.getDouble("sotien");
-				rs.close();
-				if(stien < Double.parseDouble(this.sotien.replaceAll(",", ""))){
-					this.msg = "Số tiền trong tài khoản không đủ.";
-					return false;
-				}
-			}
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
 	public boolean create() {
 		try {
-			if(!check()){
-				return false;
-			}
-			
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "insert into THUCHI(ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, trangthai, ngaytao, ngaysua, USERID)"
 					+ "\n values('"+this.ngay+"',"+this.sotien.replaceAll(",", "")+","+this.loai+","+this.noidungthuchiId+","+this.taikhoanId+","+this.taikhoanthanhtoanId+","
-					+ " N'"+this.diengiai+"',1,'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
+					+ " N'"+this.diengiai+"',0,'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
 			if(!db.update(query)) {
 				this.msg = "Không thể tạo mới THUCHI: " + query;
-				db.getConnection().rollback();
-				return false;
-			}
-			
-			if(this.loai.equals("1")){
-				query = "update TAIKHOAN set sotien = (sotien + "+this.sotien.replaceAll(",", "")+") where ID = " + this.taikhoanId;
-			} else {
-				query = "update TAIKHOAN set sotien = (sotien - "+this.sotien.replaceAll(",", "")+") where ID = " + this.taikhoanId;
-			}
-			if(db.updateReturnInt(query) != 1) {
-				this.msg = "Không cập nhật TAIKHOAN: " + query;
 				db.getConnection().rollback();
 				return false;
 			}
@@ -168,8 +134,8 @@ public class ThuChi implements IThuChi {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "update THUCHI set noidungthuchi_fk="+this.noidungthuchiId+",taikhoanthanhtoan_fk="+this.taikhoanthanhtoanId+","
-					+ "diengiai=N'"+this.diengiai+"',ngaysua='"+this.getDateTime()+"' where trangthai=1 and ID = " + this.ID;
+			String query = "update THUCHI set ngay='"+this.ngay+"',sotien="+this.sotien.replaceAll(",", "")+",loai="+this.loai+",noidungthuchi_fk="+this.noidungthuchiId+","
+					+ "taikhoan_fk="+this.taikhoanId+",taikhoanthanhtoan_fk="+this.taikhoanthanhtoanId+",diengiai=N'"+this.diengiai+"',ngaysua='"+this.getDateTime()+"' where trangthai=0 and ID = " + this.ID;
 			System.out.println(query);
 			
 			if(db.updateReturnInt(query) != 1) {

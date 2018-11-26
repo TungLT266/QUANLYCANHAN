@@ -260,15 +260,15 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 											<td width="98%">
 												<table width="100%" border="0" cellspacing="1" cellpadding="4">
 													<tr class="tbheader">
-														<th width="10%">ID</th>
-														<th width="10%">Ngày</th>
-														<th width="10%">Tài khoản chuyển</th>
-														<th width="10%">Tài khoản nhận</th>
+														<th width="7%">ID</th>
+														<th width="7%">Ngày</th>
+														<th width="14%">Tài khoản chuyển</th>
+														<th width="14%">Tài khoản nhận</th>
 														<th width="10%">Số tiền chuyển</th>
-														<th width="10%">Nội dung</th>
-														<th width="10%">Trạng thái</th>
-														<th width="10%">Ngày tạo</th>
-														<th width="10%">Ngày sửa</th>
+														<th width="16%">Nội dung</th>
+														<th width="8%">Trạng thái</th>
+														<th width="7%">Ngày tạo</th>
+														<th width="7%">Ngày sửa</th>
 														<th width="10%">Tác vụ</th>
 													</tr>
 													<%
@@ -290,7 +290,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=ChuyentienRs.getString("ngay") %></td>
 															<td><%=ChuyentienRs.getString("taikhoanchuyen") %></td>
 															<td><%=ChuyentienRs.getString("taikhoannhan") %></td>
-															<td><%=formatter.format(Double.parseDouble(ChuyentienRs.getString("sotienchuyen"))) + " " + ChuyentienRs.getString("donvichuyen") %></td>
+															<td align="center"><%=formatter.format(Double.parseDouble(ChuyentienRs.getString("sotienchuyen"))) + " " + ChuyentienRs.getString("donvichuyen") %></td>
 															<td><%=ChuyentienRs.getString("noidung") %></td>
 															
 															<%if(tt.equals("0")) { %>

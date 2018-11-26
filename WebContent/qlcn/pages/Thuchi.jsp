@@ -60,6 +60,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 	    document.forms['FormTc'].loai.value = "";
 	    document.forms['FormTc'].noidungthuchiId.value = "";
 	    document.forms['FormTc'].noidung.value = "";
+	    document.forms['FormTc'].trangthai.value = "";
 	    document.forms['FormTc'].action.value = 'search';
 		document.forms['FormTc'].submit();
 	}
@@ -207,29 +208,39 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 										</tr>
 										
 										<tr>
-											<%-- <td class="plainlabel">Tài khoản</td>
-											<td class="plainlabel">
-												<select name="taikhoaId" class="select2" style="width: 200px" onchange="search();">
-													<option value=""></option>
-													<%if(TaikhoanRs != null){ %>
-														<%while(TaikhoanRs.next()){ %>
-															<%if(obj.getTaikhoaId().equals(TaikhoanRs.getString("id"))){ %>
-																<option value="<%=TaikhoanRs.getString("id") %>" selected="selected"><%=TaikhoanRs.getString("ten") %></option>
-															<%} else { %>
-																<option value="<%=TaikhoanRs.getString("id") %>" ><%=TaikhoanRs.getString("ten") %></option>
-															<%} %>
-														<%} %>
-													<%} %>
-												</select>
-											</td> --%>
-											
 											<td class="plainlabel">Nội dung</td>
 											<td class="plainlabel">
 												<input type="text" name="noidung" value="<%=obj.getNoidung() %>" onchange="search();">
 											</td>
 											
-											<td class="plainlabel">Số Items</td>
+											<td class="plainlabel">Trạng thái</td>
 											<td class="plainlabel">
+												<select name="trangthai" class="select2" style="width: 200px;" onchange="search();">
+													<option value=""></option>
+													<%if(obj.getTrangthai().equals("0")){ %>
+														<option value="0" selected="selected">Chưa chốt</option>
+														<option value="1">Đã thực hiện</option>
+														<option value="2">Đã xóa</option>
+													<%} else if(obj.getTrangthai().equals("1")){ %>
+														<option value="0">Chưa chốt</option>
+														<option value="1" selected="selected">Đã thực hiện</option>
+														<option value="2">Đã xóa</option>
+													<%} else if(obj.getTrangthai().equals("2")){ %>
+														<option value="0">Chưa chốt</option>
+														<option value="1">Đã thực hiện</option>
+														<option value="2" selected="selected">Đã xóa</option>
+													<%} else { %>
+														<option value="0">Chưa chốt</option>
+														<option value="1">Đã thực hiện</option>
+														<option value="2">Đã xóa</option>
+													<%} %>
+												</select>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="plainlabel">Số Items</td>
+											<td class="plainlabel" colspan="3">
 												<input type="text" style="text-align: right;" name="soitems" value="<%=obj.getSoItems() %>" onchange="search();" onkeypress="return keypress(event);">
 											</td>
 										</tr>
@@ -297,19 +308,21 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td><%=ThuchiRs.getString("tenndtc") %></td>
 															<td><%=ThuchiRs.getString("diengiai") %></td>
 															
-															<%if(tt.equals("2")){ %>
-																<td align="center" style="color: red;">Đã xóa</td>
+															<%if(tt.equals("0")) { %>
+																<td align="center">Chưa chốt</td>
 															<%} else if(tt.equals("1")) { %>
 																<td align="center">Đã thực hiện</td>
+															<%} else { %>
+																<td align="center" style="color: red;">Đã xóa</td>
 															<%} %>
 
 															<td align="center"><%=ThuchiRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=ThuchiRs.getString("NGAYSUA") %></td>
 															<td align="center">
-																<a href="/QUANLYCANHAN/ThuChiUpdateSvl?userId=<%=userId %>&action=copy&id=<%=ThuchiRs.getString("ID") %>">
-																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
-																</a>
-																<% if(tt.equals("1")){ %>
+																<% if(tt.equals("0")){ %>
+																	<a href="/QUANLYCANHAN/ThuChiSvl?userId=<%=userId %>&action=chot&id=<%=ThuchiRs.getString("ID") %>">
+																		<img title="Chốt" src="../images/Chot.png" alt="Chot" width="20" height="20" longdesc="Chot" border=0>
+																	</a>
 																	<a href="/QUANLYCANHAN/ThuChiUpdateSvl?userId=<%=userId %>&action=update&id=<%=ThuchiRs.getString("ID") %>">
 																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
 																	</a>
@@ -318,6 +331,13 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 																	</a>
 																	<a href="/QUANLYCANHAN/ThuChiSvl?userId=<%=userId%>&action=delete&id=<%=ThuchiRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
+																	</a>
+																<%} else if(tt.equals("1")){ %>
+																	<a href="/QUANLYCANHAN/ThuChiSvl?userId=<%=userId %>&action=unchot&id=<%=ThuchiRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn bỏ chốt?')) return false;">
+																		<img title="Bỏ chốt" src="../images/unChot.png" alt="Bo chot" width="20" height="20" longdesc="Bo chot" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/ThuChiUpdateSvl?userId=<%=userId%>&action=display&id=<%=ThuchiRs.getString("ID") %>">
+																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} else { %>
 																	<a href="/QUANLYCANHAN/ThuChiUpdateSvl?userId=<%=userId %>&action=display&id=<%=ThuchiRs.getString("ID") %>">

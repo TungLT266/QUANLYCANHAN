@@ -2,6 +2,9 @@ package qlcn.pages.thuchi.beans.imp;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import qlcn.center.util.Phan_Trang;
 import qlcn.center.util.Utility;
@@ -18,6 +21,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	private String loai;
 	private String noidungthuchiId;
 	private String noidung;
+	private String trangthai;
 	private String soItems;
 	private String msg;
 	
@@ -36,6 +40,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		this.loai = "";
 		this.noidungthuchiId = "";
 		this.noidung = "";
+		this.trangthai = "";
 		this.soItems = "100";
 		this.msg = "";
 		
@@ -88,8 +93,12 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 			query += " and dbo.ftBoDau(tc.diengiai) like '%" + this.util.replaceAEIOU(this.noidung.trim()) + "%'";
 		}
 		
+		if(this.trangthai.length() > 0) {
+			query += " and tc.TRANGTHAI = " + this.trangthai;
+		}
+		
 		System.out.println(query);
-		this.ThuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+		this.ThuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ngay desc, id desc", query);
 		
 		createRs();
 	}
@@ -109,47 +118,107 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		this.NoidungthuchiRs = this.db.get(query);
 	}
 	
+	public void chot(String id) {
+		try {
+			String query = "select SOTIEN, LOAI, TAIKHOAN_FK,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
+			ResultSet rs = this.db.get(query);
+			rs.next();
+			double sotien = rs.getDouble("SOTIEN");
+			String loai = rs.getString("LOAI");
+			String taikhoan = rs.getString("TAIKHOAN_FK");
+			double tientk = rs.getDouble("tientk");
+			rs.close();
+			
+			if(loai.equals("1")){
+				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoan;
+			} else{
+				if(tientk < sotien){
+					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
+					return;
+				}
+				
+				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoan;
+			}
+			
+			db.getConnection().setAutoCommit(false);
+			
+			if(db.updateReturnInt(query) != 1) {
+	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			query = "update THUCHI set trangthai = 1, ngaychot = '"+this.getDateTime()+"' where trangthai=0 and ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
+	    		this.msg = "Không thể cập nhật THUCHI: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
+			e.printStackTrace();
+		}
+	}
+	
+	public void unchot(String id) {
+		try {
+			String query = "select SOTIEN, LOAI, TAIKHOAN_FK,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
+			ResultSet rs = this.db.get(query);
+			rs.next();
+			double sotien = rs.getDouble("SOTIEN");
+			String loai = rs.getString("LOAI");
+			String taikhoan = rs.getString("TAIKHOAN_FK");
+			double tientk = rs.getDouble("tientk");
+			rs.close();
+			
+			if(loai.equals("1")){
+				if(tientk < sotien){
+					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
+					return;
+				}
+				
+				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoan;
+			} else{
+				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoan;
+			}
+			
+			db.getConnection().setAutoCommit(false);
+			
+			if(db.updateReturnInt(query) != 1) {
+	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			query = "update THUCHI set trangthai = 0 where trangthai=1 and ID = " + id;
+			if(db.updateReturnInt(query) != 1) {
+	    		this.msg = "Không thể cập nhật THUCHI: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
+			
+			db.getConnection().commit();
+			db.getConnection().setAutoCommit(true);
+		} catch (SQLException e) {
+			this.msg = "Loi: " + e.getMessage();
+			try {
+				db.getConnection().rollback();
+			} catch (SQLException e1) {}
+			e.printStackTrace();
+		}
+	}
+	
 	public void delete(String id) {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "select loai, sotien, taikhoan_fk from THUCHI where ID = " + id;
-			ResultSet rs = this.db.get(query);
-			rs.next();
-			String loai = rs.getString("loai");
-			String sotien = rs.getString("sotien");
-			String taikhoanId = rs.getString("taikhoan_fk");
-			rs.close();
-			
-			// Cộng trừ lại tiển trong tài khoản
-			if(loai.equals("1")){
-				// Kiểm tra có đủ tiền trong tài khoản để trừ
-				query = "select sotien from TAIKHOAN where ID = " + taikhoanId;
-				rs = this.db.get(query);
-				rs.next();
-				double stien = rs.getDouble("sotien");
-				rs.close();
-				if(stien < Double.parseDouble(sotien)){
-					this.msg = "Số tiền trong tài khoản không đủ.";
-					return;
-				}
-				
-				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoanId;
-				if(db.updateReturnInt(query) != 1) {
-					this.msg = "Không cập nhật TAIKHOAN: " + query;
-					db.getConnection().rollback();
-					return;
-				}
-			} else {
-				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoanId;
-				if(db.updateReturnInt(query) != 1) {
-					this.msg = "Không cập nhật TAIKHOAN: " + query;
-					db.getConnection().rollback();
-					return;
-				}
-			}
-			
-			query = "update THUCHI set trangthai = 2 where trangthai=1 and ID = " + id;
+			String query = "update THUCHI set trangthai = 2 where trangthai=0 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể xóa THUCHI: " + query;
 	    		db.getConnection().rollback();
@@ -200,6 +269,12 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 			} catch (SQLException e1) {}
 			e.printStackTrace();
 		}
+	}
+	
+	private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date);	
 	}
 	
 	public void DBClose() {
@@ -315,5 +390,13 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 
 	public void setNoidung(String noidung) {
 		this.noidung = noidung;
+	}
+
+	public String getTrangthai() {
+		return trangthai;
+	}
+
+	public void setTrangthai(String trangthai) {
+		this.trangthai = trangthai;
 	}
 }

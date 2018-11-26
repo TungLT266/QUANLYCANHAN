@@ -237,7 +237,7 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 	    		return;
 	    	}
 			
-			query = "update CHUYENTIEN set trangthai = 0, ngaychot = '"+this.getDateTime()+"' where trangthai=1 and ID = " + id;
+			query = "update CHUYENTIEN set trangthai = 0 where trangthai=1 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật CHUYENTIEN: " + query;
 	    		db.getConnection().rollback();

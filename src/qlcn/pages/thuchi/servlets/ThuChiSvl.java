@@ -57,8 +57,13 @@ public class ThuChiSvl extends HttpServlet {
 			if(action == null)
 				action = "";
 			
-			if(action.trim().equals("delete")) {
-				String id = request.getParameter("id");
+			String id = request.getParameter("id");
+			
+			if(action.trim().equals("chot")) {
+				obj.chot(id);
+			} else if(action.trim().equals("unchot")) {
+				obj.unchot(id);
+			} else if(action.trim().equals("delete")) {
 		    	obj.delete(id);
 		    }
 			
@@ -141,6 +146,10 @@ public class ThuChiSvl extends HttpServlet {
 				String noidung = util.antiSQLInspection(request.getParameter("noidung"));
 				if(noidung != null)
 					obj.setNoidung(noidung);
+				
+				String trangthai = request.getParameter("trangthai");
+				if(trangthai != null)
+					obj.setTrangthai(trangthai);
 				
 				String soitems = request.getParameter("soitems");
 				if(soitems == null)

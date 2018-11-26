@@ -88,7 +88,6 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 											<td class="plainlabel">Nội dung thu chi</td>
 											<td class="plainlabel">
 												<select name="noidungthuchiId" style="width: 200px">
-													<option value="0" disabled="disabled"></option>
 													<%if(NoidungthuchiRs != null){ %>
 														<%while(NoidungthuchiRs.next()){ %>
 															<%if(obj.getNoidungthuchiId().equals(NoidungthuchiRs.getString("id"))){ %>
@@ -106,7 +105,6 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 											<td class="plainlabel">Tài khoản</td>
 											<td class="plainlabel">
 												<select name="taikhoanId" id="taikhoanId" style="width: 200px">
-													<option value="" disabled="disabled"></option>
 													<%if(TaikhoanRs != null){ %>
 														<%while(TaikhoanRs.next()){ %>
 															<%if(obj.getTaikhoanId().equals(TaikhoanRs.getString("id"))){ %>
@@ -122,7 +120,6 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 											<td class="plainlabel">Tài khoản thanh toán</td>
 											<td class="plainlabel">
 												<select name="taikhoanthanhtoanId" style="width: 200px">
-													<option value="0" disabled="disabled"></option>
 													<%if(TaikhoanthanhtoanRs != null){ %>
 														<%while(TaikhoanthanhtoanRs.next()){ %>
 															<%if(obj.getTaikhoanthanhtoanId().equals(TaikhoanthanhtoanRs.getString("id"))){ %>
