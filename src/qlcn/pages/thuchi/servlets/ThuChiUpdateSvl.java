@@ -129,6 +129,14 @@ public class ThuChiUpdateSvl extends HttpServlet {
 			String diengiai = util.antiSQLInspection(request.getParameter("diengiai"));
 			if (diengiai != null)
 				obj.setDiengiai(diengiai);
+			
+			String phi = util.antiSQLInspection(request.getParameter("phi"));
+			if (phi != null)
+				obj.setPhi(phi);
+			
+			String ghichuphi = util.antiSQLInspection(request.getParameter("ghichuphi"));
+			if (ghichuphi != null)
+				obj.setGhichuphi(ghichuphi);
 	    	
 			String action = request.getParameter("action");
 			if(action == null)

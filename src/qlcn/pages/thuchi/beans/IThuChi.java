@@ -50,4 +50,10 @@ public interface IThuChi {
 	
 	public String getDonvi();
 	public void setDonvi(String donvi);
+	
+	public String getPhi();
+	public void setPhi(String phi);
+
+	public String getGhichuphi();
+	public void setGhichuphi(String ghichuphi);
 }

@@ -91,7 +91,7 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			queryUser = " and USERID = " + this.userId;
 		}
 		
-		String query = "select ID, ten from TAIKHOAN where trangthai = 1 and istknganhang = 1" + queryUser;
+		String query = "select ID, '['+cast(ID as varchar)+'] ' + ten as ten from TAIKHOAN where trangthai = 1 and istknganhang = 1" + queryUser;
 		this.TaikhoanRs = this.db.get(query);
 	}
 	

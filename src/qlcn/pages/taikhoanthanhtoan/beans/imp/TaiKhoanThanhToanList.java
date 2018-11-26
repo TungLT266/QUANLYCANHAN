@@ -47,7 +47,7 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 		}
 		
 		String query = "select tktt.ID, (case when tktt.loaithe=1 then 'ATM' when tktt.loaithe=2 then 'VISA' when tktt.loaithe=3 then 'MASTERCARD' else '' end) as loaithe,"
-				+ " '[' + cast(tk.id as varchar) + '] ' + tk.ten as taikhoan,tktt.sothe as ten,tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
+				+ " tk.ten as taikhoan,tktt.sothe as ten,tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
 				+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.ID > 0" + queryUser;
 		
 		if(this.ID.trim().length() > 0) {

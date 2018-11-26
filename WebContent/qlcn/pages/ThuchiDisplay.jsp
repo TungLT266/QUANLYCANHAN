@@ -60,14 +60,21 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 									<table border="0" width="100%" cellpadding="6" cellspacing="0">
 										<tr>
 											<td width="15%" class="plainlabel">Ngày</td>
-											<td class="plainlabel">
+											<td class="plainlabel" colspan="3">
 												<input type="text" name="ngay" value="<%=obj.getNgay() %>" readonly="readonly">
 											</td>
-											
-											<td width="15%" class="plainlabel">Số tiền</td>
+										</tr>
+										
+										<tr>
+											<td class="plainlabel">Số tiền</td>
 											<td class="plainlabel">
 												<input type="text" style="text-align: right;" name="sotien" id="sotien" value="<%=obj.getSotien() %>" readonly="readonly">
 												&nbsp;<%=obj.getDonvi() %>
+											</td>
+											
+											<td class="plainlabel" width="15%">Nội dung</td>
+											<td class="plainlabel">
+												<input type="text" name="diengiai" id="diengiai" value="<%=obj.getDiengiai() %>" readonly="readonly">
 											</td>
 										</tr>
 										
@@ -134,9 +141,15 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 										</tr>
 										
 										<tr>
-											<td class="plainlabel">Nội dung</td>
-											<td class="plainlabel" colspan="3">
-												<textarea name="diengiai" rows="5" style="width: 80%; color: black;" readonly="readonly"><%=obj.getDiengiai()%></textarea>
+											<td class="plainlabel">Phí</td>
+											<td class="plainlabel">
+												<input type="text" style="text-align: right;" name="phi" value="<%=obj.getPhi() %>" readonly="readonly">
+												&nbsp;<%=obj.getDonvi() %>
+											</td>
+											
+											<td class="plainlabel">Ghi chú phí</td>
+											<td class="plainlabel">
+												<input type="text" name="ghichuphi" value="<%=obj.getGhichuphi() %>" readonly="readonly">
 											</td>
 										</tr>
 									</table>

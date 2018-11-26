@@ -22,6 +22,8 @@ public class ThuChi implements IThuChi {
 	private String taikhoanId;
 	private String taikhoanthanhtoanId;
 	private String diengiai;
+	private String phi;
+	private String ghichuphi;
 	private String msg;
 	
 	private ResultSet NoidungthuchiRs;
@@ -41,6 +43,8 @@ public class ThuChi implements IThuChi {
 		this.taikhoanId = "0";
 		this.taikhoanthanhtoanId = "0";
 		this.diengiai = "";
+		this.phi = "";
+		this.ghichuphi = "";
 		this.msg = "";
 		
 		this.db = new Dbutils();
@@ -49,7 +53,7 @@ public class ThuChi implements IThuChi {
 	
 	public void init() {
 		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
-		String query = "select ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai from THUCHI where ID = " + this.ID;
+		String query = "select ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, phi, ghichuphi from THUCHI where ID = " + this.ID;
 		System.out.println(query);
 		
 		ResultSet rs = this.db.get(query);
@@ -62,6 +66,8 @@ public class ThuChi implements IThuChi {
 			this.taikhoanId = rs.getString("taikhoan_fk");
 			this.taikhoanthanhtoanId = rs.getString("taikhoanthanhtoan_fk");
 			this.diengiai = rs.getString("diengiai");
+			this.phi = formatter.format(Double.parseDouble(rs.getString("phi")));
+			this.ghichuphi = rs.getString("ghichuphi");
 			rs.close();
 		} catch (Exception e) {}
 		
@@ -96,7 +102,7 @@ public class ThuChi implements IThuChi {
 			} catch (SQLException e) {}
 			
 			// Lấy tài khoản thanh toán thuộc tài khoản này
-			query = "select ID, (case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+'['+cast(ID as varchar)+'] '+SOTHE as ten"
+			query = "select ID, '['+cast(ID as varchar)+'] '+(case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+SOTHE as ten"
 					+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and taikhoan_fk = " + this.taikhoanId + queryUser;
 			this.TaikhoanthanhtoanRs = this.db.get(query);
 		}
@@ -104,11 +110,15 @@ public class ThuChi implements IThuChi {
 	
 	public boolean create() {
 		try {
+			if(this.phi.trim().length() == 0){
+				this.phi = "0";
+			}
+			
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "insert into THUCHI(ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, trangthai, ngaytao, ngaysua, USERID)"
+			String query = "insert into THUCHI(ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, phi, ghichuphi, trangthai, ngaytao, ngaysua, USERID)"
 					+ "\n values('"+this.ngay+"',"+this.sotien.replaceAll(",", "")+","+this.loai+","+this.noidungthuchiId+","+this.taikhoanId+","+this.taikhoanthanhtoanId+","
-					+ " N'"+this.diengiai+"',0,'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
+					+ " N'"+this.diengiai+"',"+this.phi.replaceAll(",", "")+",N'"+this.ghichuphi+"',0,'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -132,10 +142,15 @@ public class ThuChi implements IThuChi {
 	
 	public boolean update() {
 		try {
+			if(this.phi.trim().length() == 0){
+				this.phi = "0";
+			}
+			
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "update THUCHI set ngay='"+this.ngay+"',sotien="+this.sotien.replaceAll(",", "")+",loai="+this.loai+",noidungthuchi_fk="+this.noidungthuchiId+","
-					+ "taikhoan_fk="+this.taikhoanId+",taikhoanthanhtoan_fk="+this.taikhoanthanhtoanId+",diengiai=N'"+this.diengiai+"',ngaysua='"+this.getDateTime()+"' where trangthai=0 and ID = " + this.ID;
+					+ "taikhoan_fk="+this.taikhoanId+",taikhoanthanhtoan_fk="+this.taikhoanthanhtoanId+",diengiai=N'"+this.diengiai+"',phi="+this.phi.replaceAll(",", "")+","
+					+ "ghichuphi=N'"+this.ghichuphi+"',ngaysua='"+this.getDateTime()+"' where trangthai=0 and ID = " + this.ID;
 			System.out.println(query);
 			
 			if(db.updateReturnInt(query) != 1) {
@@ -280,5 +295,21 @@ public class ThuChi implements IThuChi {
 
 	public void setDonvi(String donvi) {
 		this.donvi = donvi;
+	}
+
+	public String getPhi() {
+		return phi;
+	}
+
+	public void setPhi(String phi) {
+		this.phi = phi;
+	}
+
+	public String getGhichuphi() {
+		return ghichuphi;
+	}
+
+	public void setGhichuphi(String ghichuphi) {
+		this.ghichuphi = ghichuphi;
 	}
 }

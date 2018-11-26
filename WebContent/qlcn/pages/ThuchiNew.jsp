@@ -66,6 +66,11 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 			return false;
 		}
 		
+		if (document.getElementById("diengiai").value == "") {
+			document.getElementById("dataerror").value = "Bạn chưa nhập nội dung.";
+			return false;
+		}
+		
 		if (document.getElementById("taikhoanId").value == "") {
 			document.getElementById("dataerror").value = "Bạn chưa chọn tài khoản.";
 			return false;
@@ -135,14 +140,21 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 									<table border="0" width="100%" cellpadding="6" cellspacing="0">
 										<tr>
 											<td width="15%" class="plainlabel">Ngày <FONT class="erroralert">*</FONT></td>
-											<td class="plainlabel">
+											<td class="plainlabel" colspan="3">
 												<input type="text" class="days" name="ngay" value="<%=obj.getNgay() %>" readonly="readonly">
 											</td>
-											
-											<td width="15%" class="plainlabel">Số tiền <FONT class="erroralert">*</FONT></td>
+										</tr>
+										
+										<tr>
+											<td class="plainlabel">Số tiền <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
 												<input type="text" style="text-align: right;" name="sotien" id="sotien" value="<%=obj.getSotien() %>" onkeypress="return keypress(event);">
 												&nbsp;<%=obj.getDonvi() %>
+											</td>
+											
+											<td class="plainlabel" width="15%">Nội dung <FONT class="erroralert">*</FONT></td>
+											<td class="plainlabel">
+												<input type="text" name="diengiai" id="diengiai" value="<%=obj.getDiengiai() %>">
 											</td>
 										</tr>
 										
@@ -212,9 +224,15 @@ ResultSet TaikhoanthanhtoanRs = obj.getTaikhoanthanhtoanRs();
 										</tr>
 										
 										<tr>
-											<td class="plainlabel">Nội dung</td>
-											<td class="plainlabel" colspan="3">
-												<textarea name="diengiai" rows="5" style="width: 80%; color: black;"><%=obj.getDiengiai() %></textarea>
+											<td class="plainlabel">Phí</td>
+											<td class="plainlabel">
+												<input type="text" style="text-align: right;" name="phi" value="<%=obj.getPhi() %>" onkeypress="return keypress(event);">
+												&nbsp;<%=obj.getDonvi() %>
+											</td>
+											
+											<td class="plainlabel">Ghi chú phí</td>
+											<td class="plainlabel">
+												<input type="text" name="ghichuphi" value="<%=obj.getGhichuphi() %>">
 											</td>
 										</tr>
 									</table>

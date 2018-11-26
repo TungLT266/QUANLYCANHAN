@@ -120,24 +120,30 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	
 	public void chot(String id) {
 		try {
-			String query = "select SOTIEN, LOAI, TAIKHOAN_FK,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
+			String query = "select SOTIEN, LOAI, TAIKHOAN_FK, phi,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
 			double sotien = rs.getDouble("SOTIEN");
 			String loai = rs.getString("LOAI");
 			String taikhoan = rs.getString("TAIKHOAN_FK");
+			double phi = rs.getDouble("phi");
 			double tientk = rs.getDouble("tientk");
 			rs.close();
 			
 			if(loai.equals("1")){
-				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoan;
-			} else{
-				if(tientk < sotien){
+				if(tientk + sotien < phi){
 					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
 					return;
 				}
 				
-				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoan;
+				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" - "+phi+") where ID = " + taikhoan;
+			} else{
+				if(tientk < sotien + phi){
+					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
+					return;
+				}
+				
+				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" - "+phi+") where ID = " + taikhoan;
 			}
 			
 			db.getConnection().setAutoCommit(false);
@@ -168,24 +174,25 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	
 	public void unchot(String id) {
 		try {
-			String query = "select SOTIEN, LOAI, TAIKHOAN_FK,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
+			String query = "select SOTIEN, LOAI, TAIKHOAN_FK, phi,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
 			double sotien = rs.getDouble("SOTIEN");
 			String loai = rs.getString("LOAI");
 			String taikhoan = rs.getString("TAIKHOAN_FK");
+			double phi = rs.getDouble("phi");
 			double tientk = rs.getDouble("tientk");
 			rs.close();
 			
 			if(loai.equals("1")){
-				if(tientk < sotien){
+				if(tientk + phi < sotien){
 					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
 					return;
 				}
 				
-				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoan;
+				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" + "+phi+") where ID = " + taikhoan;
 			} else{
-				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoan;
+				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" + "+phi+") where ID = " + taikhoan;
 			}
 			
 			db.getConnection().setAutoCommit(false);
