@@ -83,6 +83,11 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	
 	public void deleteDB(String pinUser) {
 		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
@@ -90,7 +95,7 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 			if(rs.next()){
 				rs.close();
 				
-				query = "delete TAIKHOAN where trangthai = 2";
+				query = "delete TAIKHOAN where trangthai = 2" + queryUser;
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database TAIKHOAN: " + query;
 		    		db.getConnection().rollback();

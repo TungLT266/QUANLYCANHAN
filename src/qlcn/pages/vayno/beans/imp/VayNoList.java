@@ -210,6 +210,11 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 	
 	public void deleteDB(String pinUser) {
 		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
@@ -217,7 +222,7 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 			if(rs.next()){
 				rs.close();
 				
-				query = "delete VAYNO where trangthai = 2";
+				query = "delete VAYNO where trangthai = 2" + queryUser;
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database VAYNO: " + query;
 		    		db.getConnection().rollback();

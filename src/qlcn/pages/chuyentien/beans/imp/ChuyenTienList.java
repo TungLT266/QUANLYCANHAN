@@ -279,6 +279,11 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 	
 	public void deleteDB(String pinUser) {
 		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
 			db.getConnection().setAutoCommit(false);
 			
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
@@ -286,7 +291,7 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 			if(rs.next()){
 				rs.close();
 				
-				query = "delete CHUYENTIEN where trangthai = 2";
+				query = "delete CHUYENTIEN where trangthai = 2" + queryUser;
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database CHUYENTIEN: " + query;
 		    		db.getConnection().rollback();
