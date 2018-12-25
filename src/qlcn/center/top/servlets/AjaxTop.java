@@ -45,16 +45,18 @@ public class AjaxTop extends HttpServlet {
 		String output = "";
 		
 		try {
-			query = "select (select sum(sotien) as tongtien from TAIKHOAN where trangthai in (1) and USERID="+userId+") as tongtien,"
-					+ "(select SUM(sotien) as tongthu from THUCHI where loai=1 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+") as tongthu,"
-					+ "(select SUM(sotien) as tongchi from THUCHI where loai=2 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+") as tongchi";
+			query = "select isnull((select sum(sotien) as tongtien from TAIKHOAN where trangthai in (1) and USERID="+userId+"),0) as tongtien,"
+					+ "isnull((select SUM(sotien) as tongthu from THUCHI where loai=1 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+"),0) as tongthu,"
+					+ "isnull((select SUM(sotien) as tongchi from THUCHI where loai=2 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+"),0) as tongchi";
 			ResultSet rs = db.get(query);
 			rs.next();
 			output = formatter.format(Double.parseDouble(rs.getString("tongtien"))) + "[==]";
 			output += formatter.format(Double.parseDouble(rs.getString("tongthu"))) + "[==]";
 			output += formatter.format(Double.parseDouble(rs.getString("tongchi")));
 			rs.close();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		out.write(output);
 	}
