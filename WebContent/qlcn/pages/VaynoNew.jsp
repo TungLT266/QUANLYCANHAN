@@ -69,6 +69,20 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 	function submitform() {
 		document.forms["FormVn"].submit();
 	}
+	
+	function clearDay(s){
+		document.getElementById(s).value = "";
+	}
+	
+	function nhantra() {
+		if (document.getElementById("taikhoannhantra").value == "") {
+			document.getElementById("dataerror").value = "Bạn chưa chọn tài khoản thực hiện.";
+			return false;
+		}
+
+		document.forms["FormVn"].action.value = "nhantra";
+		document.forms["FormVn"].submit();
+	}
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
@@ -100,7 +114,7 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 							<td width="2" align="left"></td>
 							<td width="30" align="left">
 								<div id="btnSave">
-									<A href="javascript: save()">
+									<A href="javascript:<%=obj.getAction().equals("nhantra") ? "nhantra" : "save" %>()">
 										<img src="../images/Save30.png" title="Save" alt="Save" border="1" style="border-style: outset">
 									</A>
 								</div>
@@ -127,12 +141,12 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 										<tr>
 											<td width="15%" class="plainlabel">Ngày <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" <%=obj.getID().length() > 5 ? "" : "class=\"days\"" %> name="ngay" value="<%=obj.getNgay() %>" readonly="readonly">
+												<input type="text" <%=obj.getAction().equals("nhantra") ? "" : "class=\"days\"" %> name="ngay" value="<%=obj.getNgay() %>" readonly="readonly">
 											</td>
 											
 											<td width="15%" class="plainlabel">Số tiền <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" style="text-align: right;" name="sotien" id="sotien" value="<%=obj.getSotien() %>" onkeypress="return keypress(event);" <%=obj.getID().length() > 5 ? "readonly" : "" %>>
+												<input type="text" style="text-align: right;" name="sotien" id="sotien" value="<%=obj.getSotien() %>" onkeypress="return keypress(event);" <%=obj.getAction().equals("nhantra") ? "readonly" : "" %>>
 												&nbsp;<%=obj.getDonvi() %>
 											</td>
 										</tr>
@@ -140,7 +154,7 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 										<tr>
 											<td class="plainlabel">Loại <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<%if(obj.getID().length() > 5){ %>
+												<%if(obj.getAction().equals("nhantra")){ %>
 													<select name="loai" style="width: 200px;">
 														<%if(obj.getLoai().equals("1")){ %>
 															<option value="1" selected="selected">Vay</option>
@@ -165,7 +179,7 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 											
 											<td class="plainlabel">Tài khoản <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<%if(obj.getID().length() > 5){ %>
+												<%if(obj.getAction().equals("nhantra")){ %>
 													<select id="taikhoanId" name="taikhoanId" style="width: 200px">
 														<option value="" disabled="disabled"></option>
 														<%if(TaikhoanRs != null){ %>
@@ -198,19 +212,69 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 										<tr>
 											<td class="plainlabel">Người Vay/Nợ <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" id="nguoivayno" name="nguoivayno" value="<%=obj.getNguoivayno() %>">
+												<input type="text" id="nguoivayno" name="nguoivayno" value="<%=obj.getNguoivayno() %>" <%=obj.getAction().equals("nhantra") ? "readonly" : "" %>>
 											</td>
 											
 											<td class="plainlabel">Nội dung</td>
 											<td class="plainlabel">
-												<input type="text" name="noidung" value="<%=obj.getNoidung() %>">
+												<input type="text" name="noidung" value="<%=obj.getNoidung() %>" <%=obj.getAction().equals("nhantra") ? "readonly" : "" %>>
 											</td>
 										</tr>
 										
 										<tr>
 											<td class="plainlabel">Ghi chú</td>
 											<td class="plainlabel" colspan="3">
-												<textarea name="ghichu" rows="5" style="width: 80%; color: black;"><%=obj.getGhichu() %></textarea>
+												<textarea name="ghichu" rows="5" style="width: 80%; color: black;" <%=obj.getAction().equals("nhantra") ? "readonly" : "" %>><%=obj.getGhichu() %></textarea>
+											</td>
+										</tr>
+									</table>
+								</fieldset>
+							</td>
+						</tr>
+						
+						<tr>
+							<td>
+								<fieldset>
+									<legend class="legendtitle">Trả</legend>
+									<table border="0" width="100%" cellpadding="6" cellspacing="0">
+										<tr>
+											<td class="plainlabel" width="15%">Ngày trả <FONT class="erroralert">*</FONT></td>
+											<td class="plainlabel">
+												<input type="text" class="days" id="ngaytra" name="ngaytra" value="<%=obj.getNgaytra() %>" readonly="readonly">
+												<%if(!obj.getAction().equals("nhantra")){ %>
+													<a href="javascript:clearDay('ngaytra')">
+														<img title="Clear" src="../images/Delete.png" alt="Clear" width="20" height="20" longdesc="Clear" border=0>
+													</a>
+												<%} %>
+											</td>
+											
+											<td class="plainlabel">Tài khoản thực hiện <FONT class="erroralert">*</FONT></td>
+											<td class="plainlabel">
+												<select id="taikhoannhantra" name="taikhoannhantra" class="select2" style="width: 200px">
+													<option value="0"></option>
+													<%if(TaikhoanNhantraRs != null){ %>
+														<%while(TaikhoanNhantraRs.next()){ %>
+															<%if(obj.getTaikhoannhantra() != null && obj.getTaikhoannhantra().equals(TaikhoanNhantraRs.getString("id"))){ %>
+																<option value="<%=TaikhoanNhantraRs.getString("id") %>" selected="selected"><%=TaikhoanNhantraRs.getString("ten") %></option>
+															<%} else { %>
+																<option value="<%=TaikhoanNhantraRs.getString("id") %>" ><%=TaikhoanNhantraRs.getString("ten") %></option>
+															<%} %>
+														<%} %>
+													<%} %>
+												</select>
+											</td>
+										</tr>
+											
+										<tr>
+											<td class="plainlabel" width="15%">Phí</td>
+											<td class="plainlabel">
+												<input type="text" style="text-align: right;" name="phi" id="phi" value="<%=obj.getPhi() %>" onkeypress="return keypress(event);">
+												&nbsp;<%=obj.getDonvi() %>
+											</td>
+											
+											<td class="plainlabel">Ghi chú</td>
+											<td class="plainlabel">
+												<input type="text" name="ghichu2" value="<%=obj.getGhichu2() %>">
 											</td>
 										</tr>
 									</table>

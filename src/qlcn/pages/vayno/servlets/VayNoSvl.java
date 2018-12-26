@@ -63,6 +63,12 @@ public class VayNoSvl extends HttpServlet {
 		    	obj.delete(id);
 		    } else if(action.equals("unnhantra")) {
 		    	obj.unNhantra(id);
+		    } else if(action.equals("chot")) {
+		    	obj.chot(id);
+		    } else if(action.equals("unchot")) {
+		    	obj.unChot(id);
+		    } else if(action.equals("unnhantra")) {
+		    	obj.unNhantra(id);
 		    }
 			
 	    	obj.init();

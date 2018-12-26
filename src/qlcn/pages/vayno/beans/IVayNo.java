@@ -60,4 +60,7 @@ public interface IVayNo {
 	
 	public String getAction();
 	public void setAction(String action);
+	
+	public String getGhichu2();
+	public void setGhichu2(String ghichu2);
 }

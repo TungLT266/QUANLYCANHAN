@@ -69,7 +69,7 @@ public class VayNoUpdateSvl extends HttpServlet {
     		session.setAttribute("userId", userId);
 		    
 			if(action.equals("nhantra")){
-				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoDisplay.jsp");
+				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/VaynoNew.jsp");
 			} else if(action.equals("update") || action.equals("copy")) {
 				if(action.equals("copy")){
 					obj.setID("");
@@ -147,6 +147,10 @@ public class VayNoUpdateSvl extends HttpServlet {
 			String taikhoannhantra = request.getParameter("taikhoannhantra");
 			if (taikhoannhantra != null)
 				obj.setTaikhoannhantra(taikhoannhantra);
+			
+			String ghichu2 = util.antiSQLInspection(request.getParameter("ghichu2"));
+			if (ghichu2 != null)
+				obj.setGhichu2(ghichu2);
 	    	
 			String action = request.getParameter("action");
 			if(action == null)

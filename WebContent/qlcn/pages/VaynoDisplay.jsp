@@ -186,48 +186,38 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 									<legend class="legendtitle">Trả</legend>
 									<table border="0" width="100%" cellpadding="6" cellspacing="0">
 										<tr>
-											<td class="plainlabel">Ngày trả <FONT class="erroralert">*</FONT></td>
+											<td class="plainlabel" width="15%">Ngày trả <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" <%=obj.getAction().equals("nhantra") ? "class=\"days\"" : "" %> name="ngaytra" value="<%=obj.getNgaytra() %>" readonly="readonly">
+												<input type="text" name="ngaytra" value="<%=obj.getNgaytra() %>" readonly="readonly">
 											</td>
 											
-											<td class="plainlabel">Phí</td>
+											<td class="plainlabel">Tài khoản thực hiện <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" style="text-align: right;" name="phi" id="phi" value="<%=obj.getPhi() %>" onkeypress="return keypress(event);" <%=obj.getAction().equals("nhantra") ? "" : "readonly" %>>
-												&nbsp;<%=obj.getDonvi() %>
+												<select id="taikhoannhantra" name="taikhoannhantra" style="width: 200px">
+													<option value="" disabled="disabled"></option>
+													<%if(TaikhoanNhantraRs != null){ %>
+														<%while(TaikhoanNhantraRs.next()){ %>
+															<%if(obj.getTaikhoannhantra() != null && obj.getTaikhoannhantra().equals(TaikhoanNhantraRs.getString("id"))){ %>
+																<option value="<%=TaikhoanNhantraRs.getString("id") %>" selected="selected"><%=TaikhoanNhantraRs.getString("ten") %></option>
+															<%} else { %>
+																<option value="<%=TaikhoanNhantraRs.getString("id") %>" disabled="disabled"><%=TaikhoanNhantraRs.getString("ten") %></option>
+															<%} %>
+														<%} %>
+													<%} %>
+												</select>
 											</td>
 										</tr>
 										
 										<tr>
-											<td class="plainlabel">Tài khoản thực hiện <FONT class="erroralert">*</FONT></td>
-											<td class="plainlabel" colspan="3">
-												<%if(obj.getAction().equals("nhantra")){ %>
-													<select id="taikhoannhantra" name="taikhoannhantra" class="select2" style="width: 400px">
-														<option value=""></option>
-														<%if(TaikhoanNhantraRs != null){ %>
-															<%while(TaikhoanNhantraRs.next()){ %>
-																<%if(obj.getTaikhoannhantra() != null && obj.getTaikhoannhantra().equals(TaikhoanNhantraRs.getString("id"))){ %>
-																	<option value="<%=TaikhoanNhantraRs.getString("id") %>" selected="selected"><%=TaikhoanNhantraRs.getString("ten") %></option>
-																<%} else { %>
-																	<option value="<%=TaikhoanNhantraRs.getString("id") %>" ><%=TaikhoanNhantraRs.getString("ten") %></option>
-																<%} %>
-															<%} %>
-														<%} %>
-													</select>
-												<%} else { %>
-													<select id="taikhoannhantra" name="taikhoannhantra" style="width: 400px">
-														<option value="" disabled="disabled"></option>
-														<%if(TaikhoanNhantraRs != null){ %>
-															<%while(TaikhoanNhantraRs.next()){ %>
-																<%if(obj.getTaikhoannhantra() != null && obj.getTaikhoannhantra().equals(TaikhoanNhantraRs.getString("id"))){ %>
-																	<option value="<%=TaikhoanNhantraRs.getString("id") %>" selected="selected"><%=TaikhoanNhantraRs.getString("ten") %></option>
-																<%} else { %>
-																	<option value="<%=TaikhoanNhantraRs.getString("id") %>" disabled="disabled"><%=TaikhoanNhantraRs.getString("ten") %></option>
-																<%} %>
-															<%} %>
-														<%} %>
-													</select>
-												<%} %>
+											<td class="plainlabel" width="15%">Phí</td>
+											<td class="plainlabel">
+												<input type="text" style="text-align: right;" name="phi" id="phi" value="<%=obj.getPhi() %>" onkeypress="return keypress(event);" readonly="readonly">
+												&nbsp;<%=obj.getDonvi() %>
+											</td>
+											
+											<td class="plainlabel">Ghi chú</td>
+											<td class="plainlabel">
+												<input type="text" name="ghichu2" value="<%=obj.getGhichu2() %>" readonly="readonly">
 											</td>
 										</tr>
 									</table>

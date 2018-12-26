@@ -6,6 +6,8 @@ import qlcn.center.util.IPhan_Trang;
 
 public interface IVayNoList extends IPhan_Trang {
 	public void init();
+	public void chot(String id);
+	public void unChot(String id);
 	public void unNhantra(String id);
 	public void delete(String id);
 	public void deleteDB(String pinUser);

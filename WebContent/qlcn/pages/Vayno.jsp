@@ -205,21 +205,30 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 												<select name="trangthai" class="select2" style="width: 200px;" onchange="search();">
 													<option value=""></option>
 													<%if(obj.getTrangthai().equals("0")){ %>
-														<option value="0" selected="selected">Chưa trả</option>
-														<option value="1">Đã trả</option>
-														<option value="2">Đã xóa</option>
+														<option value="0" selected="selected">Chưa chốt</option>
+														<option value="1">Chưa trả</option>
+														<option value="2">Đã trả</option>
+														<option value="3">Đã xóa</option>
 													<%} else if(obj.getTrangthai().equals("1")){ %>
-														<option value="0">Chưa trả</option>
-														<option value="1" selected="selected">Đã trả</option>
-														<option value="2">Đã xóa</option>
+														<option value="0">Chưa chốt</option>
+														<option value="1" selected="selected">Chưa trả</option>
+														<option value="2">Đã trả</option>
+														<option value="3">Đã xóa</option>
 													<%} else if(obj.getTrangthai().equals("2")){ %>
-														<option value="0">Chưa trả</option>
-														<option value="1">Đã trả</option>
-														<option value="2" selected="selected">Đã xóa</option>
+														<option value="0">Chưa chốt</option>
+														<option value="1">Chưa trả</option>
+														<option value="2" selected="selected">Đã trả</option>
+														<option value="3">Đã xóa</option>
+													<%} else if(obj.getTrangthai().equals("3")){ %>
+														<option value="0">Chưa chốt</option>
+														<option value="1">Chưa trả</option>
+														<option value="2">Đã trả</option>
+														<option value="3" selected="selected">Đã xóa</option>
 													<%} else { %>
-														<option value="0">Chưa trả</option>
-														<option value="1">Đã trả</option>
-														<option value="2">Đã xóa</option>
+														<option value="0">Chưa chốt</option>
+														<option value="1">Chưa trả</option>
+														<option value="2">Đã trả</option>
+														<option value="3">Đã xóa</option>
 													<%} %>
 												</select>
 											</td>
@@ -296,22 +305,21 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td><%=VaynoRs.getString("noidung") %></td>
 															
 															<%if(tt.equals("0")) { %>
+																<td align="center">Chưa chốt</td>
+															<%} else if(tt.equals("1")){ %>
 																<td align="center" style="color: red;">Chưa trả</td>
 															<%} else if(tt.equals("2")){ %>
-																<td align="center" style="color: red;">Đã xóa</td>
-															<%} else if(tt.equals("1")) { %>
 																<td align="center">Đã trả</td>
+															<%} else { %>
+																<td align="center" style="color: red;">Đã xóa</td>
 															<%} %>
 
 															<td align="center"><%=VaynoRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=VaynoRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("0")){ %>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=nhantra&id=<%=VaynoRs.getString("ID") %>">
-																		<img title="Trả tiền" src="../images/Chot.png" alt="Tra tien" width="20" height="20" longdesc="Tra tien" border=0>
-																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
-																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId %>&action=chot&id=<%=VaynoRs.getString("ID") %>">
+																		<img title="Chốt" src="../images/Chot.png" alt="Chot" width="20" height="20" longdesc="Chot" border=0>
 																	</a>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=update&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
@@ -323,19 +331,26 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
 																<%} else if(tt.equals("1")) { %>
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=nhantra&id=<%=VaynoRs.getString("ID") %>">
+																		<img title="Trả tiền" src="../images/Pay24.png" alt="Tra tien" width="20" height="20" longdesc="Tra tien" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId %>&action=unchot&id=<%=VaynoRs.getString("ID") %>">
+																		<img title="Mở chốt" src="../images/unChot.png" alt="unChot" width="20" height="20" longdesc="unChot" border=0>
+																	</a>
+																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&action=display&id=<%=VaynoRs.getString("ID") %>">
+																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	</a>
+																<%} else if(tt.equals("2")) { %>
 																	<a href="/QUANLYCANHAN/VayNoSvl?userId=<%=userId %>&action=unnhantra&id=<%=VaynoRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn hủy?')) return false;">
 																		<img title="Hủy trả" src="../images/unChot.png" alt="Huy tra tien" width="20" height="20" longdesc="Huy tra" border=0>
-																	</a>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
-																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
 																	</a>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId%>&action=display&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>
 																<%} else { %>
-																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
+																	<%-- <a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=copy&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
-																	</a>
+																	</a> --%>
 																	<a href="/QUANLYCANHAN/VayNoUpdateSvl?userId=<%=userId %>&action=display&id=<%=VaynoRs.getString("ID") %>">
 																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
 																	</a>

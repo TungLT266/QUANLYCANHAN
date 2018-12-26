@@ -26,6 +26,7 @@ public class VayNo implements IVayNo {
 	private String taikhoannhantra;
 	private String ngaytra;
 	private String phi;
+	private String ghichu2;
 	
 	private String msg;
 	
@@ -47,9 +48,12 @@ public class VayNo implements IVayNo {
 		this.nguoivayno = "";
 		this.noidung = "";
 		this.ghichu = "";
+		
 		this.taikhoannhantra = "";
 		this.ngaytra = "";
 		this.phi = "";
+		this.ghichu2 = "";
+		
 		this.msg = "";
 		this.action = "";
 		
@@ -59,9 +63,7 @@ public class VayNo implements IVayNo {
 	
 	public void init() {
 		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
-		String query = "select ngay,sotien,loai,taikhoan_fk_cho,isnull(taikhoan_fk_nhan,0) as taikhoan_fk_nhan,"
-				+ "nguoivayno,noidung,ghichu,isnull(ngaytra,'') as ngaytra,isnull(cast(phi as varchar),'') as phi"
-				+ " from VAYNO where ID = " + this.ID;
+		String query = "select ngay,sotien,loai,taikhoan_fk_cho,taikhoan_fk_nhan,nguoivayno,noidung,ghichu,ngaytra,phi,ghichu2 from VAYNO where ID = " + this.ID;
 		System.out.println("init: "+query);
 		
 		ResultSet rs = this.db.get(query);
@@ -75,11 +77,18 @@ public class VayNo implements IVayNo {
 			this.noidung = rs.getString("noidung");
 			this.ghichu = rs.getString("ghichu");
 			this.taikhoannhantra = rs.getString("taikhoan_fk_nhan");
+			
 			this.ngaytra = rs.getString("ngaytra");
-			this.phi = rs.getString("phi");
+			if(this.action.equals("nhantra") && this.ngaytra.length() == 0){
+				this.ngaytra = this.getDateTime();
+			}
+			
+			this.phi = rs.getString("phi") == null ? "" : rs.getString("phi");
 			if(this.phi.length() > 0){
 				this.phi = formatter.format(Double.parseDouble(this.phi));
 			}
+			
+			this.ghichu2 = rs.getString("ghichu2");
 			rs.close();
 		} catch (Exception e) {}
 		
@@ -92,6 +101,7 @@ public class VayNo implements IVayNo {
 			queryUser = " and USERID = " + this.userId;
 		}
 		
+		//Lấy list tài khoản
 		String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
 		this.TaikhoanRs = this.db.get(query);
 		
@@ -106,61 +116,26 @@ public class VayNo implements IVayNo {
 			} catch (SQLException e) {}
 		}
 		
-		if(this.action.equals("nhantra") || this.action.equals("display")){
-			if(this.action.equals("nhantra") && this.ngaytra.length() <= 0){
-				this.ngaytra = this.getDateTime();
-			}
-			
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1 and donvi_fk=(select donvi_fk from TAIKHOAN where ID = "+this.taikhoanId+")" + queryUser;
+		// Lấy list tài khoản thực hiện, chỉ lấy những tài khoản có cùng đơn vị với ô tài khoản
+		if(this.taikhoanId.length() > 0){
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN"
+					+ " where TRANGTHAI = 1 and donvi_fk=(select donvi_fk from TAIKHOAN where ID = "+this.taikhoanId+")" + queryUser;
 			this.TaikhoanNhantraRs = this.db.get(query);
-		}
-	}
-	
-	private boolean check() {
-		try {
-			if(this.loai.equals("2")) {
-				String query = "select sotien from TAIKHOAN where ID = " + this.taikhoanId;
-				ResultSet rs = this.db.get(query);
-				rs.next();
-				double stien = rs.getDouble("sotien");
-				rs.close();
-				if(stien < Double.parseDouble(this.sotien.replaceAll(",", ""))){
-					this.msg = "Số tiền trong tài khoản không đủ.";
-					return false;
-				}
-			}
-			return true;
-		} catch (Exception e) {
-			return false;
 		}
 	}
 	
 	public boolean create() {
 		try {
-			if(!check()){
-				return false;
-			}
-			
 			db.getConnection().setAutoCommit(false);
 			
-			String query = "insert into VAYNO(ngay,sotien,loai,taikhoan_fk_cho,nguoivayno,noidung,ghichu,trangthai,ngaytao,ngaysua,USERID)"
+			String query = "insert into VAYNO(ngay,sotien,loai,taikhoan_fk_cho,nguoivayno,noidung,ghichu,ngaytra,taikhoan_fk_nhan,phi,ghichu2,trangthai,ngaytao,ngaysua,USERID)"
 					+ "\n values('"+this.ngay+"',"+this.sotien.replaceAll(",", "")+","+this.loai+","+this.taikhoanId+",N'"+this.nguoivayno+"',"
-					+ "N'"+this.noidung+"',N'"+this.ghichu+"',0,'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
+					+ " N'"+this.noidung+"',N'"+this.ghichu+"','"+this.ngaytra+"',"+this.taikhoannhantra+","+(this.phi.length() > 0 ? this.phi : "null")+","
+					+ " N'"+this.ghichu2+"',0,'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println("create: "+query);
 			
 			if(!db.update(query)) {
 				this.msg = "Không thể tạo mới VAYNO: " + query;
-				db.getConnection().rollback();
-				return false;
-			}
-			
-			if(this.loai.equals("1")){
-				query = "update TAIKHOAN set sotien = (sotien + "+this.sotien.replaceAll(",", "")+") where ID = " + this.taikhoanId;
-			} else {
-				query = "update TAIKHOAN set sotien = (sotien - "+this.sotien.replaceAll(",", "")+") where ID = " + this.taikhoanId;
-			}
-			if(db.updateReturnInt(query) != 1) {
-				this.msg = "Không cập nhật TAIKHOAN: " + query;
 				db.getConnection().rollback();
 				return false;
 			}
@@ -181,8 +156,12 @@ public class VayNo implements IVayNo {
 	public boolean update() {
 		try {
 			db.getConnection().setAutoCommit(false);
-			
-			String query = "update VAYNO set nguoivayno=N'"+this.nguoivayno+"',noidung=N'"+this.noidung+"',ghichu=N'"+this.ghichu+"',ngaysua='"+this.getDateTime()+"' where trangthai in (0) and ID = " + this.ID;
+
+			String query = "update VAYNO set ngay='"+this.ngay+"',sotien="+this.sotien.replaceAll(",", "")+",loai="+this.loai+","
+					+ " taikhoan_fk_cho="+this.taikhoanId+",nguoivayno=N'"+this.nguoivayno+"',noidung=N'"+this.noidung+"',"
+					+ " ghichu=N'"+this.ghichu+"',ngaytra='"+this.ngaytra+"',taikhoan_fk_nhan="+this.taikhoannhantra+","
+					+ " phi="+(this.phi.length() > 0 ? this.phi : "null")+",ghichu2=N'"+this.ghichu2+"',ngaysua='"+this.getDateTime()+"'"
+					+ " where trangthai in (0) and ID = " + this.ID;
 			System.out.println("update: "+query);
 			
 			if(db.updateReturnInt(query) != 1) {
@@ -200,16 +179,24 @@ public class VayNo implements IVayNo {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 	}
 	
 	public boolean nhantra() {
 		try {
-			String query = "select sotien from TAIKHOAN where ID = " + this.taikhoannhantra;
+			String query = "select loai, sotien from VAYNO where ID = " + this.ID;
 			ResultSet rs = this.db.get(query);
 			rs.next();
-			double stien = rs.getDouble("sotien");
+			String loai = rs.getString("loai");
+			double sotien = rs.getDouble("sotien");
+			rs.close();
+			
+			query = "select sotien from TAIKHOAN where ID = " + this.taikhoannhantra;
+			rs = this.db.get(query);
+			rs.next();
+			double stientk = rs.getDouble("sotien");
 			rs.close();
 			
 			double phint = 0;
@@ -217,20 +204,20 @@ public class VayNo implements IVayNo {
 				phint = Double.parseDouble(this.phi.replaceAll(",", ""));
 			}
 			
-			if(this.loai.equals("1")) {
-				if(stien < Double.parseDouble(this.sotien.replaceAll(",", "")) + phint){
-					this.msg = "Số tiền trong tài khoản còn "+stien+", không đủ để thực hiện.";
+			if(loai.equals("1")) {
+				if(stientk < sotien + phint){
+					this.msg = "Số tiền trong tài khoản còn "+stientk+", không đủ để thực hiện.";
 					return false;
 				}
 				
-				query = "update TAIKHOAN set sotien = (sotien - "+this.sotien.replaceAll(",", "")+" - "+phint+") where ID = " + this.taikhoannhantra;
+				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" - "+phint+") where ID = " + this.taikhoannhantra;
 			} else {
-				if(stien + Double.parseDouble(this.sotien.replaceAll(",", "")) < phint){
-					this.msg = "Số tiền trong tài khoản còn "+stien+", không đủ để thực hiện.";
+				if(stientk + sotien < phint){
+					this.msg = "Số tiền trong tài khoản còn "+stientk+", không đủ để thực hiện.";
 					return false;
 				}
 				
-				query = "update TAIKHOAN set sotien = (sotien + "+this.sotien.replaceAll(",", "")+" - "+phint+") where ID = " + this.taikhoannhantra;
+				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" - "+phint+") where ID = " + this.taikhoannhantra;
 			}
 			
 			db.getConnection().setAutoCommit(false);
@@ -241,7 +228,7 @@ public class VayNo implements IVayNo {
 				return false;
 			}
 			
-			query = "update VAYNO set ghichu=N'"+this.ghichu+"',ngaytra='"+this.ngaytra+"',phi="+phint+",taikhoan_fk_nhan="+this.taikhoannhantra+",trangthai=1 where trangthai in (0) and ID = " + this.ID;
+			query = "update VAYNO set ngaytra='"+this.ngaytra+"',phi="+phint+",taikhoan_fk_nhan="+this.taikhoannhantra+",ghichu2=N'"+this.ghichu2+"',trangthai=2 where trangthai = 1 and ID = " + this.ID;
 			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật VAYNO: " + query;
 				db.getConnection().rollback();
@@ -257,6 +244,7 @@ public class VayNo implements IVayNo {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -410,5 +398,13 @@ public class VayNo implements IVayNo {
 
 	public void setTaikhoanNhantraRs(ResultSet taikhoanNhantraRs) {
 		TaikhoanNhantraRs = taikhoanNhantraRs;
+	}
+
+	public String getGhichu2() {
+		return ghichu2;
+	}
+
+	public void setGhichu2(String ghichu2) {
+		this.ghichu2 = ghichu2;
 	}
 }
