@@ -85,7 +85,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		document.forms['FormCt'].submit();
 	}
 
-	//cho phép nhập số từ 0->9
+	//cho phép nhập phím enter, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -93,10 +93,10 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 48) || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 </script>
 </head>

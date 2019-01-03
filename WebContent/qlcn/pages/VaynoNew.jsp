@@ -46,6 +46,20 @@ ResultSet TaikhoanNhantraRs = obj.getTaikhoanNhantraRs();
 </script>
 
 <script language="javascript" type="text/javascript">
+	//cho phép nhập phím enter, dấu phẩy, dấu chấm, 0->9
+	function keypress(e) {
+		var keypressed = null;
+		if (window.event)
+			keypressed = window.event.keyCode;
+		else
+			keypressed = e.which;
+		
+		if (keypressed == 13 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
+		}
+		return false;
+	}
+	
 	function save() {
 		if (document.getElementById("sotien").value.trim() == "") {
 			document.getElementById("dataerror").value = "Bạn chưa nhập số tiền.";

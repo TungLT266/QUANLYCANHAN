@@ -65,6 +65,7 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 		document.forms['FormTktt'].submit();
 	}
 
+	//cho phép nhập phím enter, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -72,10 +73,10 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 48) || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	function Hienthi(id) {

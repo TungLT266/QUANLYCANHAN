@@ -86,7 +86,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		document.forms['FormTc'].submit();
 	}
 
-	//cho phép nhập số từ 0->9
+	//cho phép nhập phím enter, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -94,13 +94,13 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 48) || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
-	//cho phép nhập số từ 0->9 và dấu , .
+	// cho phép nhập phím enter, dấu phẩy, dấu chấm, 0->9
 	function keypress2(e) {
 		var keypressed = null;
 		if (window.event)
@@ -108,10 +108,10 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 44) || keypressed == 45 || keypressed == 47 || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 </script>
 </head>

@@ -46,7 +46,7 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 </script>
 
 <script language="javascript" type="text/javascript">
-	//cho phép nhập số từ 0->9 và dấu , .
+	//cho phép nhập phím enter, dấu phẩy, dấu chấm, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -54,10 +54,10 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 44) || keypressed == 45 || keypressed == 47 || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	function save() {

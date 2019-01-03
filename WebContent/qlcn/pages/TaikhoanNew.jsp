@@ -60,7 +60,7 @@ ResultSet DonviRs = obj.getDonviRs();
 		document.forms["FormTk"].submit();
 	}
 	
-	// cho phép nhập phím enter, cách, dấu phẩy, dấu chấm, 0->9
+	// cho phép nhập phím enter, dấu phẩy, dấu chấm, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -68,7 +68,7 @@ ResultSet DonviRs = obj.getDonviRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed == 13 || keypressed == 32 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+		if (keypressed == 13 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
 			return true;
 		}
 		return false;

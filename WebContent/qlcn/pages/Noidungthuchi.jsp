@@ -63,6 +63,7 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 		document.forms['FormNdtc'].submit();
 	}
 
+	//cho phép nhập phím enter, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -70,10 +71,10 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 48) || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 </script>
 </head>
