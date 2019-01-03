@@ -82,21 +82,31 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 														<option value="1" selected="selected">ATM</option>
 														<option value="2" disabled="disabled">VISA</option>
 														<option value="3" disabled="disabled">MASTERCARD</option>
+														<option value="4" disabled="disabled">Tín dụng</option>
 													<%} else if(obj.getLoaithe().equals("2")) { %>
 														<option value="0" disabled="disabled"></option>
 														<option value="1" disabled="disabled">ATM</option>
 														<option value="2" selected="selected">VISA</option>
 														<option value="3" disabled="disabled">MASTERCARD</option>
+														<option value="4" disabled="disabled">Tín dụng</option>
 													<%} else if(obj.getLoaithe().equals("3")) { %>
 														<option value="0" disabled="disabled"></option>
 														<option value="1" disabled="disabled">ATM</option>
 														<option value="2" disabled="disabled">VISA</option>
 														<option value="3" selected="selected">MASTERCARD</option>
+														<option value="4" disabled="disabled">Tín dụng</option>
+													<%} else if(obj.getLoaithe().equals("3")) { %>
+														<option value="0" disabled="disabled"></option>
+														<option value="1" disabled="disabled">ATM</option>
+														<option value="2" disabled="disabled">VISA</option>
+														<option value="3" disabled="disabled">MASTERCARD</option>
+														<option value="4" selected="selected">Tín dụng</option>
 													<%} else { %>
 														<option value="0" selected="selected"></option>
 														<option value="1" disabled="disabled">ATM</option>
 														<option value="2" disabled="disabled">VISA</option>
 														<option value="3" disabled="disabled">MASTERCARD</option>
+														<option value="4" disabled="disabled">Tín dụng</option>
 													<%} %>
 												</select>
 											</td>

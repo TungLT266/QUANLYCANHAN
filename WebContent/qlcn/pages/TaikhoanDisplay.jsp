@@ -87,12 +87,35 @@ ResultSet DonviRs = obj.getDonviRs();
 											</td>
 											
 											<td class="plainlabel">
-												<div <%=obj.getIsTknganhang().equals("1") ? "" : "style='display: none;'" %> id="nganhang1">Ngân hàng</div>
+												<div <%=obj.getIsTknganhang().equals("1") || obj.getIsTktindung().equals("1") ? "" : "style='display: none;'" %> id="nganhang1">Ngân hàng</div>
 											</td>
 											<td class="plainlabel">
-												<div <%=obj.getIsTknganhang().equals("1") ? "" : "style='display: none;'" %> id="nganhang2">
+												<div <%=obj.getIsTknganhang().equals("1") || obj.getIsTktindung().equals("1") ? "" : "style='display: none;'" %> id="nganhang2">
 													<input type="text" name="nganhang" value="<%=obj.getNganhang() %>" readonly="readonly">
 												</div>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="plainlabel">Tài khoản tín dụng</td>
+											<td class="plainlabel" colspan="3">
+		                            			<%if(obj.getIsTktindung().equals("1")){ %>
+			                            			<input type="checkbox" id="istktindung" name="istktindung" value="1" checked="checked" disabled="disabled">
+					                            <%} else { %>
+					                            	<input type="checkbox" id="istktindung" name="istktindung" value="1" disabled="disabled">
+					                            <%} %>
+											</td>
+										</tr>
+										
+										<tr <%=obj.getIsTktindung().equals("1") ? "" : "style='display: none;'" %> id="tindung2">
+											<td class="plainlabel">Hạn mức</td>
+											<td class="plainlabel">
+												<input type="text" id="hanmuc" name="hanmuc" value="<%=obj.getHanmuc() %>" style="text-align: right;" readonly="readonly">
+											</td>
+											
+											<td class="plainlabel">Nợ</td>
+											<td class="plainlabel">
+												<input type="text" name="notindung" value="<%=obj.getNoTindung() %>" style="text-align: right;" readonly="readonly">
 											</td>
 										</tr>
 										

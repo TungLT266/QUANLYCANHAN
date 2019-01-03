@@ -46,7 +46,7 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 			queryUser = " and tktt.USERID = " + this.userId;
 		}
 		
-		String query = "select tktt.ID, (case when tktt.loaithe=1 then 'ATM' when tktt.loaithe=2 then 'VISA' when tktt.loaithe=3 then 'MASTERCARD' else '' end) as loaithe,"
+		String query = "select tktt.ID, (case when tktt.loaithe=1 then 'ATM' when tktt.loaithe=2 then 'VISA' when tktt.loaithe=3 then 'MASTERCARD' when tktt.loaithe=4 then N'Tín dụng' else '' end) as loaithe,"
 				+ " tk.ten as taikhoan,tktt.sothe as ten,tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
 				+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.ID > 0" + queryUser;
 		

@@ -48,11 +48,19 @@ ResultSet DonviRs = obj.getDonviRs();
 			document.getElementById("dataerror").value = "Bạn chưa chọn đơn vị.";
 			return false;
 		}
+		
+		if(document.getElementById("istktindung").checked == true){
+			if (document.getElementById("hanmuc").value == "") {
+				document.getElementById("dataerror").value = "Bạn chưa nhập hạn mức.";
+				return false;
+			}
+		}
 
 		document.forms["FormTk"].action.value = "save";
 		document.forms["FormTk"].submit();
 	}
 	
+	// cho phép nhập phím enter, cách, dấu phẩy, dấu chấm, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -60,10 +68,10 @@ ResultSet DonviRs = obj.getDonviRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed < 13 || (keypressed > 13 && keypressed < 44) || keypressed == 45  || (keypressed > 46 && keypressed < 48) || keypressed > 57) {
-			return false;
+		if (keypressed == 13 || keypressed == 32 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	function showHideNganHang(){
@@ -71,8 +79,24 @@ ResultSet DonviRs = obj.getDonviRs();
 			document.getElementById("nganhang1").style.display = "";
 			document.getElementById("nganhang2").style.display = "";
 		} else {
-			document.getElementById("nganhang1").style.display = "none";
-			document.getElementById("nganhang2").style.display = "none";
+			if(document.getElementById("istktindung").checked == false){
+				document.getElementById("nganhang1").style.display = "none";
+				document.getElementById("nganhang2").style.display = "none";
+			}
+		}
+	}
+	
+	function showHideTinDung(){
+		if(document.getElementById("istktindung").checked == true){
+			document.getElementById("nganhang1").style.display = "";
+			document.getElementById("nganhang2").style.display = "";
+			document.getElementById("tindung2").style.display = "";
+		} else {
+			document.getElementById("tindung2").style.display = "none";
+			if(document.getElementById("istknganhang").checked == false){
+				document.getElementById("nganhang1").style.display = "none";
+				document.getElementById("nganhang2").style.display = "none";
+			}
 		}
 	}
 </script>
@@ -175,20 +199,61 @@ ResultSet DonviRs = obj.getDonviRs();
 										<tr>
 											<td class="plainlabel">Tài khoản ngân hàng</td>
 											<td class="plainlabel">
-												<%if(obj.getIsTknganhang().equals("1")){ %>
-			                            			<input type="checkbox" id="istknganhang" name="istknganhang" value="1" checked="checked" onchange="showHideNganHang();">
+					                            <%if(obj.getID().length() > 0){ %>
+					                            	<input type="hidden" name="istknganhang" value="<%=obj.getIsTknganhang() %>">
+			                            			<%if(obj.getIsTknganhang().equals("1")){ %>
+				                            			<input type="checkbox" id="istknganhang" name="istknganhang" value="1" checked="checked" disabled="disabled">
+						                            <%} else { %>
+						                            	<input type="checkbox" id="istknganhang" name="istknganhang" value="1" disabled="disabled">
+						                            <%} %>
 					                            <%} else { %>
-					                            	<input type="checkbox" id="istknganhang" name="istknganhang" value="1" onchange="showHideNganHang();">
+					                            	<%if(obj.getIsTknganhang().equals("1")){ %>
+				                            			<input type="checkbox" id="istknganhang" name="istknganhang" value="1" checked="checked" onchange="showHideNganHang();">
+						                            <%} else { %>
+						                            	<input type="checkbox" id="istknganhang" name="istknganhang" value="1" onchange="showHideNganHang();">
+						                            <%} %>
 					                            <%} %>
 											</td>
 											
 											<td class="plainlabel">
-												<div <%=obj.getIsTknganhang().equals("1") ? "" : "style='display: none;'" %> id="nganhang1">Ngân hàng</div>
+												<div <%=obj.getIsTknganhang().equals("1") || obj.getIsTktindung().equals("1") ? "" : "style='display: none;'" %> id="nganhang1">Ngân hàng</div>
 											</td>
 											<td class="plainlabel">
-												<div <%=obj.getIsTknganhang().equals("1") ? "" : "style='display: none;'" %> id="nganhang2">
+												<div <%=obj.getIsTknganhang().equals("1") || obj.getIsTktindung().equals("1") ? "" : "style='display: none;'" %> id="nganhang2">
 													<input type="text" name="nganhang" value="<%=obj.getNganhang() %>">
 												</div>
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="plainlabel">Tài khoản tín dụng</td>
+											<td class="plainlabel" colspan="3">
+												<%if(obj.getID().length() > 0){ %>
+			                            			<input type="hidden" name="istktindung" value="<%=obj.getIsTktindung() %>">
+			                            			<%if(obj.getIsTktindung().equals("1")){ %>
+				                            			<input type="checkbox" id="istktindung" name="istktindung" value="1" checked="checked" disabled="disabled">
+						                            <%} else { %>
+						                            	<input type="checkbox" id="istktindung" name="istktindung" value="1" disabled="disabled">
+						                            <%} %>
+					                            <%} else { %>
+					                            	<%if(obj.getIsTktindung().equals("1")){ %>
+				                            			<input type="checkbox" id="istktindung" name="istktindung" value="1" checked="checked" onchange="showHideTinDung();">
+						                            <%} else { %>
+						                            	<input type="checkbox" id="istktindung" name="istktindung" value="1" onchange="showHideTinDung();">
+						                            <%} %>
+					                            <%} %>
+											</td>
+										</tr>
+										
+										<tr <%=obj.getIsTktindung().equals("1") ? "" : "style='display: none;'" %> id="tindung2">
+											<td class="plainlabel">Hạn mức <FONT class="erroralert">*</FONT></td>
+											<td class="plainlabel">
+												<input type="text" id="hanmuc" name="hanmuc" value="<%=obj.getHanmuc() %>" style="text-align: right;" onkeypress="return keypress(event);">
+											</td>
+											
+											<td class="plainlabel">Nợ</td>
+											<td class="plainlabel">
+												<input type="text" name="notindung" value="<%=obj.getNoTindung() %>" style="text-align: right;" readonly="readonly">
 											</td>
 										</tr>
 										

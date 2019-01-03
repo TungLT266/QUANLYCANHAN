@@ -38,4 +38,13 @@ public interface ITaiKhoan {
 	
 	public String getNganhang();
 	public void setNganhang(String nganhang);
+	
+	public String getIsTktindung();
+	public void setIsTktindung(String isTktindung);
+
+	public String getHanmuc();
+	public void setHanmuc(String hanmuc);
+
+	public String getNoTindung();
+	public void setNoTindung(String noTindung);
 }

@@ -19,6 +19,9 @@ public class TaiKhoan implements ITaiKhoan {
 	private String donvi;
 	private String nganhang;
 	private String isTknganhang;
+	private String isTktindung;
+	private String hanmuc;
+	private String noTindung;
 	private String trangthai;
 	private String msg;
 	
@@ -34,6 +37,9 @@ public class TaiKhoan implements ITaiKhoan {
 		this.donvi = "";
 		this.nganhang = "";
 		this.isTknganhang = "1";
+		this.isTktindung = "0";
+		this.hanmuc = "";
+		this.noTindung = "";
 		this.trangthai = "1";
 		this.msg = "";
 		
@@ -44,7 +50,7 @@ public class TaiKhoan implements ITaiKhoan {
 	public void init() {
 		NumberFormat formatter = new DecimalFormat("#,###,###.##");
 		
-		String query = "select TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, TRANGTHAI from TAIKHOAN where ID = " + this.ID;
+		String query = "select TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, TRANGTHAI from TAIKHOAN where ID = " + this.ID;
 		System.out.println(query);
 		
 		ResultSet rs = this.db.get(query);
@@ -55,6 +61,9 @@ public class TaiKhoan implements ITaiKhoan {
 			this.donvi = rs.getString("DONVI_FK");
 			this.nganhang = rs.getString("nganhang");
 			this.isTknganhang = rs.getString("istknganhang");
+			this.isTktindung = rs.getString("istktindung");
+			this.hanmuc = formatter.format(rs.getDouble("hanmuc"));
+			this.noTindung = formatter.format(rs.getDouble("notindung"));
 			this.trangthai = rs.getString("TRANGTHAI");
 			rs.close();
 		} catch (Exception e) {}
@@ -76,12 +85,17 @@ public class TaiKhoan implements ITaiKhoan {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			if(!this.isTknganhang.equals("1")){
+			if(!this.isTknganhang.equals("1") && !this.isTktindung.equals("1")){
 				this.nganhang = "";
+			} else if(!this.isTktindung.equals("1")){
+				this.hanmuc = "0";
+				this.noTindung = "0";
 			}
-			String sotien = this.sotien.replaceAll("[, ]", "");
-			String query = "insert into TAIKHOAN(TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, trangthai, ngaytao, ngaysua, USERID)"
-					+ "\n values(N'"+this.ten+"',"+sotien+","+this.donvi+",N'"+this.nganhang+"',"+this.isTknganhang+","+this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
+			
+			String query = "insert into TAIKHOAN(TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, trangthai, ngaytao, ngaysua, USERID)"
+					+ "\n values(N'"+this.ten.trim()+"',"+this.sotien.trim().replaceAll("[, ]", "")+","+this.donvi+",N'"+this.nganhang.trim()+"',"+this.isTknganhang+","+this.isTktindung+","
+					+ (this.hanmuc.trim().length()==0 ? "0" : this.hanmuc.trim().replaceAll("[, ]", ""))+","+(this.noTindung.trim().length()==0 ? "0" : this.noTindung.trim().replaceAll("[, ]", ""))+","
+					+ this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -107,11 +121,9 @@ public class TaiKhoan implements ITaiKhoan {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			if(!this.isTknganhang.equals("1")){
-				this.nganhang = "";
-			}
-			String query = "update TAIKHOAN set TEN=N'"+this.ten+"',nganhang=N'"+this.nganhang+"',"
-					+ "istknganhang="+this.isTknganhang+",trangthai="+this.trangthai+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
+			String query = "update TAIKHOAN set TEN=N'"+this.ten.trim()+"',nganhang=N'"+this.nganhang.trim()+"',"
+					+ "hanmuc="+(this.hanmuc.trim().length()==0 ? "0" : this.hanmuc.trim().replaceAll("[, ]", ""))+","
+					+ "trangthai="+this.trangthai+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
 			if(!db.update(query)) {
@@ -219,5 +231,29 @@ public class TaiKhoan implements ITaiKhoan {
 
 	public void setNganhang(String nganhang) {
 		this.nganhang = nganhang;
+	}
+
+	public String getIsTktindung() {
+		return isTktindung;
+	}
+
+	public void setIsTktindung(String isTktindung) {
+		this.isTktindung = isTktindung;
+	}
+
+	public String getHanmuc() {
+		return hanmuc;
+	}
+
+	public void setHanmuc(String hanmuc) {
+		this.hanmuc = hanmuc;
+	}
+
+	public String getNoTindung() {
+		return noTindung;
+	}
+
+	public void setNoTindung(String noTindung) {
+		this.noTindung = noTindung;
 	}
 }

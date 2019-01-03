@@ -127,6 +127,19 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 			String nganhang = util.antiSQLInspection(request.getParameter("nganhang"));
 			if (nganhang != null)
 				obj.setNganhang(nganhang);
+			
+			String istktindung = request.getParameter("istktindung");
+			if (istktindung == null)
+				istktindung = "0";
+			obj.setIsTktindung(istktindung);
+			
+			String hanmuc = request.getParameter("hanmuc");
+			if (hanmuc != null)
+				obj.setHanmuc(hanmuc);
+			
+			String notindung = request.getParameter("notindung");
+			if (notindung != null)
+				obj.setNoTindung(notindung);
 		    
 		    String trangthai = request.getParameter("trangthai");
 			if (trangthai == null)
