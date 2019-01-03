@@ -10,6 +10,7 @@ String userId = (String) session.getAttribute("userId");
 
 IChuyenTien obj = (IChuyenTien) session.getAttribute("obj");
 ResultSet TaikhoanRs = obj.getTaikhoanRs();
+ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -190,13 +191,12 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 											<td class="plainlabel">
 												<select name="taikhoannhanId" id="taikhoannhanId" class="select2" style="width: 200px" onchange="submitform();">
 													<option value=""></option>
-													<%TaikhoanRs.beforeFirst(); %>
-													<%if(TaikhoanRs != null){ %>
-														<%while(TaikhoanRs.next()){ %>
-															<%if(obj.getTaikhoannhanId().equals(TaikhoanRs.getString("id"))){ %>
-																<option value="<%=TaikhoanRs.getString("id") %>" selected="selected"><%=TaikhoanRs.getString("ten") %></option>
+													<%if(TaikhoannhanRs != null){ %>
+														<%while(TaikhoannhanRs.next()){ %>
+															<%if(obj.getTaikhoannhanId().equals(TaikhoannhanRs.getString("id"))){ %>
+																<option value="<%=TaikhoannhanRs.getString("id") %>" selected="selected"><%=TaikhoannhanRs.getString("ten") %></option>
 															<%} else { %>
-																<option value="<%=TaikhoanRs.getString("id") %>" ><%=TaikhoanRs.getString("ten") %></option>
+																<option value="<%=TaikhoannhanRs.getString("id") %>" ><%=TaikhoannhanRs.getString("ten") %></option>
 															<%} %>
 														<%} %>
 													<%} %>
@@ -253,6 +253,8 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 try {
 	if(TaikhoanRs != null)
 		TaikhoanRs.close();
+	if(TaikhoannhanRs != null)
+		TaikhoannhanRs.close();
 	if(obj != null)
 		obj.DBClose();
 	session.removeAttribute("obj");

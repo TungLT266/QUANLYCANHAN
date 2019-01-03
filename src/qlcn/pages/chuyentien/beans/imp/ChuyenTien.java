@@ -27,6 +27,7 @@ public class ChuyenTien implements IChuyenTien {
 	private String msg;
 	
 	private ResultSet TaikhoanRs;
+	private ResultSet TaikhoannhanRs;
 	
 	private Dbutils db;
 //	private Utility util;
@@ -78,7 +79,7 @@ public class ChuyenTien implements IChuyenTien {
 		}
 		
 		String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
-		this.TaikhoanRs = this.db.getScroll(query);
+		this.TaikhoanRs = this.db.get(query);
 		
 		if(this.taikhoanchuyenId.length() > 5){
 			try {
@@ -90,12 +91,19 @@ public class ChuyenTien implements IChuyenTien {
 				String donvichuyenId = rs.getString("id");
 				rs.close();
 				
+				// Lấy Resultset tài khoản chuyển, không lấy tài khoản đã được chọn làm tài khoản chuyển
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where ID != "+this.taikhoanchuyenId+" and TRANGTHAI = 1" + queryUser;
+				this.TaikhoannhanRs = this.db.get(query);
+				
 				if(this.taikhoannhanId.length() > 5){
 					// Nếu đơn vị tài khoản nhận khác đơn vị tài khoản chuyển, thì lấy đơn vị cho tài khoản nhận
 					query = "select dv.ten from TAIKHOAN tk inner join DONVI dv on dv.ID=tk.donvi_fk where dv.ID != "+donvichuyenId+" and tk.ID = " + this.taikhoannhanId;
 					rs = this.db.get(query);
 					if(rs.next()){
 						this.donvinhan = rs.getString("ten");
+						if(this.sotiennhan.trim().length() == 0){
+							this.sotiennhan = this.sotienchuyen;
+						}
 					}
 					rs.close();
 				}
@@ -298,5 +306,13 @@ public class ChuyenTien implements IChuyenTien {
 
 	public void setTaikhoanRs(ResultSet taikhoanRs) {
 		TaikhoanRs = taikhoanRs;
+	}
+
+	public ResultSet getTaikhoannhanRs() {
+		return TaikhoannhanRs;
+	}
+
+	public void setTaikhoannhanRs(ResultSet taikhoannhanRs) {
+		TaikhoannhanRs = taikhoannhanRs;
 	}
 }

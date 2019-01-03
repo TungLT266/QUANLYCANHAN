@@ -50,4 +50,7 @@ public interface IChuyenTien {
 
 	public ResultSet getTaikhoanRs();
 	public void setTaikhoanRs(ResultSet taikhoanRs);
+	
+	public ResultSet getTaikhoannhanRs();
+	public void setTaikhoannhanRs(ResultSet taikhoannhanRs);
 }

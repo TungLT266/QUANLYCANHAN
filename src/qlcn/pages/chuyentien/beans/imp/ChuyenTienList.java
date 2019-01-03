@@ -115,10 +115,11 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 	
 	public void chot(String id) {
 		try {
-			String query = "select TAIKHOANCHUYEN_FK, SOTIENCHUYEN, TAIKHOANNHAN_FK, SOTIENNHAN, TKPHI, PHI,"
-					+ " (select sotien from TAIKHOAN where ID=ct.TAIKHOANCHUYEN_FK) as tientkchuyen,"
-					+ " (select sotien from TAIKHOAN where ID=ct.TAIKHOANNHAN_FK) as tientknhan"
-					+ "\n from CHUYENTIEN ct where ID = " + id;
+			String query = "select ct.TAIKHOANCHUYEN_FK, ct.SOTIENCHUYEN, ct.TAIKHOANNHAN_FK, ct.SOTIENNHAN, ct.TKPHI, ct.PHI, tkc.sotien as tientkchuyen, tkn.sotien as tientknhan"
+					+ "\n from CHUYENTIEN ct"
+					+ "\n inner join TAIKHOAN tkc on tkc.ID=ct.TAIKHOANCHUYEN_FK"
+					+ "\n inner join TAIKHOAN tkn on tkn.ID=ct.TAIKHOANNHAN_FK"
+					+ "\n where ct.ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
 			String taikhoanchuyen = rs.getString("TAIKHOANCHUYEN_FK");
@@ -131,7 +132,7 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 			double tientknhan = rs.getDouble("tientknhan");
 			rs.close();
 			
-			if(tkphi.equals("1")){
+			if(tkphi.equals("1")){ // Tính phí vào tài khoản chuyển
 				if(tientkchuyen < sotienchuyen + phi){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
 					return;
@@ -139,7 +140,7 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 				
 				query = "update TAIKHOAN set sotien = sotien - "+sotienchuyen+" - "+phi+" where ID = " + taikhoanchuyen
 						+ "\n update TAIKHOAN set sotien = sotien + "+sotiennhan+" where ID = " + taikhoannhan;
-			} else if(tkphi.equals("2")){
+			} else if(tkphi.equals("2")){ // Tính phí vào tài khoản nhận
 				if(tientkchuyen < sotienchuyen){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
 					return;
@@ -152,7 +153,7 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 				
 				query = "update TAIKHOAN set sotien = sotien - "+sotienchuyen+" where ID = " + taikhoanchuyen
 						+ "\n update TAIKHOAN set sotien = sotien + "+sotiennhan+" - "+phi+" where ID = " + taikhoannhan;
-			} else {
+			} else { // Không tính phí
 				if(tientkchuyen < sotienchuyen){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
 					return;
