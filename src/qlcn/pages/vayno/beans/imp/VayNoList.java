@@ -45,56 +45,60 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 	}
 	
 	public void init() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and vn.USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and vn.USERID = " + this.userId;
+			}
+			
+			String query = "select vn.ID, ngay, vn.sotien, dv.ten as donvi, case when vn.loai=1 then 'Vay' else 'Cho vay' end as loai,"
+					+ " vn.nguoivayno, vn.noidung, vn.TRANGTHAI, vn.NGAYTAO, vn.NGAYSUA"
+					+ "\n from VAYNO vn"
+					+ "\n left join TAIKHOAN tk on tk.ID = vn.taikhoan_fk_cho"
+					+ "\n left join DONVI dv on dv.ID = tk.donvi_fk"
+					+ "\n where vn.ID > 0" + queryUser;
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and vn.ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.tungay.trim().length() > 0) {
+				query += " and vn.ngay >= '" + this.tungay.trim() + "'";
+			}
+			
+			if(this.denngay.trim().length() > 0) {
+				query += " and vn.ngay <= '" + this.denngay.trim() + "'";
+			}
+			
+			if(this.sotientu.length() > 0) {
+				query += " and vn.sotien >= " + this.sotientu;
+			}
+			
+			if(this.sotienden.length() > 0) {
+				query += " and vn.sotien <= " + this.sotienden;
+			}
+			
+			if(this.loai.length() > 0) {
+				query += " and vn.loai = " + this.loai;
+			}
+			
+			if(this.nguoivayno.trim().length() > 0) {
+				query += " and dbo.ftBoDau(vn.nguoivayno) like '%" + this.util.replaceAEIOU(this.nguoivayno.trim()) + "%'";
+			}
+			
+			if(this.noidung.trim().length() > 0) {
+				query += " and dbo.ftBoDau(vn.noidung) like '%" + this.util.replaceAEIOU(this.noidung.trim()) + "%'";
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and vn.TRANGTHAI = " + this.trangthai;
+			}
+			
+			System.out.println(query);
+			this.VaynoRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select vn.ID, ngay, vn.sotien, dv.ten as donvi, case when vn.loai=1 then 'Vay' else 'Cho vay' end as loai,"
-				+ " vn.nguoivayno, vn.noidung, vn.TRANGTHAI, vn.NGAYTAO, vn.NGAYSUA"
-				+ "\n from VAYNO vn"
-				+ "\n left join TAIKHOAN tk on tk.ID = vn.taikhoan_fk_cho"
-				+ "\n left join DONVI dv on dv.ID = tk.donvi_fk"
-				+ "\n where vn.ID > 0" + queryUser;
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and vn.ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.tungay.trim().length() > 0) {
-			query += " and vn.ngay >= '" + this.tungay.trim() + "'";
-		}
-		
-		if(this.denngay.trim().length() > 0) {
-			query += " and vn.ngay <= '" + this.denngay.trim() + "'";
-		}
-		
-		if(this.sotientu.length() > 0) {
-			query += " and vn.sotien >= " + this.sotientu;
-		}
-		
-		if(this.sotienden.length() > 0) {
-			query += " and vn.sotien <= " + this.sotienden;
-		}
-		
-		if(this.loai.length() > 0) {
-			query += " and vn.loai = " + this.loai;
-		}
-		
-		if(this.nguoivayno.trim().length() > 0) {
-			query += " and dbo.ftBoDau(vn.nguoivayno) like '%" + this.util.replaceAEIOU(this.nguoivayno.trim()) + "%'";
-		}
-		
-		if(this.noidung.trim().length() > 0) {
-			query += " and dbo.ftBoDau(vn.noidung) like '%" + this.util.replaceAEIOU(this.noidung.trim()) + "%'";
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and vn.TRANGTHAI = " + this.trangthai;
-		}
-		
-		System.out.println(query);
-		this.VaynoRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
 	public void chot(String id) {
@@ -326,7 +330,9 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 				this.VaynoRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

@@ -62,12 +62,13 @@ public class VayNo implements IVayNo {
 	}
 	
 	public void init() {
-		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
-		String query = "select ngay,sotien,loai,taikhoan_fk_cho,taikhoan_fk_nhan,nguoivayno,noidung,ghichu,ngaytra,phi,ghichu2 from VAYNO where ID = " + this.ID;
-		System.out.println("init: "+query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
+			String query = "select ngay,sotien,loai,taikhoan_fk_cho,taikhoan_fk_nhan,nguoivayno,noidung,ghichu,ngaytra,phi,ghichu2 from VAYNO where ID = " + this.ID;
+			System.out.println("init: "+query);
+			
+			ResultSet rs = this.db.get(query);
+		
 			rs.next();
 			this.ngay = rs.getString("ngay");
 			this.sotien = formatter.format(Double.parseDouble(rs.getString("sotien")));
@@ -90,37 +91,41 @@ public class VayNo implements IVayNo {
 			
 			this.ghichu2 = rs.getString("ghichu2");
 			rs.close();
-		} catch (Exception e) {}
-		
-		createRS();
+			
+			createRS();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRS() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
-		}
-		
-		//Lấy list tài khoản
-		String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
-		this.TaikhoanRs = this.db.get(query);
-		
-		if(this.taikhoanId.length() > 5){
-			// Lấy đơn vị của tài khoản
-			try {
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			//Lấy list tài khoản
+			String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			this.TaikhoanRs = this.db.get(query);
+			
+			if(this.taikhoanId.length() > 5){
+				// Lấy đơn vị của tài khoản
 				query = "select dv.ten from TAIKHOAN tk left join DONVI dv on dv.ID = tk.donvi_fk where tk.ID = " + this.taikhoanId;
 				ResultSet rs = this.db.get(query);
 				rs.next();
 				this.donvi = rs.getString("ten");
 				rs.close();
-			} catch (SQLException e) {}
-		}
-		
-		// Lấy list tài khoản thực hiện, chỉ lấy những tài khoản có cùng đơn vị với ô tài khoản
-		if(this.taikhoanId.length() > 0){
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN"
-					+ " where TRANGTHAI = 1 and donvi_fk=(select donvi_fk from TAIKHOAN where ID = "+this.taikhoanId+")" + queryUser;
-			this.TaikhoanNhantraRs = this.db.get(query);
+			}
+			
+			// Lấy list tài khoản thực hiện, chỉ lấy những tài khoản có cùng đơn vị với ô tài khoản
+			if(this.taikhoanId.length() > 0){
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN"
+						+ " where TRANGTHAI = 1 and donvi_fk=(select donvi_fk from TAIKHOAN where ID = "+this.taikhoanId+")" + queryUser;
+				this.TaikhoanNhantraRs = this.db.get(query);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -147,6 +152,7 @@ public class VayNo implements IVayNo {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -261,7 +267,9 @@ public class VayNo implements IVayNo {
 				this.TaikhoanRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

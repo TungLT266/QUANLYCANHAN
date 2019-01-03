@@ -49,73 +49,81 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	}
 	
 	public void init() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and tc.USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and tc.USERID = " + this.userId;
+			}
+			
+			String query = "select tc.ID, tc.ngay, tc.sotien, dv.ten as donvi, case when tc.loai=1 then 'Thu' else 'Chi' end as loai, isnull(ndtc.ten,'') as tenndtc, tc.diengiai, tc.TRANGTHAI, tc.NGAYTAO, tc.NGAYSUA"
+						+ "\n from THUCHI tc"
+						+ "\n left join NOIDUNGTHUCHI ndtc on ndtc.ID = tc.noidungthuchi_fk"
+						+ "\n left join TAIKHOAN tk on tk.ID = tc.taikhoan_fk"
+						+ "\n left join DONVI dv on dv.ID = tk.donvi_fk"
+						+ "\n where tc.ID > 0" + queryUser;
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and tc.ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.tungay.trim().length() > 0) {
+				query += " and tc.ngay >= '" + this.tungay.trim() + "'";
+			}
+			
+			if(this.denngay.trim().length() > 0) {
+				query += " and tc.ngay <= '" + this.denngay.trim() + "'";
+			}
+			
+			if(this.sotientu.trim().length() > 0) {
+				query += " and tc.sotien >= " + this.sotientu.trim();
+			}
+			
+			if(this.sotienden.trim().length() > 0) {
+				query += " and tc.sotien <= " + this.sotienden.trim();
+			}
+			
+			if(this.loai.length() > 0) {
+				query += " and tc.loai = " + this.loai;
+			}
+			
+			if(this.noidungthuchiId.length() > 0) {
+				query += " and tc.noidungthuchi_fk = " + this.noidungthuchiId;
+			}
+			
+			if(this.noidung.trim().length() > 0) {
+				query += " and dbo.ftBoDau(tc.diengiai) like '%" + this.util.replaceAEIOU(this.noidung.trim()) + "%'";
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and tc.TRANGTHAI = " + this.trangthai;
+			}
+			
+			System.out.println(query);
+			this.ThuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ngay desc, id desc", query);
+			
+			createRs();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select tc.ID, tc.ngay, tc.sotien, dv.ten as donvi, case when tc.loai=1 then 'Thu' else 'Chi' end as loai, isnull(ndtc.ten,'') as tenndtc, tc.diengiai, tc.TRANGTHAI, tc.NGAYTAO, tc.NGAYSUA"
-					+ "\n from THUCHI tc"
-					+ "\n left join NOIDUNGTHUCHI ndtc on ndtc.ID = tc.noidungthuchi_fk"
-					+ "\n left join TAIKHOAN tk on tk.ID = tc.taikhoan_fk"
-					+ "\n left join DONVI dv on dv.ID = tk.donvi_fk"
-					+ "\n where tc.ID > 0" + queryUser;
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and tc.ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.tungay.trim().length() > 0) {
-			query += " and tc.ngay >= '" + this.tungay.trim() + "'";
-		}
-		
-		if(this.denngay.trim().length() > 0) {
-			query += " and tc.ngay <= '" + this.denngay.trim() + "'";
-		}
-		
-		if(this.sotientu.trim().length() > 0) {
-			query += " and tc.sotien >= " + this.sotientu.trim();
-		}
-		
-		if(this.sotienden.trim().length() > 0) {
-			query += " and tc.sotien <= " + this.sotienden.trim();
-		}
-		
-		if(this.loai.length() > 0) {
-			query += " and tc.loai = " + this.loai;
-		}
-		
-		if(this.noidungthuchiId.length() > 0) {
-			query += " and tc.noidungthuchi_fk = " + this.noidungthuchiId;
-		}
-		
-		if(this.noidung.trim().length() > 0) {
-			query += " and dbo.ftBoDau(tc.diengiai) like '%" + this.util.replaceAEIOU(this.noidung.trim()) + "%'";
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and tc.TRANGTHAI = " + this.trangthai;
-		}
-		
-		System.out.println(query);
-		this.ThuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ngay desc, id desc", query);
-		
-		createRs();
 	}
 	
 	public void createRs() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			String query = "";
+			if(this.loai.length() > 0){
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
+			} else {
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1" + queryUser;
+			}
+			this.NoidungthuchiRs = this.db.get(query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "";
-		if(this.loai.length() > 0){
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
-		} else {
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1" + queryUser;
-		}
-		this.NoidungthuchiRs = this.db.get(query);
 	}
 	
 	public void chot(String id) {
@@ -292,7 +300,9 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				this.NoidungthuchiRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

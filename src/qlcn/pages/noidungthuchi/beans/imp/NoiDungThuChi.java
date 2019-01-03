@@ -34,18 +34,21 @@ public class NoiDungThuChi implements INoiDungThuChi {
 	}
 	
 	public void init() {
-		String query = "select loai, TEN, diengiai, TRANGTHAI from NOIDUNGTHUCHI where ID = " + this.ID;
-		System.out.println(query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			String query = "select loai, TEN, diengiai, TRANGTHAI from NOIDUNGTHUCHI where ID = " + this.ID;
+			System.out.println(query);
+			
+			ResultSet rs = this.db.get(query);
+			
 			rs.next();
 			this.loai = rs.getString("loai");
 			this.ten = rs.getString("TEN");
 			this.diengiai = rs.getString("diengiai");
 			this.trangthai = rs.getString("TRANGTHAI");
 			rs.close();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean create() {
@@ -64,15 +67,16 @@ public class NoiDungThuChi implements INoiDungThuChi {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	public boolean update() {
@@ -91,15 +95,16 @@ public class NoiDungThuChi implements INoiDungThuChi {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	private String getDateTime() {
@@ -112,7 +117,9 @@ public class NoiDungThuChi implements INoiDungThuChi {
 		try {
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

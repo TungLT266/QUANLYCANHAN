@@ -32,17 +32,20 @@ public class DonVi implements IDonVi {
 	}
 	
 	public void init() {
-		String query = "select TEN, DIENGIAI, TRANGTHAI from DONVI where ID = " + this.ID;
-		System.out.println(query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			String query = "select TEN, DIENGIAI, TRANGTHAI from DONVI where ID = " + this.ID;
+			System.out.println(query);
+			
+			ResultSet rs = this.db.get(query);
+			
 			rs.next();
 			this.ten = rs.getString("TEN");
 			this.diengiai = rs.getString("DIENGIAI");
 			this.trangthai = rs.getString("TRANGTHAI");
 			rs.close();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean create() {
@@ -61,15 +64,16 @@ public class DonVi implements IDonVi {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	public boolean update() {
@@ -87,15 +91,16 @@ public class DonVi implements IDonVi {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	private String getDateTime() {
@@ -108,7 +113,9 @@ public class DonVi implements IDonVi {
 		try {
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

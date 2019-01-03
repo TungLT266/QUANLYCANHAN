@@ -48,13 +48,14 @@ public class TaiKhoan implements ITaiKhoan {
 	}
 	
 	public void init() {
-		NumberFormat formatter = new DecimalFormat("#,###,###.##");
-		
-		String query = "select TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, TRANGTHAI from TAIKHOAN where ID = " + this.ID;
-		System.out.println(query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			NumberFormat formatter = new DecimalFormat("#,###,###.##");
+			
+			String query = "select TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, TRANGTHAI from TAIKHOAN where ID = " + this.ID;
+			System.out.println(query);
+			
+			ResultSet rs = this.db.get(query);
+		
 			rs.next();
 			this.ten = rs.getString("TEN");
 			this.sotien = formatter.format(rs.getDouble("SOTIEN"));
@@ -66,19 +67,25 @@ public class TaiKhoan implements ITaiKhoan {
 			this.noTindung = formatter.format(rs.getDouble("notindung"));
 			this.trangthai = rs.getString("TRANGTHAI");
 			rs.close();
-		} catch (Exception e) {}
-		
-		createRS();
+			
+			createRS();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRS() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			String query = "select ID, ten from DONVI where trangthai = 1" + queryUser;
+			this.DonviRs = this.db.get(query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select ID, ten from DONVI where trangthai = 1" + queryUser;
-		this.DonviRs = this.db.get(query);
 	}
 	
 	public boolean create() {
@@ -106,15 +113,16 @@ public class TaiKhoan implements ITaiKhoan {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	public boolean update() {
@@ -134,15 +142,16 @@ public class TaiKhoan implements ITaiKhoan {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	private String getDateTime() {
@@ -157,7 +166,9 @@ public class TaiKhoan implements ITaiKhoan {
 				this.DonviRs.close();
 			if(this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

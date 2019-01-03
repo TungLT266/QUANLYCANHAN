@@ -33,27 +33,31 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 	}
 	
 	public void init() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and ltk.USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and ltk.USERID = " + this.userId;
+			}
+			
+			String query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ltk.NGAYTAO, ltk.NGAYSUA from LOAITAIKHOAN ltk where ltk.ID > 0" + queryUser;
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and ltk.ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.ten.trim().length() > 0) {
+				query += " and dbo.ftBoDau(ltk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and ltk.TRANGTHAI = " + this.trangthai;
+			}
+			
+			System.out.println("init: "+query);
+			this.loaitaikhoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select ltk.ID, ltk.TEN, ltk.TRANGTHAI, ltk.NGAYTAO, ltk.NGAYSUA from LOAITAIKHOAN ltk where ltk.ID > 0" + queryUser;
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and ltk.ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(ltk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and ltk.TRANGTHAI = " + this.trangthai;
-		}
-		
-		System.out.println("init: "+query);
-		this.loaitaikhoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
 	public void delete(String id) {
@@ -119,7 +123,9 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 				this.loaitaikhoanRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

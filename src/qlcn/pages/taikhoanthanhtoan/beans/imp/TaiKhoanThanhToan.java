@@ -57,11 +57,12 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 	}
 	
 	public void init() {
-		String query = "select taikhoan_fk, LOAITHE, SOTHE, MAPIN, TENCHUTHE, THOIGIANHIEULUC, THOIGIANHETHAN, CHUKY, TRANGTHAI from TAIKHOANTHANHTOAN where ID = " + this.ID;
-		System.out.println(query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			String query = "select taikhoan_fk, LOAITHE, SOTHE, MAPIN, TENCHUTHE, THOIGIANHIEULUC, THOIGIANHETHAN, CHUKY, TRANGTHAI from TAIKHOANTHANHTOAN where ID = " + this.ID;
+			System.out.println(query);
+			
+			ResultSet rs = this.db.get(query);
+		
 			rs.next();
 			
 			this.taikhoan = rs.getString("taikhoan_fk");
@@ -80,19 +81,25 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			}
 			
 			rs.close();
-		} catch (Exception e) {}
-		
-		createRS();
+			
+			createRS();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRS() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			String query = "select ID, '['+cast(ID as varchar)+'] ' + ten as ten from TAIKHOAN where trangthai = 1 and istknganhang = 1" + queryUser;
+			this.TaikhoanRs = this.db.get(query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select ID, '['+cast(ID as varchar)+'] ' + ten as ten from TAIKHOAN where trangthai = 1 and istknganhang = 1" + queryUser;
-		this.TaikhoanRs = this.db.get(query);
 	}
 	
 	public boolean create() {
@@ -112,15 +119,16 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	public boolean update() {
@@ -150,15 +158,16 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	private String getDateTime() {
@@ -190,7 +199,9 @@ public class TaiKhoanThanhToan implements ITaiKhoanThanhToan {
 				this.TaikhoanRs.close();
 			if(this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

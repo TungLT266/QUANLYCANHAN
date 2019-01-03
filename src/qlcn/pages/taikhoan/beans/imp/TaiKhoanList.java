@@ -33,30 +33,34 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	}
 	
 	public void init() {
-		String query = "";
-		if(this.userId.equals("100000")){
-			query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
-					+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.ID > 0";
-		} else {
-			query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
-					+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.USERID = " + this.userId;
+		try {
+			String query = "";
+			if(this.userId.equals("100000")){
+				query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
+						+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.ID > 0";
+			} else {
+				query = "select tk.ID, tk.TEN, tk.SOTIEN, dv.TEN as donvi, tk.TRANGTHAI, tk.NGAYTAO, tk.NGAYSUA"
+						+ "\n from TAIKHOAN tk left join DONVI dv on dv.ID = tk.DONVI_FK where tk.USERID = " + this.userId;
+			}
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and tk.ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.ten.trim().length() > 0) {
+				query += " and dbo.ftBoDau(tk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and tk.TRANGTHAI = '" + this.trangthai + "'";
+			}
+			
+			System.out.println(query);
+			
+			this.TaikhoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and tk.ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(tk.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and tk.TRANGTHAI = '" + this.trangthai + "'";
-		}
-		
-		System.out.println(query);
-		
-		this.TaikhoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
 	public void delete(String id) {
@@ -122,7 +126,9 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 				this.TaikhoanRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

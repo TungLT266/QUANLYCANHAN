@@ -41,51 +41,55 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 	}
 	
 	public void init() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and tktt.USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and tktt.USERID = " + this.userId;
+			}
+			
+			String query = "select tktt.ID, (case when tktt.loaithe=1 then 'ATM' when tktt.loaithe=2 then 'VISA' when tktt.loaithe=3 then 'MASTERCARD' when tktt.loaithe=4 then N'Tín dụng' else '' end) as loaithe,"
+					+ " tk.ten as taikhoan,tktt.sothe as ten,tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
+					+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.ID > 0" + queryUser;
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and tktt.ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.loaithe.length() > 0) {
+				query += " and tktt.loaithe = " + this.loaithe;
+			}
+			
+			if(this.ten.trim().length() > 0) {
+				query += " and tktt.sothe like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%')";
+			}
+			
+			if(this.taikhoan.trim().length() > 0) {
+				query += " and tk.id = " + this.taikhoan;
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and tktt.TRANGTHAI = " + this.trangthai;
+			}
+			
+			System.out.println(query);
+			this.TaikhoanthanhtoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+			
+			createRS();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select tktt.ID, (case when tktt.loaithe=1 then 'ATM' when tktt.loaithe=2 then 'VISA' when tktt.loaithe=3 then 'MASTERCARD' when tktt.loaithe=4 then N'Tín dụng' else '' end) as loaithe,"
-				+ " tk.ten as taikhoan,tktt.sothe as ten,tktt.TRANGTHAI, tktt.NGAYTAO, tktt.NGAYSUA"
-				+ "\n from TAIKHOANTHANHTOAN tktt left join TAIKHOAN tk on tk.ID = tktt.taikhoan_fk where tktt.ID > 0" + queryUser;
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and tktt.ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.loaithe.length() > 0) {
-			query += " and tktt.loaithe = " + this.loaithe;
-		}
-		
-		if(this.ten.trim().length() > 0) {
-			query += " and tktt.sothe like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%')";
-		}
-		
-		if(this.taikhoan.trim().length() > 0) {
-			query += " and tk.id = " + this.taikhoan;
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and tktt.TRANGTHAI = " + this.trangthai;
-		}
-		
-		System.out.println(query);
-		this.TaikhoanthanhtoanRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
-		
-		createRS();
 	}
 	
 	public void createRS() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
-		}
-		
-		String query = "select ID, ten from TAIKHOAN where trangthai = 1 and istknganhang = 1" + queryUser;
-		this.TaikhoanRs = this.db.get(query);
-		
 		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			String query = "select ID, ten from TAIKHOAN where trangthai = 1 and istknganhang = 1" + queryUser;
+			this.TaikhoanRs = this.db.get(query);
+			
 			query = "select ID from TAIKHOANTHANHTOAN"
 					+ " where (case when thoigianhethan = '' then '' else left(thoigianhethan,CHARINDEX('-',thoigianhethan)-1) end) = '"+Integer.parseInt(this.getDateTime().split("-")[1])+"'"
 					+ " and right(thoigianhethan,4) = '"+this.getDateTime().split("-")[0]+"'" + queryUser;
@@ -98,7 +102,9 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 			if(idhethan.length() > 0){
 				this.msg = "Tài khoản thanh toán sắp hết hạn" + idhethan;
 			}
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void delete(String id) {
@@ -164,7 +170,9 @@ public class TaiKhoanThanhToanList extends Phan_Trang implements ITaiKhoanThanhT
 				this.TaikhoanthanhtoanRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private String getDateTime() {

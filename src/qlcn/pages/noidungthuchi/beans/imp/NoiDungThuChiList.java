@@ -35,31 +35,35 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 	}
 	
 	public void init() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and ndtc.USERID = " + this.userId;
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and ndtc.USERID = " + this.userId;
+			}
+			
+			String query = "select ndtc.ID, case when ndtc.loai=0 then 'Thu - Chi' when ndtc.loai=1 then 'Thu' else 'Chi' end as loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.ID > 0" + queryUser;
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and ndtc.ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.loai.length() > 0) {
+				query += " and ndtc.loai = " + this.loai;
+			}
+			
+			if(this.ten.trim().length() > 0) {
+				query += " and dbo.ftBoDau(ndtc.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and ndtc.TRANGTHAI = " + this.trangthai;
+			}
+			
+			System.out.println(query);
+			this.NoidungthuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String query = "select ndtc.ID, case when ndtc.loai=0 then 'Thu - Chi' when ndtc.loai=1 then 'Thu' else 'Chi' end as loai, ndtc.TEN, ndtc.TRANGTHAI, ndtc.NGAYTAO, ndtc.NGAYSUA from NOIDUNGTHUCHI ndtc where ndtc.ID > 0" + queryUser;
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and ndtc.ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.loai.length() > 0) {
-			query += " and ndtc.loai = " + this.loai;
-		}
-		
-		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(ndtc.TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and ndtc.TRANGTHAI = " + this.trangthai;
-		}
-		
-		System.out.println(query);
-		this.NoidungthuchiRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
 	public void delete(String id) {
@@ -125,7 +129,9 @@ public class NoiDungThuChiList extends Phan_Trang implements INoiDungThuChiList 
 				this.NoidungthuchiRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

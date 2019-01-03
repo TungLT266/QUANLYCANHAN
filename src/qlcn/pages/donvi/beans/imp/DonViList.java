@@ -35,31 +35,35 @@ public class DonViList extends Phan_Trang implements IDonViList {
 	}
 	
 	public void init() {
-		String query = "";
-		if(this.userId.equals("100000")){
-			query = "select ID, TEN, DIENGIAI, TRANGTHAI, NGAYTAO, NGAYSUA from DONVI where ID > 0";
-		} else {
-			query = "select ID, TEN, DIENGIAI, TRANGTHAI, NGAYTAO, NGAYSUA from DONVI where USERID = " + this.userId;
+		try {
+			String query = "";
+			if(this.userId.equals("100000")){
+				query = "select ID, TEN, DIENGIAI, TRANGTHAI, NGAYTAO, NGAYSUA from DONVI where ID > 0";
+			} else {
+				query = "select ID, TEN, DIENGIAI, TRANGTHAI, NGAYTAO, NGAYSUA from DONVI where USERID = " + this.userId;
+			}
+			
+			if(this.ID.trim().length() > 0) {
+				query += " and ID like '%" + this.ID.trim() + "%'";
+			}
+			
+			if(this.ten.trim().length() > 0) {
+				query += " and dbo.ftBoDau(TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
+			}
+			
+			if(this.diengiai.trim().length() > 0) {
+				query += " and dbo.ftBoDau(DIENGIAI) like '%" + this.util.replaceAEIOU(this.diengiai.trim()) + "%'";
+			}
+			
+			if(this.trangthai.length() > 0) {
+				query += " and TRANGTHAI = " + this.trangthai;
+			}
+			
+			System.out.println(query);
+			this.DonviRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		if(this.ID.trim().length() > 0) {
-			query += " and ID like '%" + this.ID.trim() + "%'";
-		}
-		
-		if(this.ten.trim().length() > 0) {
-			query += " and dbo.ftBoDau(TEN) like '%" + this.util.replaceAEIOU(this.ten.trim()) + "%'";
-		}
-		
-		if(this.diengiai.trim().length() > 0) {
-			query += " and dbo.ftBoDau(DIENGIAI) like '%" + this.util.replaceAEIOU(this.diengiai.trim()) + "%'";
-		}
-		
-		if(this.trangthai.length() > 0) {
-			query += " and TRANGTHAI = " + this.trangthai;
-		}
-		
-		System.out.println(query);
-		this.DonviRs = createSplittingDataNew(this.db, Integer.parseInt(this.soItems), 10, "ID desc", query);
 	}
 	
 	public void delete(String id) {
@@ -125,7 +129,9 @@ public class DonViList extends Phan_Trang implements IDonViList {
 				this.DonviRs.close();
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

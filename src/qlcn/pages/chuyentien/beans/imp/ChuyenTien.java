@@ -51,12 +51,13 @@ public class ChuyenTien implements IChuyenTien {
 	}
 	
 	public void init() {
-		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
-		String query = "select ngay,noidung,taikhoanchuyen_fk,sotienchuyen,taikhoannhan_fk,sotiennhan,tkphi,phi from CHUYENTIEN where ID = " + this.ID;
-		System.out.println("init: "+query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
+			String query = "select ngay,noidung,taikhoanchuyen_fk,sotienchuyen,taikhoannhan_fk,sotiennhan,tkphi,phi from CHUYENTIEN where ID = " + this.ID;
+			System.out.println("init: "+query);
+			
+			ResultSet rs = this.db.get(query);
+			
 			rs.next();
 			this.ngay = rs.getString("ngay");
 			this.noidung = rs.getString("noidung");
@@ -67,22 +68,24 @@ public class ChuyenTien implements IChuyenTien {
 			this.tkphi = rs.getString("tkphi");
 			this.phi = formatter.format(Double.parseDouble(rs.getString("phi")));
 			rs.close();
-		} catch (Exception e) {}
-		
-		createRs();
+			
+			createRs();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRs() {
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
-		}
-		
-		String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
-		this.TaikhoanRs = this.db.get(query);
-		
-		if(this.taikhoanchuyenId.length() > 5){
-			try {
+		try {
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			this.TaikhoanRs = this.db.get(query);
+			
+			if(this.taikhoanchuyenId.length() > 5){
 				// Lấy đơn vị cho tài khoản chuyển
 				query = "select dv.id,dv.ten from TAIKHOAN tk inner join DONVI dv on dv.ID=tk.donvi_fk where tk.ID = " + this.taikhoanchuyenId;
 				ResultSet rs = this.db.get(query);
@@ -107,7 +110,9 @@ public class ChuyenTien implements IChuyenTien {
 					}
 					rs.close();
 				}
-			} catch (Exception e) {}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -136,15 +141,16 @@ public class ChuyenTien implements IChuyenTien {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	public boolean update() {
@@ -172,15 +178,16 @@ public class ChuyenTien implements IChuyenTien {
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
+			
+			return true;
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
-		
-		return true;
 	}
 	
 	private String getDateTime() {
@@ -193,7 +200,9 @@ public class ChuyenTien implements IChuyenTien {
 		try {
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

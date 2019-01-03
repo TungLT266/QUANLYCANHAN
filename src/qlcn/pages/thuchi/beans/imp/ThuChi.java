@@ -52,12 +52,13 @@ public class ThuChi implements IThuChi {
 	}
 	
 	public void init() {
-		NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
-		String query = "select ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, phi, ghichuphi from THUCHI where ID = " + this.ID;
-		System.out.println(query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			NumberFormat formatter = new DecimalFormat("#,###,###,###.##");
+			String query = "select ngay, sotien, loai, noidungthuchi_fk, taikhoan_fk, taikhoanthanhtoan_fk, diengiai, phi, ghichuphi from THUCHI where ID = " + this.ID;
+			System.out.println(query);
+			
+			ResultSet rs = this.db.get(query);
+			
 			rs.next();
 			this.ngay = rs.getString("ngay");
 			this.sotien = formatter.format(Double.parseDouble(rs.getString("sotien")));
@@ -69,42 +70,46 @@ public class ThuChi implements IThuChi {
 			this.phi = formatter.format(Double.parseDouble(rs.getString("phi")));
 			this.ghichuphi = rs.getString("ghichuphi");
 			rs.close();
-		} catch (Exception e) {}
-		
-		createRs();
+			
+			createRs();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRs() {
-		String query = "";
-		String queryUser = "";
-		if(!this.userId.equals("100000")){
-			queryUser = " and USERID = " + this.userId;
-		}
-		
-		if(this.loai.length() > 0){
-			// Lấy nội dung thu chi
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
-			this.NoidungthuchiRs = this.db.get(query);
-		}
-		
-		// Lấy danh sách tài khoản có trạng thái hoạt động
-		query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
-		this.TaikhoanRs = this.db.get(query);
-		
-		if(this.taikhoanId.length() > 5){
-			// Lấy đơn vị của tài khoản
-			try {
+		try {
+			String query = "";
+			String queryUser = "";
+			if(!this.userId.equals("100000")){
+				queryUser = " and USERID = " + this.userId;
+			}
+			
+			if(this.loai.length() > 0){
+				// Lấy nội dung thu chi
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
+				this.NoidungthuchiRs = this.db.get(query);
+			}
+			
+			// Lấy danh sách tài khoản có trạng thái hoạt động
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			this.TaikhoanRs = this.db.get(query);
+			
+			if(this.taikhoanId.length() > 5){
+				// Lấy đơn vị của tài khoản
 				query = "select dv.ten from TAIKHOAN tk left join DONVI dv on dv.ID = tk.donvi_fk where tk.ID = " + this.taikhoanId;
 				ResultSet rs = this.db.get(query);
 				rs.next();
 				this.donvi = rs.getString("ten");
 				rs.close();
-			} catch (SQLException e) {}
-			
-			// Lấy tài khoản thanh toán thuộc tài khoản này
-			query = "select ID, '['+cast(ID as varchar)+'] '+(case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+SOTHE as ten"
-					+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and taikhoan_fk = " + this.taikhoanId + queryUser;
-			this.TaikhoanthanhtoanRs = this.db.get(query);
+				
+				// Lấy tài khoản thanh toán thuộc tài khoản này
+				query = "select ID, '['+cast(ID as varchar)+'] '+(case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+SOTHE as ten"
+						+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and taikhoan_fk = " + this.taikhoanId + queryUser;
+				this.TaikhoanthanhtoanRs = this.db.get(query);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -134,6 +139,7 @@ public class ThuChi implements IThuChi {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -166,6 +172,7 @@ public class ThuChi implements IThuChi {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -182,7 +189,9 @@ public class ThuChi implements IThuChi {
 		try {
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {

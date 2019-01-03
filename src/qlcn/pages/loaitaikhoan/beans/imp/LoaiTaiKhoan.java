@@ -31,16 +31,19 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 	}
 	
 	public void init() {
-		String query = "select TEN, TRANGTHAI from LOAITAIKHOAN where ID = " + this.ID;
-		System.out.println("init: "+query);
-		
-		ResultSet rs = this.db.get(query);
 		try {
+			String query = "select TEN, TRANGTHAI from LOAITAIKHOAN where ID = " + this.ID;
+			System.out.println("init: "+query);
+			
+			ResultSet rs = this.db.get(query);
+			
 			rs.next();
 			this.ten = rs.getString("TEN");
 			this.trangthai = rs.getString("TRANGTHAI");
 			rs.close();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean create() {
@@ -64,6 +67,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -90,6 +94,7 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 			try {
 				db.getConnection().rollback();
 			} catch (SQLException e1) {}
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -106,7 +111,9 @@ public class LoaiTaiKhoan implements ILoaiTaiKhoan {
 		try {
 			if (this.db != null)
 				this.db.shutDown();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUserId() {
