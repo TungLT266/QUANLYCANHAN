@@ -54,6 +54,14 @@ public class AjaxTop extends HttpServlet {
 			output += formatter.format(Double.parseDouble(rs.getString("tongthu"))) + "[==]";
 			output += formatter.format(Double.parseDouble(rs.getString("tongchi")));
 			rs.close();
+			
+			query = "select tk.ID, tk.sotien, dv.ten as donvi from TAIKHOAN tk inner join DONVI dv on dv.ID=tk.donvi_fk where tk.trangthai=1 and tk.USERID = " + userId;
+			rs = db.get(query);
+			while(rs.next()){
+				output += "[==]" + rs.getString("ID") + ",," + formatter.format(Double.parseDouble(rs.getString("sotien"))) + " " + rs.getString("donvi");
+			}
+			rs.close();
+			System.out.println(output);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

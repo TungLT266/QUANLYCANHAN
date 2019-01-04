@@ -9,10 +9,8 @@ String userTen = (String) session.getAttribute("userTen");
 String userId = (String) session.getAttribute("userId");
 
 Dbutils db = new Dbutils();
-String query = "select sotien from TAIKHOAN where id=110007 and USERID = " + userId;
-ResultSet rs;
-String str = "";
-int i = 0;
+String query = "select ID, ten from TAIKHOAN where trangthai=1 and USERID = " + userId;
+ResultSet rs = db.getScroll(query);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -40,11 +38,26 @@ int i = 0;
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				var taikhoan = xmlhttp.responseText;
 				if(taikhoan.length > 5){
-					document.getElementById('tongtien').innerHTML = "&nbsp;&nbsp;&nbsp;<b>Tổng tiền: </b>" + taikhoan.substr(0, taikhoan.indexOf("[==]"));
+					document.getElementById('tongtien').innerHTML = taikhoan.substr(0, taikhoan.indexOf("[==]"));
 					taikhoan = taikhoan.substr(taikhoan.indexOf("[==]")+4);
-					document.getElementById('tongthu').innerHTML = "&nbsp;&nbsp;&nbsp;<b>Tổng thu: </b>" + taikhoan.substr(0, taikhoan.indexOf("[==]"));
+					document.getElementById('tongthu').innerHTML = taikhoan.substr(0, taikhoan.indexOf("[==]"));
 					taikhoan = taikhoan.substr(taikhoan.indexOf("[==]")+4);
-					document.getElementById('tongchi').innerHTML = "&nbsp;&nbsp;&nbsp;<b>Tổng chi: </b>" + taikhoan;
+					
+					if(taikhoan.includes("[==]")){
+						document.getElementById('tongchi').innerHTML = taikhoan.substr(0, taikhoan.indexOf("[==]"));
+					} else {
+						document.getElementById('tongchi').innerHTML = taikhoan;
+					}
+					
+					while(1){
+						if(!taikhoan.includes("[==]")){
+							document.getElementById(taikhoan.substr(0, taikhoan.indexOf(",,"))).innerHTML = taikhoan.substr(taikhoan.indexOf(",,")+2);
+							break;
+						}
+						
+						taikhoan = taikhoan.substr(taikhoan.indexOf("[==]")+4);
+						document.getElementById(taikhoan.substr(0, taikhoan.indexOf(",,"))).innerHTML = taikhoan.substr(taikhoan.indexOf(",,")+2, taikhoan.indexOf("[==]")-8);
+					}
 				}
 			}
 		}
@@ -59,24 +72,31 @@ int i = 0;
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
 	<form name="topForm" method="post" action="/QUANLYCANHAN/LogoutSvl">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<tr style="height: 30px">
-				<td id="tongtien" align="left" style="font-size: 15px;" colspan="2">
-					<!-- <img src="../images/salesup_erp.jpg" width="140" height="50" align="right"> &nbsp;&nbsp; <img src="../images/logo.gif" height="30" align="right" style="padding-top: 10px;" /> &nbsp; -->
-					<!-- &nbsp;&nbsp;&nbsp;<b>Tổng tiền:</b>
-					<input type="text" name="tongtien" value=""> -->
-				</td>
+		<table width="100%" border="0" cellspacing="1" cellpadding="4">
+			<tr>
+				<th class="tbheader">Tổng tiền</th>
+				<th class="tbheader">Tổng thu tháng</th>
+				<th class="tbheader">Tổng chi tháng</th>
+				<%if(rs != null){ %>
+					<%while(rs.next()){ %>
+						<th class="tbheader"><%=rs.getString("ten") %></th>
+					<%} %>
+				<%} %>
 				<td align="right" class="blanc" rowspan="2">
 					<a href="../../LogoutSvl" target="_parent">Đăng xuất&nbsp;&nbsp;</a>
-					<!-- <div>
-						<iframe style="width: 200px; height: 20px" id="frame1" src="counter.jsp" frameborder="0" scrolling="no"></iframe>
-					</div> -->
 				</td>
 			</tr>
 			
 			<tr>
-				<td id="tongthu" align="left" style="font-size: 15px"></td>
-				<td id="tongchi" align="left" style="font-size: 15px"></td>
+				<th id="tongtien" align="center"></th>
+				<td id="tongthu" align="center"></td>
+				<td id="tongchi" align="center"></td>
+				<%rs.beforeFirst(); %>
+				<%if(rs != null){ %>
+					<%while(rs.next()){ %>
+						<td id="<%=rs.getString("id") %>" align="center"></td>
+					<%} %>
+				<%} %>
 			</tr>
 		</table>
 	</form>
@@ -84,13 +104,6 @@ int i = 0;
 	<script type="text/javascript">
 		replaces();
 	</script>
-	
-	<%-- <% while(true){ %>
-		<%i++; %>
-		<script language="JavaScript" type="text/javascript">
-			document.forms['topForm'].tongtien.value = "<%=i %>";
-		</script>
-	<%} %> --%>
 </body>
 </html>
 
