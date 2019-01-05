@@ -192,6 +192,10 @@ public class VayNo implements IVayNo {
 	
 	public boolean nhantra() {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
+			// Cập nhật tiền tài khoản nhận
+			//begin{
 			String query = "select loai, sotien from VAYNO where ID = " + this.ID;
 			ResultSet rs = this.db.get(query);
 			rs.next();
@@ -226,14 +230,26 @@ public class VayNo implements IVayNo {
 				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" - "+phint+") where ID = " + this.taikhoannhantra;
 			}
 			
-			db.getConnection().setAutoCommit(false);
-			
 			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật TAIKHOAN: " + query;
 				db.getConnection().rollback();
 				return false;
 			}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Vay/Nợ'"
+					+ " from TAIKHOAN where ID = " + this.taikhoannhantra;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return false;
+			}
+			//}end
+			
+			// Lưu thông tin trả
 			query = "update VAYNO set ngaytra='"+this.ngaytra+"',phi="+phint+",taikhoan_fk_nhan="+this.taikhoannhantra+",ghichu2=N'"+this.ghichu2+"',trangthai=2 where trangthai = 1 and ID = " + this.ID;
 			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật VAYNO: " + query;

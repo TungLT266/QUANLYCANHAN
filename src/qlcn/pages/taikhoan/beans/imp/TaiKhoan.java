@@ -105,8 +105,23 @@ public class TaiKhoan implements ITaiKhoan {
 					+ this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
-			if(!db.update(query)) {
+			if(!this.db.update(query)) {
 				this.msg = "Không thể tạo mới TAIKHOAN: " + query;
+				db.getConnection().rollback();
+				return false;
+			}
+			
+			query = "SELECT SCOPE_IDENTITY() AS ID";
+			ResultSet rs = this.db.get(query);
+			rs.next();
+			String idCreate = rs.getString("ID");
+			rs.close();
+			
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Tài khoản'"
+					+ " from TAIKHOAN where ID = " + idCreate;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
 				db.getConnection().rollback();
 				return false;
 			}
@@ -134,8 +149,17 @@ public class TaiKhoan implements ITaiKhoan {
 					+ "trangthai="+this.trangthai+", ngaysua='"+this.getDateTime()+"' where ID = " + this.ID;
 			System.out.println(query);
 			
-			if(!db.update(query)) {
+			if(this.db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật TAIKHOAN: " + query;
+				db.getConnection().rollback();
+				return false;
+			}
+			
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Tài khoản'"
+					+ " from TAIKHOAN where ID = " + this.ID;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
 				db.getConnection().rollback();
 				return false;
 			}

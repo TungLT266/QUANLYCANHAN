@@ -128,6 +128,10 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	
 	public void chot(String id) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
+			// Cập nhật tiền trong tài khoản
+			//begin{
 			String query = "select SOTIEN, LOAI, TAIKHOAN_FK, phi,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
@@ -154,14 +158,26 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" - "+phi+") where ID = " + taikhoan;
 			}
 			
-			db.getConnection().setAutoCommit(false);
-			
-			if(db.updateReturnInt(query) != 1) {
+			if(this.db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Thu/Chi'"
+					+ " from TAIKHOAN where ID = " + taikhoan;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhât thu/chi sang trạng thái đã chốt
 			query = "update THUCHI set trangthai = 1, ngaychot = '"+this.getDateTime()+"' where trangthai=0 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật THUCHI: " + query;
@@ -182,6 +198,10 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	
 	public void unchot(String id) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
+			// Cập nhật tiền trong tài khoản
+			//begin{
 			String query = "select SOTIEN, LOAI, TAIKHOAN_FK, phi,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
@@ -203,14 +223,26 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" + "+phi+") where ID = " + taikhoan;
 			}
 			
-			db.getConnection().setAutoCommit(false);
-			
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Thu/Chi'"
+					+ " from TAIKHOAN where ID = " + taikhoan;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhât thu/chi sang trạng thái chưa chốt
 			query = "update THUCHI set trangthai = 0 where trangthai=1 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật THUCHI: " + query;

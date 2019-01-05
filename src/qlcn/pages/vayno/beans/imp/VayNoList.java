@@ -105,6 +105,8 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
+			// Cập nhật tiền trong tài khoản
+			//begin{
 			String query = "select loai, sotien, taikhoan_fk_cho from VAYNO where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
@@ -119,10 +121,9 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 			double stientk = rs.getDouble("sotien");
 			rs.close();
 			
-			// Cập nhật tiền trong tài khoản
-			if(loai.equals("1")) {
+			if(loai.equals("1")) { // Nếu và vay
 				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoan;
-			} else {
+			} else { // Nếu là cho vay
 				if(stientk < sotien){
 					this.msg = "Số tiền trong tài khoản còn "+stientk+", không đủ để thực hiện.";
 					db.getConnection().rollback();
@@ -137,7 +138,21 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 				db.getConnection().rollback();
 				return;
 			}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Vay/Nợ'"
+					+ " from TAIKHOAN where ID = " + taikhoan;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhật vay nợ sang trạng thái đã chốt
 			query = "update VAYNO set trangthai = 1 where trangthai = 0 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể chốt VAYNO: " + query;
@@ -161,6 +176,8 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
+			// Cập nhật tiền trong tài khoản
+			//begin{
 			String query = "select loai, sotien, taikhoan_fk_cho from VAYNO where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
@@ -175,7 +192,7 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 			double stientk = rs.getDouble("sotien");
 			rs.close();
 			
-			if(loai.equals("1")) {
+			if(loai.equals("1")) { // Nếu là vay
 				if(stientk < sotien){
 					this.msg = "Số tiền trong tài khoản còn "+stientk+", không đủ để thực hiện.";
 					db.getConnection().rollback();
@@ -183,7 +200,7 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 				}
 				
 				query = "update TAIKHOAN set sotien = (sotien - "+sotien+") where ID = " + taikhoan;
-			} else {
+			} else { // Nếu là cho vay
 				query = "update TAIKHOAN set sotien = (sotien + "+sotien+") where ID = " + taikhoan;
 			}
 			
@@ -192,7 +209,21 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 				db.getConnection().rollback();
 				return;
 			}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Vay/Nợ'"
+					+ " from TAIKHOAN where ID = " + taikhoan;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhật sang trạng thái chưa chốt
 			query = "update VAYNO set trangthai = 0 where trangthai = 1 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể bỏ chốt VAYNO: " + query;
@@ -214,6 +245,10 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 	
 	public void unNhantra(String id) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
+			// Cập nhật tiền trong tài khoản nhận
+			//begin{
 			String query = "select loai, sotien, taikhoan_fk_nhan, phi from VAYNO where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
@@ -229,9 +264,9 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 			double stientk = rs.getDouble("sotien");
 			rs.close();
 			
-			if(loai.equals("1")) {
+			if(loai.equals("1")) { // Vay
 				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" + "+phi+") where ID = " + taikhoannhantra;
-			} else {
+			} else { // Cho vay
 				if(stientk + phi < sotien){
 					this.msg = "Số tiền trong tài khoản còn "+stientk+", không đủ để thực hiện.";
 					return;
@@ -240,27 +275,39 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" + "+phi+") where ID = " + taikhoannhantra;
 			}
 			
-			db.getConnection().setAutoCommit(false);
-			
-			if(db.updateReturnInt(query) != 1) {
+			if(this.db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật TAIKHOAN: " + query;
-				db.getConnection().rollback();
+				this.db.getConnection().rollback();
 				return;
 			}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Vay/Nợ'"
+					+ " from TAIKHOAN where ID = " + taikhoannhantra;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				this.db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhật sang trạng thái đã chốt
 			query = "update VAYNO set trangthai=1 where trangthai = 2 and ID = " + id;
-			if(db.updateReturnInt(query) != 1) {
+			if(this.db.updateReturnInt(query) != 1) {
 				this.msg = "Không thể cập nhật VAYNO: " + query;
 				db.getConnection().rollback();
 				return;
 			}
 			
-			db.getConnection().commit();
-			db.getConnection().setAutoCommit(true);
+			this.db.getConnection().commit();
+			this.db.getConnection().setAutoCommit(true);
 		} catch (Exception e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
-				db.getConnection().rollback();
+				this.db.getConnection().rollback();
 			} catch (SQLException e1) {}
 			e.printStackTrace();
 			return;
@@ -269,21 +316,21 @@ public class VayNoList extends Phan_Trang implements IVayNoList {
 	
 	public void delete(String id) {
 		try {
-			db.getConnection().setAutoCommit(false);
+			this.db.getConnection().setAutoCommit(false);
 			
 			String query = "update VAYNO set trangthai = 3 where trangthai = 0 and ID = " + id;
-			if(db.updateReturnInt(query) != 1) {
+			if(this.db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể xóa VAYNO: " + query;
-	    		db.getConnection().rollback();
+	    		this.db.getConnection().rollback();
 	    		return;
 	    	}
 			
-			db.getConnection().commit();
-			db.getConnection().setAutoCommit(true);
+			this.db.getConnection().commit();
+			this.db.getConnection().setAutoCommit(true);
 		} catch (SQLException e) {
 			this.msg = "Loi: " + e.getMessage();
 			try {
-				db.getConnection().rollback();
+				this.db.getConnection().rollback();
 			} catch (SQLException e1) {}
 			e.printStackTrace();
 		}

@@ -123,6 +123,10 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 	
 	public void chot(String id) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
+			// Cập nhật tiền trong tài khoản chuyển và nhận
+			//begin{
 			String query = "select ct.TAIKHOANCHUYEN_FK, ct.SOTIENCHUYEN, ct.TAIKHOANNHAN_FK, ct.SOTIENNHAN, ct.TKPHI, ct.PHI, tkc.sotien as tientkchuyen, tkn.sotien as tientknhan"
 					+ "\n from CHUYENTIEN ct"
 					+ "\n inner join TAIKHOAN tkc on tkc.ID=ct.TAIKHOANCHUYEN_FK"
@@ -171,14 +175,29 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 						+ "\n update TAIKHOAN set sotien = sotien + "+sotiennhan+" where ID = " + taikhoannhan;
 			}
 			
-			db.getConnection().setAutoCommit(false);
-			
-			if(db.updateReturnInt(query) != 1) {
+			if(this.db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
+					+ " from TAIKHOAN where ID = " + taikhoanchuyen;
+			query += " insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
+					+ " from TAIKHOAN where ID = " + taikhoannhan;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhật chuyển tiền sang trạng thái đã chốt
 			query = "update CHUYENTIEN set trangthai = 1, ngaychot = '"+this.getDateTime()+"' where trangthai=0 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật CHUYENTIEN: " + query;
@@ -199,6 +218,10 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 	
 	public void unchot(String id) {
 		try {
+			db.getConnection().setAutoCommit(false);
+			
+			// Cập nhật tiền trong tài khoản chuyển và nhận
+			//begin{
 			String query = "select TAIKHOANCHUYEN_FK, SOTIENCHUYEN, TAIKHOANNHAN_FK, SOTIENNHAN, TKPHI, PHI, (select sotien from TAIKHOAN where ID=ct.TAIKHOANNHAN_FK) as tientknhan"
 					+ " from CHUYENTIEN ct where ID = " + id;
 			ResultSet rs = this.db.get(query);
@@ -238,14 +261,29 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 						+ "\n update TAIKHOAN set sotien = sotien - "+sotiennhan+" where ID = " + taikhoannhan;
 			}
 			
-			db.getConnection().setAutoCommit(false);
-			
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
+			//}end
 			
+			// Lưu log cho tài khoản
+			//begin{
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
+					+ " from TAIKHOAN where ID = " + taikhoanchuyen;
+			query += " insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
+					+ " from TAIKHOAN where ID = " + taikhoannhan;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			//}end
+			
+			// Cập nhật chuyển tiền sang trang thái chưa chốt
 			query = "update CHUYENTIEN set trangthai = 0 where trangthai=1 and ID = " + id;
 			if(db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể cập nhật CHUYENTIEN: " + query;
