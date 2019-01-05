@@ -117,6 +117,7 @@ public class TaiKhoan implements ITaiKhoan {
 			String idCreate = rs.getString("ID");
 			rs.close();
 			
+			// Lưu log tài khoản
 			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
 					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Tài khoản'"
 					+ " from TAIKHOAN where ID = " + idCreate;

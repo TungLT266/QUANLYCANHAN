@@ -74,6 +74,16 @@ public class TaiKhoanList extends Phan_Trang implements ITaiKhoanList {
 	    		return;
 	    	}
 			
+			// Lưu log tài khoản
+			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
+					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Tài khoản'"
+					+ " from TAIKHOAN where ID = " + id;
+			if(this.db.updateReturnInt(query) != 1) {
+				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+				db.getConnection().rollback();
+				return;
+			}
+			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
 		} catch (SQLException e) {

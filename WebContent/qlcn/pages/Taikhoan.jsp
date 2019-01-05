@@ -240,10 +240,10 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 																	</a>
 																<%} %>
 																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
-																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" border=0>
 																</a>
-																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
-																	<img title="Hiển thị" src="../images/log20.png" alt="Hien thi" title="Hien thi" border=0>
+																<a href="/QUANLYCANHAN/TaiKhoanLogSvl?userId=<%=userId %>&id=<%=TaikhoanRs.getString("ID") %>">
+																	<img title="View Log" src="../images/log20.png" alt="ViewLog" border=0>
 																</a>
 															</td>
 															</tr>

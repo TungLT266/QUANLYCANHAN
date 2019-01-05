@@ -237,7 +237,7 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 																	</a>
 																<%} %>
 																<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=loaitaikhoanRs.getString("ID") %>">
-																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" border=0>
 																</a>
 																<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=copy&id=<%=loaitaikhoanRs.getString("ID") %>">
 																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>

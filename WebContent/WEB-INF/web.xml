@@ -195,6 +195,27 @@
     <url-pattern>/ChuyenTienUpdateSvl</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <description></description>
+    <display-name>TaiKhoanLogSvl</display-name>
+    <servlet-name>TaiKhoanLogSvl</servlet-name>
+    <servlet-class>qlcn.pages.taikhoan.servlets.TaiKhoanLogSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TaiKhoanLogSvl</servlet-name>
+    <url-pattern>/TaiKhoanLogSvl</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>CaiDatHienThiSvl</display-name>
+    <servlet-name>CaiDatHienThiSvl</servlet-name>
+    <servlet-class>qlcn.pages.caidathienthi.servlets.CaiDatHienThiSvl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaiDatHienThiSvl</servlet-name>
+    <url-pattern>/CaiDatHienThiSvl</url-pattern>
+  </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
