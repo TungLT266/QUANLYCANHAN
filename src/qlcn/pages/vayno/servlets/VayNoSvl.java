@@ -52,24 +52,6 @@ public class VayNoSvl extends HttpServlet {
 	    } else {
 	    	IVayNoList obj = new VayNoList();
 	    	obj.setUserId(userId);
-	    	
-	    	String id = request.getParameter("id");
-	    	
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
-			if(action.equals("delete")) {
-		    	obj.delete(id);
-		    } else if(action.equals("unnhantra")) {
-		    	obj.unNhantra(id);
-		    } else if(action.equals("chot")) {
-		    	obj.chot(id);
-		    } else if(action.equals("unchot")) {
-		    	obj.unChot(id);
-		    } else if(action.equals("unnhantra")) {
-		    	obj.unNhantra(id);
-		    }
 			
 	    	obj.init();
 	    	
@@ -165,7 +147,19 @@ public class VayNoSvl extends HttpServlet {
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
 					obj.deleteDB(pinUser);
-				}
+				} else if(action.trim().equals("chot")) {
+					String idrow = request.getParameter("idrow");
+					obj.chot(idrow);
+				} else if(action.trim().equals("unchot")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.unChot(idrow);
+				} else if(action.trim().equals("delete")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.delete(idrow);
+				} else if(action.equals("unnhantra")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.unNhantra(idrow);
+			    }
 				
 		    	obj.init();
 		    	

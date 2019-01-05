@@ -52,15 +52,6 @@ public class NoiDungThuChiSvl extends HttpServlet {
 	    } else {
 	    	INoiDungThuChiList obj = new NoiDungThuChiList();
 	    	obj.setUserId(userId);
-	    	
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
-			if(action.trim().equals("delete")) {
-				String id = request.getParameter("id");
-		    	obj.delete(id);
-		    }
 			
 	    	obj.init();
 	    	
@@ -124,8 +115,6 @@ public class NoiDungThuChiSvl extends HttpServlet {
 				if(trangthai != null)
 					obj.setTrangthai(trangthai);
 				
-				System.out.println("jfeifefejfjoe:"+trangthai);
-				
 				String soitems = request.getParameter("soitems");
 				if(soitems == null)
 					soitems = "";
@@ -137,6 +126,9 @@ public class NoiDungThuChiSvl extends HttpServlet {
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
 					obj.deleteDB(pinUser);
+				} else if(action.trim().equals("delete")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.delete(idrow);
 				}
 				
 		    	obj.init();

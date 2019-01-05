@@ -52,15 +52,6 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 	    } else {
 	    	ILoaiTaiKhoanList obj = new LoaiTaiKhoanList();
 	    	obj.setUserId(userId);
-	    	
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
-			if(action.trim().equals("delete")) {
-				String id = request.getParameter("id");
-		    	obj.delete(id);
-		    }
 			
 	    	obj.init();
 	    	
@@ -131,6 +122,9 @@ public class LoaiTaiKhoanSvl extends HttpServlet {
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
 					obj.deleteDB(pinUser);
+				} else if(action.trim().equals("delete")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.delete(idrow);
 				}
 				
 		    	obj.init();

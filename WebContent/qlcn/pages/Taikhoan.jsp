@@ -38,21 +38,28 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
-	    document.forms['FormTk'].id.value = "";
-	    document.forms['FormTk'].ten.value = "";
-	    document.forms['FormTk'].trangthai.value = "";
-	    document.forms['FormTk'].action.value = 'search';
-		document.forms['FormTk'].submit();
+	    document.forms['MainForm'].id.value = "";
+	    document.forms['MainForm'].ten.value = "";
+	    document.forms['MainForm'].trangthai.value = "";
+	    document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
 	}
 	
 	function search() {
-		document.forms['FormTk'].action.value = 'search';
-		document.forms['FormTk'].submit();
+		document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
+	}
+	
+	function deleterow(id) {
+		if(!confirm('Bạn thật sự muốn xóa?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'delete';
+		document.forms['MainForm'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormTk'].action.value = 'new';
-		document.forms['FormTk'].submit();
+		document.forms['MainForm'].action.value = 'new';
+		document.forms['MainForm'].submit();
 	}
 	
 	function deleteDB() {
@@ -61,9 +68,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 			return false;
 		}
 		
-		document.forms['FormTk'].pinUser.value = pin;
-		document.forms['FormTk'].action.value = 'deletedb';
-		document.forms['FormTk'].submit();
+		document.forms['MainForm'].pinUser.value = pin;
+		document.forms['MainForm'].action.value = 'deletedb';
+		document.forms['MainForm'].submit();
 	}
 
 	//cho phép nhập phím enter, 0->9
@@ -82,8 +89,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormTk" method="post" action="/QUANLYCANHAN/TaiKhoanSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/TaiKhoanSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
+		<input type="hidden" name="idrow" value="">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -125,16 +133,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 											</td>
 										</tr>
 										<tr>
-											<%-- <td class="plainlabel">Loại</td>
-											<td class="plainlabel">
-												<select name="loai" onchange="search();">
-													<option value=""></option>
-													<option value="1" <%if(obj.getLoai().equals("1")){ %>selected<%} %>>TIỀN MẶT</option>
-													<option value="2" <%if(obj.getLoai().equals("2")){ %>selected<%} %>>ATM</option>
-													<option value="3" <%if(obj.getLoai().equals("3")){ %>selected<%} %>>VISA</option>
-												</select>
-											</td> --%>
-										
 											<td class="plainlabel">Trạng thái</td>
 											<td class="plainlabel">
 												<select name="trangthai" class="select2" style="width: 200px;" onchange="search();">
@@ -167,9 +165,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 
 										<tr class="plainlabel">
 											<td colspan="4">
-												<!-- <a class="button2" href="javascript:search();">
-													<img style="top: -4px;" src="../Images/button.png" alt="">Tìm kiếm
-												</a>&nbsp;&nbsp;&nbsp;&nbsp; -->
 												&nbsp;&nbsp;
 												<a class="button2" href="javascript:clearform()">
 													<img style="top: -4px;" src="../images/Clear32.png" alt="">Clear
@@ -225,15 +220,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td><%=TaikhoanRs.getString("TEN") %></td>
 															<td align="center"><%=formatter.format(Double.parseDouble(TaikhoanRs.getString("SOTIEN"))) + " " + TaikhoanRs.getString("donvi") %></td>
 															
-															<%-- <%String loai = TaikhoanRs.getString("loai").trim(); %>
-															<%if(loai.equals("1")) { %>
-																<td align="center">Tiền mặt</td>
-															<%} else if(loai.equals("2")){ %>
-																<td align="center">ATM</td>
-															<%} else if(loai.equals("3")) { %>
-																<td align="center">VISA</td>
-															<%} %> --%>
-															
 															<%if(tt.equals("0")) { %>
 																<td align="center" style="color: red;">Ngưng hoạt động</td>
 															<%} else if(tt.equals("2")){ %>
@@ -245,24 +231,20 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=TaikhoanRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=TaikhoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
-																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=copy&id=<%=TaikhoanRs.getString("ID") %>">
-																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
-																</a>
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=update&id=<%=TaikhoanRs.getString("ID") %>">
 																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId%>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
-																	<a href="/QUANLYCANHAN/TaiKhoanSvl?userId=<%=userId%>&action=delete&id=<%=TaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																	<a href="javascript:deleterow('<%=TaikhoanRs.getString("ID") %>')">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
-																<%} else { %>
-																	<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
 																<%} %>
+																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
+																<a href="/QUANLYCANHAN/TaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=TaikhoanRs.getString("ID") %>">
+																	<img title="Hiển thị" src="../images/log20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
 															</td>
 															</tr>
 															<%m++; %>

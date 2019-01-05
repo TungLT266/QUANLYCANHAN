@@ -34,21 +34,28 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
-	    document.forms['FormLtk'].id.value = "";
-	    document.forms['FormLtk'].ten.value = "";
-	    document.forms['FormLtk'].trangthai.value = "";
-	    document.forms['FormLtk'].action.value = 'search';
-		document.forms['FormLtk'].submit();
+	    document.forms['MainForm'].id.value = "";
+	    document.forms['MainForm'].ten.value = "";
+	    document.forms['MainForm'].trangthai.value = "";
+	    document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
+	}
+	
+	function deleterow(id) {
+		if(!confirm('Bạn thật sự muốn xóa?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'delete';
+		document.forms['MainForm'].submit();
 	}
 	
 	function search() {
-		document.forms['FormLtk'].action.value = 'search';
-		document.forms['FormLtk'].submit();
+		document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormLtk'].action.value = 'new';
-		document.forms['FormLtk'].submit();
+		document.forms['MainForm'].action.value = 'new';
+		document.forms['MainForm'].submit();
 	}
 	
 	function deleteDB() {
@@ -57,9 +64,9 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 			return false;
 		}
 		
-		document.forms['FormLtk'].pinUser.value = pin;
-		document.forms['FormLtk'].action.value = 'deletedb';
-		document.forms['FormLtk'].submit();
+		document.forms['MainForm'].pinUser.value = pin;
+		document.forms['MainForm'].action.value = 'deletedb';
+		document.forms['MainForm'].submit();
 	}
 
 	//cho phép nhập phím enter, 0->9
@@ -78,8 +85,9 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormLtk" method="post" action="/QUANLYCANHAN/LoaiTaiKhoanSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/LoaiTaiKhoanSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
+		<input type="hidden" name="idrow" value="">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -220,24 +228,20 @@ ResultSet loaitaikhoanRs = obj.getLoaitaikhoanRs();
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYTAO") %></td>
 															<td align="center"><%=loaitaikhoanRs.getString("NGAYSUA") %></td>
 															<td align="center">
-																<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=copy&id=<%=loaitaikhoanRs.getString("ID") %>">
-																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
-																</a>
 																<% if(tt.equals("1") || tt.equals("0")){ %>
 																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=update&id=<%=loaitaikhoanRs.getString("ID") %>">
 																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId%>&action=display&id=<%=loaitaikhoanRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
-																	<a href="/QUANLYCANHAN/LoaiTaiKhoanSvl?userId=<%=userId%>&action=delete&id=<%=loaitaikhoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																	<a href="javascript:deleterow('<%=loaitaikhoanRs.getString("ID") %>')">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
-																<%} else { %>
-																	<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=loaitaikhoanRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
 																<%} %>
+																<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=display&id=<%=loaitaikhoanRs.getString("ID") %>">
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
+																<a href="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl?userId=<%=userId %>&action=copy&id=<%=loaitaikhoanRs.getString("ID") %>">
+																	<img title="Copy" src="../images/copy20.png" alt="Copy" width="20" height="20" longdesc="Copy" border=0>
+																</a>
 															</td></tr>
 															<%m++; %>
 														<%} %>

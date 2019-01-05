@@ -21,7 +21,7 @@ ILoaiTaiKhoan obj = (ILoaiTaiKhoan) session.getAttribute("obj");
 <link type="text/css" rel="stylesheet" href="../css/mybutton.css">
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormLtk" method="post" action="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/LoaiTaiKhoanUpdateSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
 		<input type="hidden" name="id" value="<%=obj.getID() %>">
 		<input type="hidden" name="action" value="">

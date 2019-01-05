@@ -34,22 +34,29 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
-	    document.forms['FormNdtc'].id.value = "";
-	    document.forms['FormNdtc'].loai.value = "";
-	    document.forms['FormNdtc'].ten.value = "";
-	    document.forms['FormNdtc'].trangthai.value = "";
-	    document.forms['FormNdtc'].action.value = 'search';
-		document.forms['FormNdtc'].submit();
+	    document.forms['MainForm'].id.value = "";
+	    document.forms['MainForm'].loai.value = "";
+	    document.forms['MainForm'].ten.value = "";
+	    document.forms['MainForm'].trangthai.value = "";
+	    document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
 	}
 	
 	function search() {
-		document.forms['FormNdtc'].action.value = 'search';
-		document.forms['FormNdtc'].submit();
+		document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
+	}
+	
+	function deleterow(id) {
+		if(!confirm('Bạn thật sự muốn xóa?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'delete';
+		document.forms['MainForm'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormNdtc'].action.value = 'new';
-		document.forms['FormNdtc'].submit();
+		document.forms['MainForm'].action.value = 'new';
+		document.forms['MainForm'].submit();
 	}
 	
 	function deleteDB() {
@@ -58,9 +65,9 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 			return false;
 		}
 		
-		document.forms['FormNdtc'].pinUser.value = pin;
-		document.forms['FormNdtc'].action.value = 'deletedb';
-		document.forms['FormNdtc'].submit();
+		document.forms['MainForm'].pinUser.value = pin;
+		document.forms['MainForm'].action.value = 'deletedb';
+		document.forms['MainForm'].submit();
 	}
 
 	//cho phép nhập phím enter, 0->9
@@ -79,8 +86,9 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormNdtc" method="post" action="/QUANLYCANHAN/NoiDungThuChiSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/NoiDungThuChiSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
+		<input type="hidden" name="idrow" value="">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -250,20 +258,16 @@ ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
 															<td align="center"><%=NoidungthuchiRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
-																		<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId %>&action=update&id=<%=NoidungthuchiRs.getString("ID") %>">
-																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
-																		</a>
-																		<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId%>&action=display&id=<%=NoidungthuchiRs.getString("ID") %>">
-																			<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																		</a>
-																		<a href="/QUANLYCANHAN/NoiDungThuChiSvl?userId=<%=userId%>&action=delete&id=<%=NoidungthuchiRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
-																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
-																		</a>
-																<%} else { %>
-																	<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId %>&action=display&id=<%=NoidungthuchiRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId %>&action=update&id=<%=NoidungthuchiRs.getString("ID") %>">
+																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
+																	</a>
+																	<a href="javascript:deleterow('<%=NoidungthuchiRs.getString("ID") %>')">
+																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
 																<%} %>
+																<a href="/QUANLYCANHAN/NoiDungThuChiUpdateSvl?userId=<%=userId %>&action=display&id=<%=NoidungthuchiRs.getString("ID") %>">
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
 															</td></tr>
 															<%m++; %>
 														<%} %>

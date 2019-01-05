@@ -52,20 +52,6 @@ public class ChuyenTienSvl extends HttpServlet {
 	    } else {
 	    	IChuyenTienList obj = new ChuyenTienList();
 	    	obj.setUserId(userId);
-	    	
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
-			String id = request.getParameter("id");
-			
-			if(action.trim().equals("chot")) {
-				obj.chot(id);
-			} else if(action.trim().equals("unchot")) {
-				obj.unchot(id);
-			} else if(action.trim().equals("delete")) {
-		    	obj.delete(id);
-		    }
 			
 	    	obj.init();
 	    	
@@ -162,6 +148,15 @@ public class ChuyenTienSvl extends HttpServlet {
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
 					obj.deleteDB(pinUser);
+				} else if(action.trim().equals("chot")) {
+					String idrow = request.getParameter("idrow");
+					obj.chot(idrow);
+				} else if(action.trim().equals("unchot")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.unchot(idrow);
+				} else if(action.trim().equals("delete")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.delete(idrow);
 				}
 				
 		    	obj.init();

@@ -51,27 +51,47 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
-	    document.forms['FormCt'].id.value = "";
-	    document.forms['FormCt'].tungay.value = "";
-	    document.forms['FormCt'].denngay.value = "";
-	    document.forms['FormCt'].sotientu.value = "";
-	    document.forms['FormCt'].sotienden.value = "";
-	    document.forms['FormCt'].taikhoanchuyenId.value = "";
-	    document.forms['FormCt'].taikhoannhanId.value = "";
-	    document.forms['FormCt'].noidung.value = "";
-	    document.forms['FormCt'].trangthai.value = "";
-	    document.forms['FormCt'].action.value = 'search';
-		document.forms['FormCt'].submit();
+	    document.forms['MainForm'].id.value = "";
+	    document.forms['MainForm'].tungay.value = "";
+	    document.forms['MainForm'].denngay.value = "";
+	    document.forms['MainForm'].sotientu.value = "";
+	    document.forms['MainForm'].sotienden.value = "";
+	    document.forms['MainForm'].taikhoanchuyenId.value = "";
+	    document.forms['MainForm'].taikhoannhanId.value = "";
+	    document.forms['MainForm'].noidung.value = "";
+	    document.forms['MainForm'].trangthai.value = "";
+	    document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
 	}
 	
 	function search() {
-		document.forms['FormCt'].action.value = 'search';
-		document.forms['FormCt'].submit();
+		document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
+	}
+	
+	function deleterow(id) {
+		if(!confirm('Bạn thật sự muốn xóa?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'delete';
+		document.forms['MainForm'].submit();
+	}
+	
+	function chot(id) {
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'chot';
+		document.forms['MainForm'].submit();
+	}
+	
+	function unchot(id) {
+		if(!confirm('Bạn thật sự muốn bỏ chốt?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'unchot';
+		document.forms['MainForm'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormCt'].action.value = 'new';
-		document.forms['FormCt'].submit();
+		document.forms['MainForm'].action.value = 'new';
+		document.forms['MainForm'].submit();
 	}
 	
 	function deleteDB() {
@@ -80,9 +100,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 			return false;
 		}
 		
-		document.forms['FormCt'].pinUser.value = pin;
-		document.forms['FormCt'].action.value = 'deletedb';
-		document.forms['FormCt'].submit();
+		document.forms['MainForm'].pinUser.value = pin;
+		document.forms['MainForm'].action.value = 'deletedb';
+		document.forms['MainForm'].submit();
 	}
 
 	//cho phép nhập phím enter, 0->9
@@ -101,8 +121,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormCt" method="post" action="/QUANLYCANHAN/ChuyenTienSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/ChuyenTienSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
+		<input type="hidden" name="idrow" value="">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -305,30 +326,23 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															<td align="center"><%=ChuyentienRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("0")){ %>
-																	<a href="/QUANLYCANHAN/ChuyenTienSvl?userId=<%=userId %>&action=chot&id=<%=ChuyentienRs.getString("ID") %>">
+																	<a href="javascript:chot('<%=ChuyentienRs.getString("ID") %>')">
 																		<img title="Chốt" src="../images/Chot.png" alt="Chot" width="20" height="20" longdesc="Chot" border=0>
 																	</a>
 																	<a href="/QUANLYCANHAN/ChuyenTienUpdateSvl?userId=<%=userId %>&action=update&id=<%=ChuyentienRs.getString("ID") %>">
 																		<img title="Edit" src="../images/Edit20.png" alt="Edit" width="20" height="20" longdesc="Edit" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/ChuyenTienUpdateSvl?userId=<%=userId%>&action=display&id=<%=ChuyentienRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
-																	<a href="/QUANLYCANHAN/ChuyenTienSvl?userId=<%=userId%>&action=delete&id=<%=ChuyentienRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																	<a href="javascript:deleterow('<%=ChuyentienRs.getString("ID") %>')">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
 																<%} else if(tt.equals("1")){ %>
-																	<a href="/QUANLYCANHAN/ChuyenTienSvl?userId=<%=userId %>&action=unchot&id=<%=ChuyentienRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn bỏ chốt?')) return false;">
+																	<a href="javascript:unchot('<%=ChuyentienRs.getString("ID") %>')">
 																		<img title="Bỏ chốt" src="../images/unChot.png" alt="Bo chot" width="20" height="20" longdesc="Bo chot" border=0>
 																	</a>
-																	<a href="/QUANLYCANHAN/ChuyenTienUpdateSvl?userId=<%=userId%>&action=display&id=<%=ChuyentienRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
-																<%} else { %>
-																	<a href="/QUANLYCANHAN/ChuyenTienUpdateSvl?userId=<%=userId %>&action=display&id=<%=ChuyentienRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
 																<%} %>
+																<a href="/QUANLYCANHAN/ChuyenTienUpdateSvl?userId=<%=userId %>&action=display&id=<%=ChuyentienRs.getString("ID") %>">
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
 															</td></tr>
 															<%m++; %>
 														<%} %>

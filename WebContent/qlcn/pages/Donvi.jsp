@@ -34,22 +34,29 @@ ResultSet DonviRs = obj.getDonviRs();
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
-	    document.forms['FormDv'].id.value = "";
-	    document.forms['FormDv'].ten.value = "";
-	    document.forms['FormDv'].diengiai.value = "";
-	    document.forms['FormDv'].trangthai.value = "";
-	    document.forms['FormDv'].action.value = 'search';
-		document.forms['FormDv'].submit();
+	    document.forms['MainForm'].id.value = "";
+	    document.forms['MainForm'].ten.value = "";
+	    document.forms['MainForm'].diengiai.value = "";
+	    document.forms['MainForm'].trangthai.value = "";
+	    document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
 	}
 	
 	function search() {
-		document.forms['FormDv'].action.value = 'search';
-		document.forms['FormDv'].submit();
+		document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
+	}
+	
+	function deleterow(id) {
+		if(!confirm('Bạn thật sự muốn xóa?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'delete';
+		document.forms['MainForm'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormDv'].action.value = 'new';
-		document.forms['FormDv'].submit();
+		document.forms['MainForm'].action.value = 'new';
+		document.forms['MainForm'].submit();
 	}
 	
 	function deleteDB() {
@@ -58,9 +65,9 @@ ResultSet DonviRs = obj.getDonviRs();
 			return false;
 		}
 		
-		document.forms['FormDv'].pinUser.value = pin;
-		document.forms['FormDv'].action.value = 'deletedb';
-		document.forms['FormDv'].submit();
+		document.forms['MainForm'].pinUser.value = pin;
+		document.forms['MainForm'].action.value = 'deletedb';
+		document.forms['MainForm'].submit();
 	}
 
 	//cho phép nhập phím enter, 0->9
@@ -79,8 +86,9 @@ ResultSet DonviRs = obj.getDonviRs();
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormDv" method="post" action="/QUANLYCANHAN/DonViSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/DonViSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
+		<input type="hidden" name="idrow" value="">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -228,20 +236,16 @@ ResultSet DonviRs = obj.getDonviRs();
 															<td align="center"><%=DonviRs.getString("NGAYSUA") %></td>
 															<td align="center">
 																<% if(tt.equals("1") || tt.equals("0")){ %>
-																		<a href="/QUANLYCANHAN/DonViUpdateSvl?userId=<%=userId %>&action=update&id=<%=DonviRs.getString("ID") %>">
-																			<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
-																		</a>
-																		<a href="/QUANLYCANHAN/DonViUpdateSvl?userId=<%=userId%>&action=display&id=<%=DonviRs.getString("ID") %>">
-																			<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																		</a>
-																		<a href="/QUANLYCANHAN/DonViSvl?userId=<%=userId%>&action=delete&id=<%=DonviRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
-																			<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
-																		</a>
-																<%} else { %>
-																	<a href="/QUANLYCANHAN/DonViUpdateSvl?userId=<%=userId %>&action=display&id=<%=DonviRs.getString("ID") %>">
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																	<a href="/QUANLYCANHAN/DonViUpdateSvl?userId=<%=userId %>&action=update&id=<%=DonviRs.getString("ID") %>">
+																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
+																	</a>
+																	<a href="javascript:deleterow('<%=DonviRs.getString("ID") %>')">
+																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
 																<%} %>
+																<a href="/QUANLYCANHAN/DonViUpdateSvl?userId=<%=userId %>&action=display&id=<%=DonviRs.getString("ID") %>">
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
 															</td>
 															</tr>
 															<%m++; %>

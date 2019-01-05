@@ -52,15 +52,6 @@ public class TaiKhoanSvl extends HttpServlet {
 	    } else {
 	    	ITaiKhoanList obj = new TaiKhoanList();
 	    	obj.setUserId(userId);
-	    	
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
-			if(action.trim().equals("delete")) {
-				String id = request.getParameter("id");
-		    	obj.delete(id);
-		    }
 			
 	    	obj.init();
 	    	
@@ -104,7 +95,7 @@ public class TaiKhoanSvl extends HttpServlet {
 				session.setAttribute("userTen", userTen);
 	    		session.setAttribute("userId", userId);
 	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/TaikhoanNew.jsp");
-		    } else {
+			} else {
 		    	ITaiKhoanList obj = new TaiKhoanList();
 		    	obj.setUserId(userId);
 		    	
@@ -133,6 +124,9 @@ public class TaiKhoanSvl extends HttpServlet {
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
 					obj.deleteDB(pinUser);
+				} else if(action.trim().equals("delete")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.delete(idrow);
 				}
 				
 		    	obj.init();
@@ -141,7 +135,7 @@ public class TaiKhoanSvl extends HttpServlet {
 		    	session.setAttribute("userTen", userTen);
 	    		session.setAttribute("userId", userId);
 	    		response.sendRedirect("/QUANLYCANHAN/qlcn/pages/Taikhoan.jsp");
-		    }
+			}
 	    }
 	}
 

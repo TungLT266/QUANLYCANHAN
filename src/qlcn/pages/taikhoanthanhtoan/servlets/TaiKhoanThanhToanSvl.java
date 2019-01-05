@@ -52,15 +52,6 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 	    } else {
 	    	ITaiKhoanThanhToanList obj = new TaiKhoanThanhToanList();
 	    	obj.setUserId(userId);
-	    	
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
-			if(action.trim().equals("delete")) {
-				String id = request.getParameter("id");
-		    	obj.delete(id);
-		    }
 			
 	    	obj.init();
 	    	
@@ -141,6 +132,9 @@ public class TaiKhoanThanhToanSvl extends HttpServlet {
 					obj.setAttribute(request, action, "list", "crrApprSplitting", "nxtApprSplitting");
 				} else if(action.equals("deletedb")) {
 					obj.deleteDB(pinUser);
+				} else if(action.trim().equals("delete")) {
+					String idrow = request.getParameter("idrow");
+			    	obj.delete(idrow);
 				}
 				
 		    	obj.init();

@@ -35,23 +35,30 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 
 <script language="javascript" type="text/javascript">
 	function clearform() { 
-	    document.forms['FormTktt'].id.value = "";
-	    document.forms['FormTktt'].loaithe.value = "";
-	    document.forms['FormTktt'].ten.value = "";
-	    document.forms['FormTktt'].taikhoan.value = "";
-	    document.forms['FormTktt'].trangthai.value = "";
-	    document.forms['FormTktt'].action.value = 'search';
-		document.forms['FormTktt'].submit();
+	    document.forms['MainForm'].id.value = "";
+	    document.forms['MainForm'].loaithe.value = "";
+	    document.forms['MainForm'].ten.value = "";
+	    document.forms['MainForm'].taikhoan.value = "";
+	    document.forms['MainForm'].trangthai.value = "";
+	    document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
 	}
 	
 	function search() {
-		document.forms['FormTktt'].action.value = 'search';
-		document.forms['FormTktt'].submit();
+		document.forms['MainForm'].action.value = 'search';
+		document.forms['MainForm'].submit();
+	}
+	
+	function deleterow(id) {
+		if(!confirm('Bạn thật sự muốn xóa?')) return false;
+		document.forms['MainForm'].idrow.value = id;
+		document.forms['MainForm'].action.value = 'delete';
+		document.forms['MainForm'].submit();
 	}
 	
 	function newform() {
-		document.forms['FormTktt'].action.value = 'new';
-		document.forms['FormTktt'].submit();
+		document.forms['MainForm'].action.value = 'new';
+		document.forms['MainForm'].submit();
 	}
 	
 	function deleteDB() {
@@ -60,9 +67,9 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 			return false;
 		}
 		
-		document.forms['FormTktt'].pinUser.value = pin;
-		document.forms['FormTktt'].action.value = 'deletedb';
-		document.forms['FormTktt'].submit();
+		document.forms['MainForm'].pinUser.value = pin;
+		document.forms['MainForm'].action.value = 'deletedb';
+		document.forms['MainForm'].submit();
 	}
 
 	//cho phép nhập phím enter, 0->9
@@ -90,8 +97,9 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 </script>
 </head>
 <body leftmargin="0" bottommargin="0" topmargin="0" rightmargin="0">
-	<form name="FormTktt" method="post" action="/QUANLYCANHAN/TaiKhoanThanhToanSvl">
+	<form name="MainForm" method="post" action="/QUANLYCANHAN/TaiKhoanThanhToanSvl">
 		<input type="hidden" name="userId" value="<%=userId %>">
+		<input type="hidden" name="idrow" value="">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="pinUser" value="">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
@@ -283,17 +291,13 @@ ResultSet TaikhoanRs = obj.getTaikhoanRs();
 																	<a href="/QUANLYCANHAN/TaiKhoanThanhToanUpdateSvl?userId=<%=userId %>&action=update&id=<%=TaikhoanthanhtoanRs.getString("ID") %>">
 																		<img title="Cập nhật" src="../images/Edit20.png" alt="Cap nhat" width="20" height="20" longdesc="Cap nhat" border=0>
 																	</a>
-																	<a href="javascript:Hienthi(<%=TaikhoanthanhtoanRs.getString("ID") %>)" >
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
-																	<a href="/QUANLYCANHAN/TaiKhoanThanhToanSvl?userId=<%=userId%>&action=delete&id=<%=TaikhoanthanhtoanRs.getString("ID") %>" onclick="if(!confirm('Bạn thật sự muốn xóa?')) return false;">
+																	<a href="javascript:deleterow('<%=TaikhoanthanhtoanRs.getString("ID") %>')">
 																		<img title="Delete" src="../images/Delete20.png" alt="Delete" width="20" height="20" longdesc="Xoa" border=0>
 																	</a>
-																<%} else { %>
-																	<a href="javascript:Hienthi(<%=TaikhoanthanhtoanRs.getString("ID") %>)" >
-																		<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
-																	</a>
 																<%} %>
+																<a href="javascript:Hienthi(<%=TaikhoanthanhtoanRs.getString("ID") %>)" >
+																	<img title="Hiển thị" src="../images/Display20.png" alt="Hien thi" title="Hien thi" border=0>
+																</a>
 															</td>
 															</tr>
 															<%m++; %>

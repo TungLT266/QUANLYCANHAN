@@ -65,7 +65,7 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 			db.getConnection().setAutoCommit(false);
 		
 			String query = "update LOAITAIKHOAN set trangthai = 2 where ID = " + id;
-			if(db.updateReturnInt(query) != 1) {
+			if(this.db.updateReturnInt(query) != 1) {
 	    		this.msg = "Không thể xóa LOAITAIKHOAN: " + query;
 	    		db.getConnection().rollback();
 	    		return;
@@ -94,8 +94,6 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 			String query = "select pin from NGUOIDUNG where pin = '"+this.util.encrypt(pinUser)+"' and ID = " + this.userId;
 			ResultSet rs = this.db.get(query);
 			if(rs.next()){
-				rs.close();
-				
 				query = "delete LOAITAIKHOAN where trangthai = 2" + queryUser;
 				if(!this.db.update(query)){
 		    		this.msg = "Không thể xóa Database LOAITAIKHOAN: " + query;
@@ -105,6 +103,7 @@ public class LoaiTaiKhoanList extends Phan_Trang implements ILoaiTaiKhoanList {
 			} else {
 				this.msg = "Mã PIN không đúng.";
 			}
+			rs.close();
 			
 			db.getConnection().commit();
 			db.getConnection().setAutoCommit(true);
