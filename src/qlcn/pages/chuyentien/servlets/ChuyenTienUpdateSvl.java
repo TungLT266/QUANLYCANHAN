@@ -53,6 +53,11 @@ public class ChuyenTienUpdateSvl extends HttpServlet {
 	    	IChuyenTien obj = new ChuyenTien();
 	    	obj.setUserId(userId);
 	    	
+	    	String action = request.getParameter("action");
+			if(action == null)
+				action = "";
+			obj.setAction(action);
+	    	
 	    	String id = request.getParameter("id");
 		    if(id != null)
 		    	obj.setID(id);
@@ -63,10 +68,6 @@ public class ChuyenTienUpdateSvl extends HttpServlet {
 	    	session.setAttribute("userTen", userTen);
     		session.setAttribute("userId", userId);
 		    
-			String action = request.getParameter("action");
-			if(action == null)
-				action = "";
-			
 			if(action.equals("update")) {
 				response.sendRedirect("/QUANLYCANHAN/qlcn/pages/ChuyentienNew.jsp");
 		    } else {

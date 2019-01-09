@@ -106,7 +106,12 @@ public class VayNo implements IVayNo {
 			}
 			
 			//Lấy list tài khoản
-			String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where 1=1" + queryUser;
+			if(this.action.equals("display") && this.taikhoanId.length() > 5){ // Lấy cả tài khoản có trạng thái ngưng hoạt động
+				query += " and (TRANGTHAI=1 or ID=" + this.taikhoanId + ")";
+			} else {
+				query += " and TRANGTHAI=1";
+			}
 			this.TaikhoanRs = this.db.get(query);
 			
 			if(this.taikhoanId.length() > 5){
@@ -121,7 +126,12 @@ public class VayNo implements IVayNo {
 			// Lấy list tài khoản thực hiện, chỉ lấy những tài khoản có cùng đơn vị với ô tài khoản
 			if(this.taikhoanId.length() > 0){
 				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN"
-						+ " where TRANGTHAI = 1 and donvi_fk=(select donvi_fk from TAIKHOAN where ID = "+this.taikhoanId+")" + queryUser;
+						+ " where donvi_fk=(select donvi_fk from TAIKHOAN where ID = "+this.taikhoanId+")" + queryUser;
+				if(this.action.equals("display") && this.taikhoannhantra.length() > 5){ // Lấy cả tài khoản có trạng thái ngưng hoạt động
+					query += " and (TRANGTHAI=1 or ID=" + this.taikhoannhantra + ")";
+				} else {
+					query += " and TRANGTHAI=1";
+				}
 				this.TaikhoanNhantraRs = this.db.get(query);
 			}
 		} catch (Exception e) {

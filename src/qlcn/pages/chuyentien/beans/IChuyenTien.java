@@ -53,4 +53,7 @@ public interface IChuyenTien {
 	
 	public ResultSet getTaikhoannhanRs();
 	public void setTaikhoannhanRs(ResultSet taikhoannhanRs);
+	
+	public String getAction();
+	public void setAction(String action);
 }

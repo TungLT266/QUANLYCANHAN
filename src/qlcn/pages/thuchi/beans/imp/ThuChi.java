@@ -13,6 +13,7 @@ import db.Dbutils;
 
 public class ThuChi implements IThuChi {
 	private String userId;
+	private String action;
 	private String ID;
 	private String ngay;
 	private String sotien;
@@ -34,6 +35,7 @@ public class ThuChi implements IThuChi {
 //	private Utility util;
 	
 	public ThuChi() {
+		this.action = "";
 		this.ID = "";
 		this.ngay = this.getDateTime();
 		this.sotien = "";
@@ -87,12 +89,22 @@ public class ThuChi implements IThuChi {
 			
 			if(this.loai.length() > 0){
 				// Lấy nội dung thu chi
-				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1 and loai in (0,"+this.loai+")" + queryUser;
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where loai in (0,"+this.loai+")" + queryUser;
+				if(this.action.equals("display") && this.noidungthuchiId.length() > 5){ // Lấy cả nội dung thu chi có trạng thái ngưng hoạt động
+					query += " and (TRANGTHAI=1 or ID=" + this.noidungthuchiId + ")";
+				} else {
+					query += " and TRANGTHAI=1";
+				}
 				this.NoidungthuchiRs = this.db.get(query);
 			}
 			
 			// Lấy danh sách tài khoản có trạng thái hoạt động
-			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where 1=1" + queryUser;
+			if(this.action.equals("display") && this.taikhoanId.length() > 5){ // Lấy cả tài khoản có trạng thái ngưng hoạt động
+				query += " and (TRANGTHAI=1 or ID=" + this.taikhoanId + ")";
+			} else {
+				query += " and TRANGTHAI=1";
+			}
 			this.TaikhoanRs = this.db.get(query);
 			
 			if(this.taikhoanId.length() > 5){
@@ -105,7 +117,12 @@ public class ThuChi implements IThuChi {
 				
 				// Lấy tài khoản thanh toán thuộc tài khoản này
 				query = "select ID, '['+cast(ID as varchar)+'] '+(case when LOAITHE = 1 then 'ATM: ' when LOAITHE = 2 then 'VISA: ' when LOAITHE = 3 then 'MASTERCARD: ' else '' end)+SOTHE as ten"
-						+ " from TAIKHOANTHANHTOAN where TRANGTHAI = 1 and taikhoan_fk = " + this.taikhoanId + queryUser;
+						+ " from TAIKHOANTHANHTOAN where taikhoan_fk = " + this.taikhoanId + queryUser;
+				if(this.action.equals("display") && this.taikhoanthanhtoanId.length() > 5){ // Lấy cả tài khoản thanh toán có trạng thái ngưng hoạt động
+					query += " and (TRANGTHAI=1 or ID=" + this.taikhoanthanhtoanId + ")";
+				} else {
+					query += " and TRANGTHAI=1";
+				}
 				this.TaikhoanthanhtoanRs = this.db.get(query);
 			}
 		} catch (Exception e) {
@@ -320,5 +337,13 @@ public class ThuChi implements IThuChi {
 
 	public void setGhichuphi(String ghichuphi) {
 		this.ghichuphi = ghichuphi;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 }

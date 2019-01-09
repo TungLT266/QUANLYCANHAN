@@ -13,6 +13,7 @@ import db.Dbutils;
 
 public class ChuyenTien implements IChuyenTien {
 	private String userId;
+	private String action;
 	private String ID;
 	private String ngay;
 	private String noidung;
@@ -33,6 +34,7 @@ public class ChuyenTien implements IChuyenTien {
 //	private Utility util;
 	
 	public ChuyenTien() {
+		this.action = "";
 		this.ID = "";
 		this.ngay = this.getDateTime();
 		this.noidung = "";
@@ -82,7 +84,12 @@ public class ChuyenTien implements IChuyenTien {
 				queryUser = " and USERID = " + this.userId;
 			}
 			
-			String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			String query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where 1=1" + queryUser;
+			if(this.action.equals("display") && this.taikhoanchuyenId.length() > 5){ // Lấy cả tài khoản có trạng thái ngưng hoạt động
+				query += " and (TRANGTHAI=1 or ID=" + this.taikhoanchuyenId + ")";
+			} else {
+				query += " and TRANGTHAI=1";
+			}
 			this.TaikhoanRs = this.db.get(query);
 			
 			if(this.taikhoanchuyenId.length() > 5){
@@ -94,8 +101,13 @@ public class ChuyenTien implements IChuyenTien {
 				String donvichuyenId = rs.getString("id");
 				rs.close();
 				
-				// Lấy Resultset tài khoản chuyển, không lấy tài khoản đã được chọn làm tài khoản chuyển
-				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where ID != "+this.taikhoanchuyenId+" and TRANGTHAI = 1" + queryUser;
+				// Lấy Resultset tài khoản nhận, không lấy tài khoản đã được chọn làm tài khoản chuyển
+				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where ID != "+this.taikhoanchuyenId + queryUser;
+				if(this.action.equals("display") && this.taikhoannhanId.length() > 5){ // Lấy cả tài khoản có trạng thái ngưng hoạt động
+					query += " and (TRANGTHAI=1 or ID=" + this.taikhoannhanId + ")";
+				} else {
+					query += " and TRANGTHAI=1";
+				}
 				this.TaikhoannhanRs = this.db.get(query);
 				
 				if(this.taikhoannhanId.length() > 5){
@@ -323,5 +335,13 @@ public class ChuyenTien implements IChuyenTien {
 
 	public void setTaikhoannhanRs(ResultSet taikhoannhanRs) {
 		TaikhoannhanRs = taikhoannhanRs;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 }
