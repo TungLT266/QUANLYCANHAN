@@ -60,7 +60,7 @@ ResultSet DonviRs = obj.getDonviRs();
 		document.forms["FormTk"].submit();
 	}
 	
-	// cho phép nhập phím enter, dấu phẩy, dấu chấm, 0->9
+	// cho phép nhập phím enter, dấu chấm, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -68,7 +68,7 @@ ResultSet DonviRs = obj.getDonviRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed == 13 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+		if (keypressed == 13 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
 			return true;
 		}
 		return false;
@@ -98,6 +98,53 @@ ResultSet DonviRs = obj.getDonviRs();
 				document.getElementById("nganhang2").style.display = "none";
 			}
 		}
+	}
+	
+	// Hàm định dạng tiền
+	function DinhDangTien(id){
+		var num = document.getElementById(id).value;
+		num = num.replace(/\,/g,''); // xóa dấu phẩy
+		
+		var sole = '';
+		if(num.indexOf(".") >= 0){
+			sole = num.substring(num.indexOf('.')); // lấy từ dấu chấm
+			num = num.substring(0, num.indexOf('.')); // lấy số trước dấu chấm
+			
+			if(num == ''){
+				num = "0";
+			}
+		}
+		
+		if(isNaN(num))
+			num = "0";
+		
+		// Định dạng thêm dấu phẩy
+		//begin{
+		num = Math.floor(num*100);
+		num = Math.floor(num/100).toString();
+		for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++){
+			num = num.substring(0,num.length-(4*i+3)) + ',' + num.substring(num.length-(4*i+3));
+		}
+		//end}
+		
+		if(sole.length >= 2){
+			var phanle = sole.substring(1); // lấy phần sau dấu chấm
+			if(phanle.indexOf(".") >= 0){ // nếu có thêm 1 dấu chấm nữa thì bỏ
+				phanle = phanle.substring(0, phanle.indexOf('.'));
+			}
+			if(isNaN(phanle))
+				phanle = '';
+			
+			sole = "." + phanle;
+			
+			if(sole.length > 3){ // chỉ cho nhập sau dấu chấm tối đa 2 số
+				sole = sole.substring(0, 3);
+			}
+		}
+		
+		var kq = num + sole;
+		
+		document.getElementById(id).value = kq;
 	}
 </script>
 </head>
@@ -178,7 +225,7 @@ ResultSet DonviRs = obj.getDonviRs();
 														<%} %>
 													</select>
 												<%} else { %>
-													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);">
+													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);" onkeyup="DinhDangTien('sotien')">
 													
 													<select id="donvi" name="donvi" class="select2" style="width: 70px;">
 														<option value=""></option>

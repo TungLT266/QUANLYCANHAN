@@ -46,7 +46,7 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 </script>
 
 <script language="javascript" type="text/javascript">
-	//cho phép nhập phím enter, dấu phẩy, dấu chấm, 0->9
+	//cho phép nhập phím enter, dấu chấm, 0->9
 	function keypress(e) {
 		var keypressed = null;
 		if (window.event)
@@ -54,18 +54,60 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 		else
 			keypressed = e.which;
 		
-		if (keypressed == 13 || keypressed == 44 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
+		if (keypressed == 13 || keypressed == 46 || (keypressed >= 48 && keypressed <= 57)) {
 			return true;
 		}
 		return false;
 	}
 	
-	function save() {
-		if (document.getElementById("noidung").value.trim() == "") {
-			document.getElementById("dataerror").value = "Bạn chưa nhập nội dung.";
-			return false;
+	// Hàm định dạng tiền
+	function DinhDangTien(id){
+		var num = document.getElementById(id).value;
+		num = num.replace(/\,/g,''); // xóa dấu phẩy
+		
+		var sole = '';
+		if(num.indexOf(".") >= 0){
+			sole = num.substring(num.indexOf('.')); // lấy từ dấu chấm
+			num = num.substring(0, num.indexOf('.')); // lấy số trước dấu chấm
+			
+			if(num == ''){
+				num = "0";
+			}
 		}
 		
+		if(isNaN(num))
+			num = "0";
+		
+		// Định dạng thêm dấu phẩy
+		//begin{
+		num = Math.floor(num*100);
+		num = Math.floor(num/100).toString();
+		for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++){
+			num = num.substring(0,num.length-(4*i+3)) + ',' + num.substring(num.length-(4*i+3));
+		}
+		//end}
+		
+		if(sole.length >= 2){
+			var phanle = sole.substring(1); // lấy phần sau dấu chấm
+			if(phanle.indexOf(".") >= 0){ // nếu có thêm 1 dấu chấm nữa thì bỏ
+				phanle = phanle.substring(0, phanle.indexOf('.'));
+			}
+			if(isNaN(phanle))
+				phanle = '';
+			
+			sole = "." + phanle;
+			
+			if(sole.length > 3){ // chỉ cho nhập sau dấu chấm tối đa 2 số
+				sole = sole.substring(0, 3);
+			}
+		}
+		
+		var kq = num + sole;
+		
+		document.getElementById(id).value = kq;
+	}
+	
+	function save() {
 		if (document.getElementById("taikhoanchuyenId").value == "") {
 			document.getElementById("dataerror").value = "Bạn chưa chọn tài khoản chuyển.";
 			return false;
@@ -156,7 +198,7 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 												<input type="text" class="days" name="ngay" value="<%=obj.getNgay() %>" readonly="readonly">
 											</td>
 											
-											<td width="20%" class="plainlabel">Nội dung <FONT class="erroralert">*</FONT></td>
+											<td width="20%" class="plainlabel">Nội dung</td>
 											<td class="plainlabel">
 												<input type="text" name="noidung" id="noidung" value="<%=obj.getNoidung() %>">
 											</td>
@@ -181,7 +223,7 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 											
 											<td class="plainlabel">Số tiền chuyển <FONT class="erroralert">*</FONT></td>
 											<td class="plainlabel">
-												<input type="text" style="text-align: right;" name="sotienchuyen" id="sotienchuyen" value="<%=obj.getSotienchuyen() %>" onkeypress="return keypress(event);">
+												<input type="text" style="text-align: right;" name="sotienchuyen" id="sotienchuyen" value="<%=obj.getSotienchuyen() %>" onkeypress="return keypress(event);" onkeyup="DinhDangTien('sotienchuyen')">
 												&nbsp;<%=obj.getDonvichuyen() %>
 											</td>
 										</tr>
@@ -206,7 +248,7 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 											<%if(obj.getDonvinhan().length() > 0){ %>
 												<td class="plainlabel">Số tiền nhận <FONT class="erroralert">*</FONT></td>
 												<td class="plainlabel">
-													<input type="text" style="text-align: right;" name="sotiennhan" id="sotiennhan" value="<%=obj.getSotiennhan() %>" onkeypress="return keypress(event);">
+													<input type="text" style="text-align: right;" name="sotiennhan" id="sotiennhan" value="<%=obj.getSotiennhan() %>" onkeypress="return keypress(event);" onkeyup="DinhDangTien('sotiennhan')">
 													&nbsp;<%=obj.getDonvinhan() %>
 												</td>
 											<%} else { %>
@@ -234,7 +276,7 @@ ResultSet TaikhoannhanRs = obj.getTaikhoannhanRs();
 											
 											<td class="plainlabel">Phí</td>
 											<td class="plainlabel">
-												<input type="text" style="text-align: right;" name="phi" value="<%=obj.getPhi() %>" onkeypress="return keypress(event);">
+												<input type="text" style="text-align: right;" id="phi" name="phi" value="<%=obj.getPhi() %>" onkeypress="return keypress(event);" onkeyup="DinhDangTien('phi')">
 											</td>
 										</tr>
 									</table>

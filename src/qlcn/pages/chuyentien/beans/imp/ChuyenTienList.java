@@ -87,11 +87,11 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 			}
 			
 			if(this.sotientu.trim().length() > 0) {
-				query += " and ct.sotienchuyen >= " + this.sotientu.trim();
+				query += " and ct.sotienchuyen >= " + this.sotientu.replaceAll(",", "").trim();
 			}
 			
 			if(this.sotienden.trim().length() > 0) {
-				query += " and ct.sotienchuyen <= " + this.sotienden.trim();
+				query += " and ct.sotienchuyen <= " + this.sotienden.replaceAll(",", "").trim();
 			}
 			
 			if(this.trangthai.length() > 0) {
