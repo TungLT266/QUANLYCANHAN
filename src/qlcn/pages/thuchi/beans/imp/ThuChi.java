@@ -38,14 +38,14 @@ public class ThuChi implements IThuChi {
 		this.action = "";
 		this.ID = "";
 		this.ngay = this.getDateTime();
-		this.sotien = "";
+		this.sotien = "0";
 		this.donvi = "";
 		this.loai = "2";
 		this.noidungthuchiId = "0";
 		this.taikhoanId = "0";
 		this.taikhoanthanhtoanId = "0";
 		this.diengiai = "";
-		this.phi = "";
+		this.phi = "0";
 		this.ghichuphi = "";
 		this.msg = "";
 		
