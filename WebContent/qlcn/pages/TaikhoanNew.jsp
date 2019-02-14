@@ -39,10 +39,10 @@ ResultSet DonviRs = obj.getDonviRs();
 			return false;
 		}
 		
-		if (document.getElementById("sotien").value.trim().length <= 0) {
+		/* if (document.getElementById("sotien").value.trim().length <= 0) {
 			document.getElementById("dataerror").value = "Bạn chưa nhập số tiền trong tài khoản.";
 			return false;
-		}
+		} */
 		
 		if (document.getElementById("donvi").value == "") {
 			document.getElementById("dataerror").value = "Bạn chưa chọn đơn vị.";
@@ -207,12 +207,12 @@ ResultSet DonviRs = obj.getDonviRs();
 												<input type="text" name="ten" id="ten" value="<%=obj.getTen() %>">
 											</td>
 											
-											<td width="15%" class="plainlabel">Số tiền <FONT class="erroralert">*</FONT></td>
+											<td width="15%" class="plainlabel">Đơn vị</td>
 											<td class="plainlabel">
 												<%if(obj.getID().length() > 0){ %>
-													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" readonly="readonly" onkeypress="return keypress(event);">
+													<%-- <input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" readonly="readonly" onkeypress="return keypress(event);"> --%>
 												
-													<select id="donvi" name="donvi" style="width: 70px;">
+													<select id="donvi" name="donvi" style="width: 200px;">
 														<option value="" disabled="disabled"></option>
 														<%if(DonviRs != null){ %>
 															<%while(DonviRs.next()){ %>
@@ -225,9 +225,9 @@ ResultSet DonviRs = obj.getDonviRs();
 														<%} %>
 													</select>
 												<%} else { %>
-													<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);" onkeyup="DinhDangTien('sotien')">
+													<%-- <input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" onkeypress="return keypress(event);" onkeyup="DinhDangTien('sotien')"> --%>
 													
-													<select id="donvi" name="donvi" class="select2" style="width: 70px;">
+													<select id="donvi" name="donvi" class="select2" style="width: 200px;">
 														<option value=""></option>
 														<%if(DonviRs != null){ %>
 															<%while(DonviRs.next()){ %>

@@ -45,9 +45,10 @@ public class AjaxTop extends HttpServlet {
 		String output = "";
 		
 		try {
-			query = "select isnull((select sum(sotien) as tongtien from TAIKHOAN where trangthai in (1) and istktindung != 1 and USERID="+userId+"),0) as tongtien,"
-					+ "isnull((select SUM(sotien) as tongthu from THUCHI where loai=1 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+"),0) as tongthu,"
-					+ "isnull((select SUM(sotien) as tongchi from THUCHI where loai=2 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+"),0) as tongchi";
+			query = " select (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN"
+					+ " where tkkt_fk in (select ID from TAIKHOAN where trangthai in (1) and istktindung != 1 and USERID="+userId+")) as tongtien,"
+					+ " isnull((select SUM(sotien) as tongthu from THUCHI where loai=1 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+"),0) as tongthu,"
+					+ " isnull((select SUM(sotien) as tongchi from THUCHI where loai=2 and trangthai in (1) and MONTH(ngay)=MONTH(getdate()) and YEAR(ngay)=YEAR(getdate()) and USERID="+userId+"),0) as tongchi";
 			ResultSet rs = db.get(query);
 			rs.next();
 			output = formatter.format(Double.parseDouble(rs.getString("tongtien"))) + "[==]";
@@ -55,7 +56,9 @@ public class AjaxTop extends HttpServlet {
 			output += formatter.format(Double.parseDouble(rs.getString("tongchi")));
 			rs.close();
 			
-			query = "select tk.ID, tk.sotien, dv.ten as donvi from TAIKHOAN tk inner join DONVI dv on dv.ID=tk.donvi_fk where tk.trangthai=1 and tk.USERID = " + userId;
+			query = "select tk.ID, dv.ten as donvi,"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = tk.ID) as sotien"
+					+ " from TAIKHOAN tk inner join DONVI dv on dv.ID=tk.donvi_fk where tk.trangthai=1 and tk.USERID = " + userId;
 			rs = db.get(query);
 			while(rs.next()){
 				output += "[==]" + rs.getString("ID") + ",," + formatter.format(Double.parseDouble(rs.getString("sotien"))) + " " + rs.getString("donvi");

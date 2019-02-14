@@ -15,7 +15,7 @@ public class TaiKhoan implements ITaiKhoan {
 	private String userId;
 	private String ID;
 	private String ten;
-	private String sotien;
+//	private String sotien;
 	private String donvi;
 	private String nganhang;
 	private String isTknganhang;
@@ -33,7 +33,7 @@ public class TaiKhoan implements ITaiKhoan {
 	public TaiKhoan() {
 		this.ID = "";
 		this.ten = "";
-		this.sotien = "";
+//		this.sotien = "";
 		this.donvi = "";
 		this.nganhang = "";
 		this.isTknganhang = "1";
@@ -51,14 +51,14 @@ public class TaiKhoan implements ITaiKhoan {
 		try {
 			NumberFormat formatter = new DecimalFormat("#,###,###.##");
 			
-			String query = "select TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, TRANGTHAI from TAIKHOAN where ID = " + this.ID;
+			String query = "select TEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, TRANGTHAI from TAIKHOAN where ID = " + this.ID;
 			System.out.println(query);
 			
 			ResultSet rs = this.db.get(query);
 		
 			rs.next();
 			this.ten = rs.getString("TEN");
-			this.sotien = formatter.format(rs.getDouble("SOTIEN"));
+//			this.sotien = formatter.format(rs.getDouble("SOTIEN"));
 			this.donvi = rs.getString("DONVI_FK");
 			this.nganhang = rs.getString("nganhang");
 			this.isTknganhang = rs.getString("istknganhang");
@@ -99,9 +99,9 @@ public class TaiKhoan implements ITaiKhoan {
 				this.noTindung = "0";
 			}
 			
-			String query = "insert into TAIKHOAN(TEN, SOTIEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, trangthai, ngaytao, ngaysua, USERID)"
-					+ "\n values(N'"+this.ten.trim()+"',"+this.sotien.trim().replaceAll("[, ]", "")+","+this.donvi+",N'"+this.nganhang.trim()+"',"+this.isTknganhang+","+this.isTktindung+","
-					+ (this.hanmuc.trim().length()==0 ? "0" : this.hanmuc.trim().replaceAll("[, ]", ""))+","+(this.noTindung.trim().length()==0 ? "0" : this.noTindung.trim().replaceAll("[, ]", ""))+","
+			String query = "insert into TAIKHOAN(TEN, DONVI_FK, nganhang, istknganhang, istktindung, hanmuc, notindung, trangthai, ngaytao, ngaysua, USERID)"
+					+ "\n values(N'"+this.ten.trim()+"',"+this.donvi+",N'"+this.nganhang.trim()+"',"+this.isTknganhang+","+this.isTktindung+","
+					+ (this.hanmuc.trim().length()==0 ? "0" : this.hanmuc.trim().replaceAll(",", ""))+","+(this.noTindung.trim().length()==0 ? "0" : this.noTindung.trim().replaceAll(",", ""))+","
 					+ this.trangthai+",'"+this.getDateTime()+"','"+this.getDateTime()+"',"+this.userId+")";
 			System.out.println(query);
 			
@@ -227,14 +227,6 @@ public class TaiKhoan implements ITaiKhoan {
 
 	public void setTrangthai(String trangthai) {
 		this.trangthai = trangthai;
-	}
-
-	public String getSotien() {
-		return sotien;
-	}
-
-	public void setSotien(String sotien) {
-		this.sotien = sotien;
 	}
 
 	public String getDonvi() {

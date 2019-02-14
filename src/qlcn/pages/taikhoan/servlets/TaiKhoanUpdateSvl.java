@@ -108,9 +108,9 @@ public class TaiKhoanUpdateSvl extends HttpServlet {
 			if (ten != null)
 				obj.setTen(ten);
 			
-			String sotien = request.getParameter("sotien");
+			/*String sotien = request.getParameter("sotien");
 			if (sotien != null)
-				obj.setSotien(sotien);
+				obj.setSotien(sotien);*/
 			
 			String donvi = request.getParameter("donvi");
 			if (donvi != null)

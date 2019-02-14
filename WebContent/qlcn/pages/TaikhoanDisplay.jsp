@@ -58,10 +58,9 @@ ResultSet DonviRs = obj.getDonviRs();
 											<td width="15%" class="plainlabel">Tên tài khoản</td>
 											<td class="plainlabel"><input type="text" name="ten" id="ten" value="<%=obj.getTen() %>" readonly="readonly"></td>
 											
-											<td width="15%" class="plainlabel">Số tiền</td>
+											<td width="15%" class="plainlabel">Đơn vị</td>
 											<td class="plainlabel">
-												<input type="text" name="sotien" id="sotien" value="<%=obj.getSotien() %>" style="text-align: right;" readonly="readonly">
-												<select name="donvi" style="width: 70px;">
+												<select name="donvi" style="width: 200px;">
 													<option value="" disabled="disabled"></option>
 													<%if(DonviRs != null){ %>
 														<%while(DonviRs.next()){ %>

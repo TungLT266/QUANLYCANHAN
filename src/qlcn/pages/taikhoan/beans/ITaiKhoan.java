@@ -23,9 +23,6 @@ public interface ITaiKhoan {
 
 	public String getTrangthai();
 	public void setTrangthai(String trangthai);
-	
-	public String getSotien();
-	public void setSotien(String sotien);
 
 	public String getDonvi();
 	public void setDonvi(String donvi);
