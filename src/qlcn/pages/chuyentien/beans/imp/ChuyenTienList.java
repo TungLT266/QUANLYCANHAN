@@ -125,15 +125,18 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			// Cập nhật tiền trong tài khoản chuyển và nhận
+			// Định khoản
 			//begin{
-			String query = "select ct.TAIKHOANCHUYEN_FK, ct.SOTIENCHUYEN, ct.TAIKHOANNHAN_FK, ct.SOTIENNHAN, ct.TKPHI, ct.PHI, tkc.sotien as tientkchuyen, tkn.sotien as tientknhan"
+			String query = "select ct.ngay, ct.TAIKHOANCHUYEN_FK, ct.SOTIENCHUYEN, ct.TAIKHOANNHAN_FK, ct.SOTIENNHAN, ct.TKPHI, ct.PHI,"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = ct.TAIKHOANCHUYEN_FK) as tientkchuyen,"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = ct.TAIKHOANNHAN_FK) as tientknhan,"
+					+ " (select count(*) from TAIKHOAN where ID=ct.TAIKHOANCHUYEN_FK and trangthai=1) as isTkchuyen,"
+					+ " (select count(*) from TAIKHOAN where ID=ct.TAIKHOANNHAN_FK and trangthai=1) as isTknhan"
 					+ "\n from CHUYENTIEN ct"
-					+ "\n inner join TAIKHOAN tkc on tkc.ID=ct.TAIKHOANCHUYEN_FK"
-					+ "\n inner join TAIKHOAN tkn on tkn.ID=ct.TAIKHOANNHAN_FK"
 					+ "\n where ct.ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
+			String ngaychungtu = rs.getString("ngay");
 			String taikhoanchuyen = rs.getString("TAIKHOANCHUYEN_FK");
 			double sotienchuyen = rs.getDouble("SOTIENCHUYEN");
 			String taikhoannhan = rs.getString("TAIKHOANNHAN_FK");
@@ -142,59 +145,74 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 			double phi = rs.getDouble("PHI");
 			double tientkchuyen = rs.getDouble("tientkchuyen");
 			double tientknhan = rs.getDouble("tientknhan");
+			int isTkchuyen = rs.getInt("isTkchuyen");
+			int isTknhan = rs.getInt("isTknhan");
 			rs.close();
+			
+			// Kiểm tra tài khoản chuyển có hoạt động
+			if(isTkchuyen != 1){
+				this.msg = "Tài khoản chuyển đã xóa hoặc ngưng hoạt động.";
+				db.getConnection().rollback();
+				return;
+			}
+			
+			// Kiểm tra tài khoản nhận có hoạt động
+			if(isTknhan != 1){
+				this.msg = "Tài khoản nhận đã xóa hoặc ngưng hoạt động.";
+				db.getConnection().rollback();
+				return;
+			}
 			
 			if(tkphi.equals("1")){ // Tính phí vào tài khoản chuyển
 				if(tientkchuyen < sotienchuyen + phi){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
+					db.getConnection().rollback();
 					return;
 				}
 				
-				query = "update TAIKHOAN set sotien = sotien - "+sotienchuyen+" - "+phi+" where ID = " + taikhoanchuyen
-						+ "\n update TAIKHOAN set sotien = sotien + "+sotiennhan+" where ID = " + taikhoannhan;
+				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",'Số tiền chuyển')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+phi+","+this.userId+",'Phí chuyển tiền')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",'Số tiền nhận')";
 			} else if(tkphi.equals("2")){ // Tính phí vào tài khoản nhận
 				if(tientkchuyen < sotienchuyen){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
+					db.getConnection().rollback();
 					return;
 				}
 				
 				if(tientknhan + sotiennhan < phi){
 					this.msg = "Số tiền trong tài khoản nhận còn "+tientknhan+", không đủ để thực hiện.";
+					db.getConnection().rollback();
 					return;
 				}
 				
-				query = "update TAIKHOAN set sotien = sotien - "+sotienchuyen+" where ID = " + taikhoanchuyen
-						+ "\n update TAIKHOAN set sotien = sotien + "+sotiennhan+" - "+phi+" where ID = " + taikhoannhan;
+				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",'Số tiền chuyển')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",'Số tiền nhận')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+",0,"+phi+","+this.userId+",'Phí chuyển tiền')";
 			} else { // Không tính phí
 				if(tientkchuyen < sotienchuyen){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
+					db.getConnection().rollback();
 					return;
 				}
 				
-				query = "update TAIKHOAN set sotien = sotien - "+sotienchuyen+" where ID = " + taikhoanchuyen
-						+ "\n update TAIKHOAN set sotien = sotien + "+sotiennhan+" where ID = " + taikhoannhan;
+				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",'Số tiền chuyển')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",'Số tiền nhận')";
 			}
 			
-			if(this.db.updateReturnInt(query) != 1) {
-	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
+			if(!this.db.update(query)) {
+	    		this.msg = "Không thể định khoản: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
-			//}end
-			
-			// Lưu log cho tài khoản
-			//begin{
-			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
-					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
-					+ " from TAIKHOAN where ID = " + taikhoanchuyen;
-			query += " insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
-					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
-					+ " from TAIKHOAN where ID = " + taikhoannhan;
-			if(this.db.updateReturnInt(query) != 1) {
-				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
-				db.getConnection().rollback();
-				return;
-			}
 			//}end
 			
 			// Cập nhật chuyển tiền sang trạng thái đã chốt
@@ -220,67 +238,40 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			// Cập nhật tiền trong tài khoản chuyển và nhận
+			// Định khoản
 			//begin{
-			String query = "select TAIKHOANCHUYEN_FK, SOTIENCHUYEN, TAIKHOANNHAN_FK, SOTIENNHAN, TKPHI, PHI, (select sotien from TAIKHOAN where ID=ct.TAIKHOANNHAN_FK) as tientknhan"
-					+ " from CHUYENTIEN ct where ID = " + id;
+			String query = "select ct.SOTIENNHAN, ct.TKPHI, ct.PHI,"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = ct.TAIKHOANNHAN_FK) as tientknhan"
+					+ "\n from CHUYENTIEN ct"
+					+ "\n where ct.ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
-			String taikhoanchuyen = rs.getString("TAIKHOANCHUYEN_FK");
-			double sotienchuyen = rs.getDouble("SOTIENCHUYEN");
-			String taikhoannhan = rs.getString("TAIKHOANNHAN_FK");
 			double sotiennhan = rs.getDouble("SOTIENNHAN");
 			String tkphi = rs.getString("TKPHI");
 			double phi = rs.getDouble("PHI");
 			double tientknhan = rs.getDouble("tientknhan");
 			rs.close();
 			
-			if(tkphi.equals("1")){
-				if(tientknhan < sotiennhan){
-					this.msg = "Số tiền trong tài khoản nhận còn "+tientknhan+", không đủ để thực hiện.";
-					return;
-				}
-				
-				query = "update TAIKHOAN set sotien = sotien + "+sotienchuyen+" + "+phi+" where ID = " + taikhoanchuyen
-						+ "\n update TAIKHOAN set sotien = sotien - "+sotiennhan+" where ID = " + taikhoannhan;
-			} else if(tkphi.equals("2")){
+			if(tkphi.equals("2")){
 				if(tientknhan + phi < sotiennhan){
 					this.msg = "Số tiền trong tài khoản nhận còn "+tientknhan+", không đủ để thực hiện.";
+					db.getConnection().rollback();
 					return;
 				}
-				
-				query = "update TAIKHOAN set sotien = sotien + "+sotienchuyen+" where ID = " + taikhoanchuyen
-						+ "\n update TAIKHOAN set sotien = sotien - "+sotiennhan+" + "+phi+" where ID = " + taikhoannhan;
 			} else {
 				if(tientknhan < sotiennhan){
 					this.msg = "Số tiền trong tài khoản nhận còn "+tientknhan+", không đủ để thực hiện.";
+					db.getConnection().rollback();
 					return;
 				}
-				
-				query = "update TAIKHOAN set sotien = sotien + "+sotienchuyen+" where ID = " + taikhoanchuyen
-						+ "\n update TAIKHOAN set sotien = sotien - "+sotiennhan+" where ID = " + taikhoannhan;
 			}
 			
-			if(db.updateReturnInt(query) != 1) {
-	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
+			query = "delete PHATSINHKETOAN where loaichungtu=N'Chuyển tiền' and sochungtu="+id;
+			if(!db.update(query)) {
+				this.msg = "Không thể xóa định khoản: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
-			//}end
-			
-			// Lưu log cho tài khoản
-			//begin{
-			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
-					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
-					+ " from TAIKHOAN where ID = " + taikhoanchuyen;
-			query += " insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
-					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Chuyển tiền'"
-					+ " from TAIKHOAN where ID = " + taikhoannhan;
-			if(this.db.updateReturnInt(query) != 1) {
-				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
-				db.getConnection().rollback();
-				return;
-			}
 			//}end
 			
 			// Cập nhật chuyển tiền sang trang thái chưa chốt
