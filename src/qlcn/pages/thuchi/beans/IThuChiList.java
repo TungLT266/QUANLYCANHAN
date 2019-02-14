@@ -54,4 +54,10 @@ public interface IThuChiList extends IPhan_Trang {
 	
 	public String getTrangthai();
 	public void setTrangthai(String trangthai);
+	
+	public ResultSet getTaikhoanRs();
+	public void setTaikhoanRs(ResultSet taikhoanRs);
+
+	public String getTaikhoanId();
+	public void setTaikhoanId(String taikhoanId);
 }

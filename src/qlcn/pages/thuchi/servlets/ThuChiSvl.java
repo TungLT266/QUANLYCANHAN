@@ -113,6 +113,10 @@ public class ThuChiSvl extends HttpServlet {
 				if(denngay != null)
 					obj.setDenngay(denngay);
 				
+				String taikhoan = request.getParameter("taikhoan");
+				if(taikhoan != null)
+					obj.setTaikhoanId(taikhoan);;
+				
 				String sotientu = util.antiSQLInspection(request.getParameter("sotientu"));
 				if(sotientu != null)
 					obj.setSotientu(sotientu);

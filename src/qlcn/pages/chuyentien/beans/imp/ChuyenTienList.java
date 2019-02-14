@@ -171,11 +171,11 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 				}
 				
 				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",'Số tiền chuyển')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",N'Số tiền chuyển')";
 				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+phi+","+this.userId+",'Phí chuyển tiền')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+phi+","+this.userId+",N'Phí chuyển tiền')";
 				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",'Số tiền nhận')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",N'Số tiền nhận')";
 			} else if(tkphi.equals("2")){ // Tính phí vào tài khoản nhận
 				if(tientkchuyen < sotienchuyen){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
@@ -190,11 +190,11 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 				}
 				
 				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",'Số tiền chuyển')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",N'Số tiền chuyển')";
 				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",'Số tiền nhận')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",N'Số tiền nhận')";
 				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+",0,"+phi+","+this.userId+",'Phí chuyển tiền')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+",0,"+phi+","+this.userId+",N'Phí chuyển tiền')";
 			} else { // Không tính phí
 				if(tientkchuyen < sotienchuyen){
 					this.msg = "Số tiền trong tài khoản chuyển còn "+tientkchuyen+", không đủ để thực hiện.";
@@ -203,9 +203,9 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 				}
 				
 				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",'Số tiền chuyển')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoanchuyen+",0,"+sotienchuyen+","+this.userId+",N'Số tiền chuyển')";
 				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
-						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",'Số tiền nhận')";
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Chuyển tiền',"+id+","+taikhoannhan+","+sotiennhan+",0,"+this.userId+",N'Số tiền nhận')";
 			}
 			
 			if(!this.db.update(query)) {
@@ -241,7 +241,9 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 			// Định khoản
 			//begin{
 			String query = "select ct.SOTIENNHAN, ct.TKPHI, ct.PHI,"
-					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = ct.TAIKHOANNHAN_FK) as tientknhan"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = ct.TAIKHOANNHAN_FK) as tientknhan,"
+					+ " (select count(*) from TAIKHOAN where ID=ct.TAIKHOANCHUYEN_FK and trangthai=1) as isTkchuyen,"
+					+ " (select count(*) from TAIKHOAN where ID=ct.TAIKHOANNHAN_FK and trangthai=1) as isTknhan"
 					+ "\n from CHUYENTIEN ct"
 					+ "\n where ct.ID = " + id;
 			ResultSet rs = this.db.get(query);
@@ -250,7 +252,23 @@ public class ChuyenTienList extends Phan_Trang implements IChuyenTienList {
 			String tkphi = rs.getString("TKPHI");
 			double phi = rs.getDouble("PHI");
 			double tientknhan = rs.getDouble("tientknhan");
+			int isTkchuyen = rs.getInt("isTkchuyen");
+			int isTknhan = rs.getInt("isTknhan");
 			rs.close();
+			
+			// Kiểm tra tài khoản chuyển có hoạt động
+			if(isTkchuyen != 1){
+				this.msg = "Tài khoản chuyển đã xóa hoặc ngưng hoạt động.";
+				db.getConnection().rollback();
+				return;
+			}
+			
+			// Kiểm tra tài khoản nhận có hoạt động
+			if(isTknhan != 1){
+				this.msg = "Tài khoản nhận đã xóa hoặc ngưng hoạt động.";
+				db.getConnection().rollback();
+				return;
+			}
 			
 			if(tkphi.equals("2")){
 				if(tientknhan + phi < sotiennhan){

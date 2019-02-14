@@ -16,6 +16,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	private String ID;
 	private String tungay;
 	private String denngay;
+	private String taikhoanId;
 	private String sotientu;
 	private String sotienden;
 	private String loai;
@@ -27,6 +28,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 	
 	private ResultSet ThuchiRs;
 	private ResultSet NoidungthuchiRs;
+	private ResultSet TaikhoanRs;
 	
 	private Dbutils db;
 	private Utility util;
@@ -35,6 +37,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		this.ID = "";
 		this.tungay = "";
 		this.denngay = "";
+		this.taikhoanId = "";
 		this.sotientu = "";
 		this.sotienden = "";
 		this.loai = "";
@@ -55,7 +58,7 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				queryUser = " and tc.USERID = " + this.userId;
 			}
 			
-			String query = "select tc.ID, tc.ngay, tc.sotien, dv.ten as donvi, case when tc.loai=1 then 'Thu' else 'Chi' end as loai, isnull(ndtc.ten,'') as tenndtc, tc.diengiai, tc.TRANGTHAI, tc.NGAYTAO, tc.NGAYSUA"
+			String query = "select tk.ten as tentk, tc.ID, tc.ngay, tc.sotien, dv.ten as donvi, case when tc.loai=1 then 'Thu' else 'Chi' end as loai, isnull(ndtc.ten,'') as tenndtc, tc.diengiai, tc.TRANGTHAI, tc.NGAYTAO, tc.NGAYSUA"
 						+ "\n from THUCHI tc"
 						+ "\n left join NOIDUNGTHUCHI ndtc on ndtc.ID = tc.noidungthuchi_fk"
 						+ "\n left join TAIKHOAN tk on tk.ID = tc.taikhoan_fk"
@@ -72,6 +75,10 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 			
 			if(this.denngay.trim().length() > 0) {
 				query += " and tc.ngay <= '" + this.denngay.trim() + "'";
+			}
+			
+			if(this.taikhoanId.length() > 0) {
+				query += " and tc.taikhoan_fk = " + this.taikhoanId;
 			}
 			
 			if(this.sotientu.trim().length() > 0) {
@@ -121,6 +128,9 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from NOIDUNGTHUCHI where TRANGTHAI = 1" + queryUser;
 			}
 			this.NoidungthuchiRs = this.db.get(query);
+			
+			query = "select ID, '['+cast(ID as varchar)+'] '+TEN as ten from TAIKHOAN where TRANGTHAI = 1" + queryUser;
+			this.TaikhoanRs = this.db.get(query);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -130,51 +140,59 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			// Cập nhật tiền trong tài khoản
+			// Định khoản
 			//begin{
-			String query = "select SOTIEN, LOAI, TAIKHOAN_FK, phi,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
+			String query = "select tc.ngay, SOTIEN, LOAI, TAIKHOAN_FK, phi,"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = tc.TAIKHOAN_FK) as tientk,"
+					+ " (select count(*) from TAIKHOAN where ID=tc.TAIKHOAN_FK and trangthai=1) as isTkkt"
+					+ " from THUCHI tc where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
+			String ngaychungtu = rs.getString("ngay");
 			double sotien = rs.getDouble("SOTIEN");
 			String loai = rs.getString("LOAI");
 			String taikhoan = rs.getString("TAIKHOAN_FK");
 			double phi = rs.getDouble("phi");
 			double tientk = rs.getDouble("tientk");
+			int isTkkt = rs.getInt("isTkkt");
 			rs.close();
 			
-			if(loai.equals("1")){
-				if(tientk + sotien < phi){
-					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
-					return;
-				}
-				
-				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" - "+phi+") where ID = " + taikhoan;
-			} else{
-				if(tientk < sotien + phi){
-					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
-					return;
-				}
-				
-				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" - "+phi+") where ID = " + taikhoan;
-			}
-			
-			if(this.db.updateReturnInt(query) != 1) {
-	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
-	    		db.getConnection().rollback();
-	    		return;
-	    	}
-			//}end
-			
-			// Lưu log cho tài khoản
-			//begin{
-			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
-					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Thu/Chi'"
-					+ " from TAIKHOAN where ID = " + taikhoan;
-			if(this.db.updateReturnInt(query) != 1) {
-				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
+			// Kiểm tra tài khoản có hoạt động
+			if(isTkkt != 1){
+				this.msg = "Tài khoản đã xóa hoặc ngưng hoạt động.";
 				db.getConnection().rollback();
 				return;
 			}
+			
+			if(loai.equals("1")){ // Thu
+				if(tientk + sotien < phi){
+					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
+					db.getConnection().rollback();
+					return;
+				}
+				
+				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Thu/Chi',"+id+","+taikhoan+","+sotien+",0,"+this.userId+",N'Số tiền')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Thu/Chi',"+id+","+taikhoan+",0,"+phi+","+this.userId+",N'Phí chuyển tiền')";
+			} else{ // Chi
+				if(tientk < sotien + phi){
+					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
+					db.getConnection().rollback();
+					return;
+				}
+				
+				query = "insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Thu/Chi',"+id+","+taikhoan+",0,"+sotien+","+this.userId+",N'Số tiền')";
+				query += "\n insert into PHATSINHKETOAN(NGAYCHUNGTU, NGAYGHINHAN, LOAICHUNGTU, SOCHUNGTU, TKKT_FK, NO, CO, USERID, GHICHU)"
+						+ " values('"+ngaychungtu+"',GETDATE(),N'Thu/Chi',"+id+","+taikhoan+",0,"+phi+","+this.userId+",N'Phí chuyển tiền')";
+			}
+			
+			if(!this.db.update(query)) {
+				this.msg = "Không thể định khoản: " + query;
+	    		db.getConnection().rollback();
+	    		return;
+	    	}
 			//}end
 			
 			// Cập nhât thu/chi sang trạng thái đã chốt
@@ -200,46 +218,41 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 		try {
 			db.getConnection().setAutoCommit(false);
 			
-			// Cập nhật tiền trong tài khoản
+			// Định khoản
 			//begin{
-			String query = "select SOTIEN, LOAI, TAIKHOAN_FK, phi,(select sotien from TAIKHOAN where ID=tc.TAIKHOAN_FK) as tientk from THUCHI tc where ID = " + id;
+			String query = "select SOTIEN, LOAI, phi,"
+					+ " (select isnull(sum(no),0) - isnull(sum(co),0) from PHATSINHKETOAN where tkkt_fk = tc.TAIKHOAN_FK) as tientk,"
+					+ " (select count(*) from TAIKHOAN where ID=tc.TAIKHOAN_FK and trangthai=1) as isTkkt"
+					+ " from THUCHI tc where ID = " + id;
 			ResultSet rs = this.db.get(query);
 			rs.next();
 			double sotien = rs.getDouble("SOTIEN");
 			String loai = rs.getString("LOAI");
-			String taikhoan = rs.getString("TAIKHOAN_FK");
 			double phi = rs.getDouble("phi");
 			double tientk = rs.getDouble("tientk");
+			int isTkkt = rs.getInt("isTkkt");
 			rs.close();
 			
-			if(loai.equals("1")){
+			// Kiểm tra tài khoản có hoạt động
+			if(isTkkt != 1){
+				this.msg = "Tài khoản đã xóa hoặc ngưng hoạt động.";
+				db.getConnection().rollback();
+				return;
+			}
+			
+			if(loai.equals("1")){ // Thu
 				if(tientk + phi < sotien){
 					this.msg = "Số tiền trong tài khoản còn "+tientk+", không đủ để thực hiện.";
 					return;
 				}
-				
-				query = "update TAIKHOAN set sotien = (sotien - "+sotien+" + "+phi+") where ID = " + taikhoan;
-			} else{
-				query = "update TAIKHOAN set sotien = (sotien + "+sotien+" + "+phi+") where ID = " + taikhoan;
 			}
 			
-			if(db.updateReturnInt(query) != 1) {
-	    		this.msg = "Không thể cập nhật TAIKHOAN: " + query;
+			query = "delete PHATSINHKETOAN where loaichungtu=N'Thu/Chi' and sochungtu="+id;
+			if(!db.update(query)) {
+				this.msg = "Không thể xóa định khoản: " + query;
 	    		db.getConnection().rollback();
 	    		return;
 	    	}
-			//}end
-			
-			// Lưu log cho tài khoản
-			//begin{
-			query = "insert into TAIKHOAN_LOG(ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,NGAY_LOG,CHUCNANG)"
-					+ " select ID,TEN,SOTIEN,DONVI_FK,TRANGTHAI,NGAYTAO,NGAYSUA,USERID,NGANHANG,ISTKNGANHANG,ISTKTINDUNG,HANMUC,NOTINDUNG,GETDATE(),N'Thu/Chi'"
-					+ " from TAIKHOAN where ID = " + taikhoan;
-			if(this.db.updateReturnInt(query) != 1) {
-				this.msg = "Không thể tạo mới TAIKHOAN_LOG: " + query;
-				db.getConnection().rollback();
-				return;
-			}
 			//}end
 			
 			// Cập nhât thu/chi sang trạng thái chưa chốt
@@ -330,6 +343,8 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 				this.ThuchiRs.close();
 			if (this.NoidungthuchiRs != null)
 				this.NoidungthuchiRs.close();
+			if (this.TaikhoanRs != null)
+				this.TaikhoanRs.close();
 			if (this.db != null)
 				this.db.shutDown();
 		} catch (Exception e) {
@@ -447,5 +462,21 @@ public class ThuChiList extends Phan_Trang implements IThuChiList {
 
 	public void setTrangthai(String trangthai) {
 		this.trangthai = trangthai;
+	}
+
+	public ResultSet getTaikhoanRs() {
+		return TaikhoanRs;
+	}
+
+	public void setTaikhoanRs(ResultSet taikhoanRs) {
+		TaikhoanRs = taikhoanRs;
+	}
+
+	public String getTaikhoanId() {
+		return taikhoanId;
+	}
+
+	public void setTaikhoanId(String taikhoanId) {
+		this.taikhoanId = taikhoanId;
 	}
 }

@@ -13,7 +13,7 @@ String userId = (String) session.getAttribute("userId");
 IThuChiList obj = (IThuChiList) session.getAttribute("obj");
 ResultSet ThuchiRs = obj.getThuchiRs();
 ResultSet NoidungthuchiRs = obj.getNoidungthuchiRs();
-/* ResultSet TaikhoanRs = obj.getTaikhoanRs(); */
+ResultSet TaikhoanRs = obj.getTaikhoanRs();
 
 NumberFormat formatter = new DecimalFormat("#,###,###.##");
 %>
@@ -55,6 +55,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 	    document.forms['MainForm'].id.value = "";
 	    document.forms['MainForm'].tungay.value = "";
 	    document.forms['MainForm'].denngay.value = "";
+	    document.forms['MainForm'].taikhoan.value = "";
 	    document.forms['MainForm'].sotientu.value = "";
 	    document.forms['MainForm'].sotienden.value = "";
 	    document.forms['MainForm'].loai.value = "";
@@ -235,6 +236,29 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 												<input type="text" name="id" value="<%=obj.getID() %>" onchange="search();">
 											</td>
 											
+											<td class="plainlabel">Nội dung</td>
+											<td class="plainlabel">
+												<input type="text" name="noidung" value="<%=obj.getNoidung() %>" onchange="search();">
+											</td>
+										</tr>
+										
+										<tr>
+											<td class="plainlabel">Tài khoản</td>
+											<td class="plainlabel">
+												<select name="taikhoan" class="select2" style="width: 200px" onchange="search();">
+													<option value=""></option>
+													<%if(TaikhoanRs != null){ %>
+														<%while(TaikhoanRs.next()){ %>
+															<%if(obj.getTaikhoanId().equals(TaikhoanRs.getString("id"))){ %>
+																<option value="<%=TaikhoanRs.getString("id") %>" selected="selected"><%=TaikhoanRs.getString("ten") %></option>
+															<%} else { %>
+																<option value="<%=TaikhoanRs.getString("id") %>" ><%=TaikhoanRs.getString("ten") %></option>
+															<%} %>
+														<%} %>
+													<%} %>
+												</select>
+											</td>
+											
 											<td class="plainlabel">Số tiền</td>
 											<td class="plainlabel">
 												<input type="text" id="sotientu" name="sotientu" value="<%=obj.getSotientu() %>" onchange="search();" onkeypress="return keypress2(event);" onkeyup="DinhDangTien2('sotientu')" style="width: 90px; text-align: right;">&nbsp;&nbsp;-&nbsp;
@@ -278,11 +302,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 										</tr>
 										
 										<tr>
-											<td class="plainlabel">Nội dung</td>
-											<td class="plainlabel">
-												<input type="text" name="noidung" value="<%=obj.getNoidung() %>" onchange="search();">
-											</td>
-											
 											<td class="plainlabel">Trạng thái</td>
 											<td class="plainlabel">
 												<select name="trangthai" class="select2" style="width: 200px;" onchange="search();">
@@ -306,11 +325,9 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 													<%} %>
 												</select>
 											</td>
-										</tr>
-										
-										<tr>
+											
 											<td class="plainlabel">Số Items</td>
-											<td class="plainlabel" colspan="3">
+											<td class="plainlabel">
 												<input type="text" style="text-align: right;" name="soitems" value="<%=obj.getSoItems() %>" onchange="search();" onkeypress="return keypress(event);">
 											</td>
 										</tr>
@@ -345,15 +362,16 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 											<td width="98%">
 												<table width="100%" border="0" cellspacing="1" cellpadding="4">
 													<tr class="tbheader">
-														<th width="7%">ID</th>
-														<th width="8%">Ngày</th>
-														<th width="12%">Số tiền</th>
+														<th width="6%">ID</th>
+														<th width="7%">Ngày</th>
+														<th width="14%">Tài khoản</th>
+														<th width="10%">Số tiền</th>
 														<th width="5%">Loại</th>
 														<th width="14%">Nội dung thu chi</th>
-														<th width="20%">Nội dung</th>
+														<th width="12%">Nội dung</th>
 														<th width="8%">Trạng thái</th>
-														<th width="8%">Ngày tạo</th>
-														<th width="8%">Ngày sửa</th>
+														<th width="7%">Ngày tạo</th>
+														<th width="7%">Ngày sửa</th>
 														<th width="10%">Tác vụ</th>
 													</tr>
 													<%
@@ -373,6 +391,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 															
 															<td align="center"><%=ThuchiRs.getString("id") %></td>
 															<td align="center"><%=ThuchiRs.getString("ngay") %></td>
+															<td><%=ThuchiRs.getString("tentk") %></td>
 															<td align="center"><%=formatter.format(Double.parseDouble(ThuchiRs.getString("sotien"))) + " " + ThuchiRs.getString("donvi") %></td>
 															<td align="center"><%=ThuchiRs.getString("loai") %></td>
 															<td><%=ThuchiRs.getString("tenndtc") %></td>
@@ -413,7 +432,7 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 														<%} %>
 			                                    	<%} %>
 													<tr class="tbfooter">
-														<td align="center" valign="middle" colspan="10" class="tbfooter">
+														<td align="center" valign="middle" colspan="11" class="tbfooter">
 															<% obj.setNextSplittings(); %>
 															<script type="text/javascript" src="../scripts/phanTrang.js"></script>
 															<input type="hidden" name="crrApprSplitting" value="<%= obj.getCrrApprSplitting() %>" >
@@ -473,8 +492,8 @@ try {
 		ThuchiRs.close();
 	if (NoidungthuchiRs != null)
 		NoidungthuchiRs.close();
-	/* if (TaikhoanRs != null)
-		TaikhoanRs.close(); */
+	if (TaikhoanRs != null)
+		TaikhoanRs.close();
 	if(obj != null)
 		obj.DBClose();
 	session.removeAttribute("obj");
