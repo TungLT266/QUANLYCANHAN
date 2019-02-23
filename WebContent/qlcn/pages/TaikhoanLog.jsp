@@ -156,7 +156,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 										<tr class="tbheader">
 											<th width="200px">Ngày</th>
 											<th width="200px">Tên tài khoản</th>
-											<th width="200px">Số tiền</th>
 											<th width="200px">Đơn vị</th>
 											<th width="200px">Tài khoản ngân hàng</th>
 											<th width="200px">Ngân hàng</th>
@@ -191,12 +190,6 @@ NumberFormat formatter = new DecimalFormat("#,###,###.##");
 												<td><input type="text" value="<%=log.getTen() %>" readonly="readonly" style="width: 100%"></td>
 											<%} else { %>
 												<td><input type="text" value="<%=log.getTen() %>" readonly="readonly" style="width: 100%; color: red;"></td>
-											<%} %>
-											
-											<%if(log.getSotien().equals(log2.getSotien())){ %>
-												<td><input type="text" value="<%=log.getSotien() %>" readonly="readonly" style="text-align: right; width: 100%"></td>
-											<%} else { %>
-												<td><input type="text" value="<%=log.getSotien() %>" readonly="readonly" style="text-align: right; width: 100%; color: red;"></td>
 											<%} %>
 											
 											<%if(log.getDonvi().equals(log2.getDonvi())){ %>

@@ -3,7 +3,6 @@ package qlcn.pages.taikhoan.beans.imp;
 public class TaiKhoanLogList {
 	private String ngaylog;
 	private String ten;
-	private String sotien;
 	private String donvi;
 	private String nganhang;
 	private String isTknganhang;
@@ -16,7 +15,6 @@ public class TaiKhoanLogList {
 	public TaiKhoanLogList() {
 		this.ngaylog = "";
 		this.ten = "";
-		this.sotien = "";
 		this.donvi = "";
 		this.nganhang = "";
 		this.isTknganhang = "1";
@@ -33,14 +31,6 @@ public class TaiKhoanLogList {
 
 	public void setTen(String ten) {
 		this.ten = ten;
-	}
-
-	public String getSotien() {
-		return sotien;
-	}
-
-	public void setSotien(String sotien) {
-		this.sotien = sotien;
 	}
 
 	public String getDonvi() {
