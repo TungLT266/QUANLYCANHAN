@@ -38,7 +38,7 @@ public class TaiKhoanLog extends Phan_Trang implements ITaiKhoanLog {
 		try {
 			NumberFormat formatter = new DecimalFormat("#,###,###.##");
 			
-			String query = "select tk.ngay_log, tk.TEN, dv.ten as donvi, tk.nganhang, tk.hanmuc, tk.notindung,"
+			String query = "select tk.ngay_log, tk.TEN, dv.ten as donvi, tk.nganhang, tk.hanmuc,"
 					+ " case when tk.istknganhang=1 then 'x' else '' end as istknganhang,"
 					+ " case when tk.istktindung=1 then 'x' else '' end as istktindung,"
 					+ " case when tk.TRANGTHAI=1 then N'Hoạt động' when tk.trangthai=0 then N'Ngưng hoạt động' else N'Đã xóa' end as TRANGTHAI"
@@ -59,7 +59,7 @@ public class TaiKhoanLog extends Phan_Trang implements ITaiKhoanLog {
 				log.setIsTknganhang(rs.getString("istknganhang"));
 				log.setIsTktindung(rs.getString("istktindung"));
 				log.setHanmuc(formatter.format(rs.getDouble("hanmuc")));
-				log.setNoTindung(formatter.format(rs.getDouble("notindung")));
+//				log.setNoTindung(formatter.format(rs.getDouble("notindung")));
 				log.setTrangthai(rs.getString("TRANGTHAI"));
 				
 				this.logList.add(log);
